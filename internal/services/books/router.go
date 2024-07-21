@@ -8,11 +8,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-var repo = repository.NewBookRepository()
-var serv = service.NewBookService(repo)
-var hand = handler.NewBookHandler(serv)
-
 func BooksRouter(app *fiber.App) {
+
+	repo := repository.NewBookRepository()
+	serv := service.NewBookService(repo)
+	hand := handler.NewBookHandler(serv)
+
 	app.Get("/books", hand.GetBooks)
 	app.Get("/books/:id", hand.GetBook)
 }
