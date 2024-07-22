@@ -6,8 +6,9 @@ import (
 )
 
 type BookService interface {
-	GetAllBooks() ([]model.Book, error)
-	GetBook(id string) (*model.Book, error)
+	CreateBook(book *model.Book) (*model.Book, error)
+	GetAllBooks() ([]model.BookResponse, error)
+	GetBook(id string) (*model.BookResponse, error)
 }
 
 type BookServiceImpl struct {
@@ -18,10 +19,15 @@ func NewBookService(bookRepo repository.BookRepository) BookService {
 	return &BookServiceImpl{bookRepo: bookRepo}
 }
 
-func (r *BookServiceImpl) GetAllBooks() ([]model.Book, error) {
+func (r *BookServiceImpl) CreateBook(book *model.Book) (*model.Book, error) {
+	book, err := r.bookRepo.CreateBook(book)
+	return book, err
+}
+
+func (r *BookServiceImpl) GetAllBooks() ([]model.BookResponse, error) {
 	return r.bookRepo.GetAllBooks()
 }
 
-func (r *BookServiceImpl) GetBook(id string) (*model.Book, error) {
+func (r *BookServiceImpl) GetBook(id string) (*model.BookResponse, error) {
 	return r.bookRepo.GetBookByID(id)
 }
