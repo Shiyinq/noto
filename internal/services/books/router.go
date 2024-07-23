@@ -15,6 +15,7 @@ func BooksRouter(app *fiber.App) {
 	hand := handler.NewBookHandler(serv)
 
 	app.Post("/books", hand.CreateBook)
+	app.Put("/books/:id", hand.UpdateBook)
 	app.Get("/books", hand.GetBooks)
 	app.Get("/books/:id", hand.GetBook)
 }

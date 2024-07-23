@@ -9,6 +9,7 @@ type BookService interface {
 	CreateBook(book *model.Book) (*model.Book, error)
 	GetAllBooks() ([]model.BookResponse, error)
 	GetBook(id string) (*model.BookResponse, error)
+	UpdateBook(id string, title string) (*model.BookResponse, error)
 }
 
 type BookServiceImpl struct {
@@ -30,4 +31,12 @@ func (r *BookServiceImpl) GetAllBooks() ([]model.BookResponse, error) {
 
 func (r *BookServiceImpl) GetBook(id string) (*model.BookResponse, error) {
 	return r.bookRepo.GetBookByID(id)
+}
+
+func (s *BookServiceImpl) UpdateBook(id string, title string) (*model.BookResponse, error) {
+	updatedBook, err := s.bookRepo.UpdateBook(id, title)
+	if err != nil {
+		return nil, err
+	}
+	return updatedBook, nil
 }
