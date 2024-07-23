@@ -29,3 +29,6 @@ Thumbs.db
 *.test
 *.exe
 *.out
+
+# air
+/tmp
