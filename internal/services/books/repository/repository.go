@@ -30,6 +30,8 @@ func NewBookRepository() BookRepository {
 func (r *BookRepositoryImpl) CreateBook(book *model.Book) (*model.Book, error) {
 	book.CreatedAt = time.Now()
 	book.UpdatedAt = time.Now()
+	book.IsArchived = book.IsArchived || false
+
 	_, err := r.books.InsertOne(context.Background(), book)
 	if err != nil {
 		return nil, err
