@@ -11,12 +11,14 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type BookRepository interface {
 	CreateBook(book *model.Book) (*model.Book, error)
 	GetAllBooks() ([]model.BookResponse, error)
 	GetBookByID(id string) (*model.BookResponse, error)
+	UpdateBook(id string, title string) (*model.BookResponse, error)
 }
 
 type BookRepositoryImpl struct {
@@ -67,4 +69,34 @@ func (r *BookRepositoryImpl) GetBookByID(id string) (*model.BookResponse, error)
 	}
 
 	return &book, nil
+}
+
+func (r *BookRepositoryImpl) UpdateBook(id string, title string) (*model.BookResponse, error) {
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, errors.New("invalid ID format")
+	}
+
+	filter := bson.M{"_id": objectID}
+	update := bson.M{
+		"$set": bson.M{
+			"title":     title,
+			"updatedAt": time.Now(),
+		},
+	}
+
+	result := r.books.FindOneAndUpdate(context.Background(), filter, update, options.FindOneAndUpdate().SetReturnDocument(options.After))
+	if result.Err() != nil {
+		if result.Err() == mongo.ErrNoDocuments {
+			return nil, errors.New("book not found")
+		}
+		return nil, result.Err()
+	}
+
+	var updatedBook model.BookResponse
+	err = result.Decode(&updatedBook)
+	if err != nil {
+		return nil, err
+	}
+	return &updatedBook, nil
 }

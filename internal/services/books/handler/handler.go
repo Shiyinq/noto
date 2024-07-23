@@ -11,6 +11,7 @@ type BookHandler interface {
 	CreateBook(c *fiber.Ctx) error
 	GetBooks(c *fiber.Ctx) error
 	GetBook(c *fiber.Ctx) error
+	UpdateBook(c *fiber.Ctx) error
 }
 
 type BookHandlerImpl struct {
@@ -54,4 +55,30 @@ func (s *BookHandlerImpl) GetBook(c *fiber.Ctx) error {
 		})
 	}
 	return c.JSON(book)
+}
+
+func (s *BookHandlerImpl) UpdateBook(c *fiber.Ctx) error {
+	id := c.Params("id")
+	var data map[string]string
+	if err := c.BodyParser(&data); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Cannot parse JSON",
+		})
+	}
+
+	title, ok := data["title"]
+	if !ok {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Title is required",
+		})
+	}
+
+	updatedBook, err := s.bookService.UpdateBook(id, title)
+	if err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "Book not found",
+		})
+	}
+
+	return c.JSON(updatedBook)
 }
