@@ -3,8 +3,10 @@ package config
 import (
 	"context"
 	"log"
+	"os"
 	"time"
 
+	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -12,10 +14,17 @@ import (
 var DB *mongo.Database
 
 func ConnectMongoDB() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Error loading .env file, using environment variables")
+	}
+
+	mongoURI := os.Getenv("MONGODB_URI")
+	dbName := os.Getenv("DB_NAME")
+
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	clientOptions := options.Client().ApplyURI(mongoURI)
 	client, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {
 		log.Fatal(err)
@@ -27,5 +36,5 @@ func ConnectMongoDB() {
 	}
 
 	log.Println("Connected to MongoDB!")
-	DB = client.Database("noto")
+	DB = client.Database(dbName)
 }
