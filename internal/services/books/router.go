@@ -18,4 +18,5 @@ func BooksRouter(app *fiber.App) {
 	app.Put("/books/:id", hand.UpdateBook)
 	app.Get("/books", hand.GetBooks)
 	app.Get("/books/:id", hand.GetBook)
+	app.Patch("/books/:id", hand.ArchiveBook)
 }

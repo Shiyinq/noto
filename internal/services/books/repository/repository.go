@@ -19,6 +19,7 @@ type BookRepository interface {
 	GetAllBooks(isArchived bool) ([]model.BookResponse, error)
 	GetBookByID(id string) (*model.BookResponse, error)
 	UpdateBook(id string, title string) (*model.BookResponse, error)
+	ArchiveBook(id string, book *model.ArchiveBook) (*model.BookResponse, error)
 }
 
 type BookRepositoryImpl struct {
@@ -83,6 +84,36 @@ func (r *BookRepositoryImpl) UpdateBook(id string, title string) (*model.BookRes
 		"$set": bson.M{
 			"title":     title,
 			"updatedAt": time.Now(),
+		},
+	}
+
+	result := r.books.FindOneAndUpdate(context.Background(), filter, update, options.FindOneAndUpdate().SetReturnDocument(options.After))
+	if result.Err() != nil {
+		if result.Err() == mongo.ErrNoDocuments {
+			return nil, errors.New("book not found")
+		}
+		return nil, result.Err()
+	}
+
+	var updatedBook model.BookResponse
+	err = result.Decode(&updatedBook)
+	if err != nil {
+		return nil, err
+	}
+	return &updatedBook, nil
+}
+
+func (r *BookRepositoryImpl) ArchiveBook(id string, book *model.ArchiveBook) (*model.BookResponse, error) {
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, errors.New("invalid ID format")
+	}
+
+	filter := bson.M{"_id": objectID}
+	update := bson.M{
+		"$set": bson.M{
+			"isArchived": book.IsArchived,
+			"updatedAt":  time.Now(),
 		},
 	}
 

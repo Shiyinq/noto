@@ -18,3 +18,7 @@ type BookResponse struct {
 	UpdatedAt  time.Time `json:"updated_at" bson:"updatedAt"`
 	IsArchived bool      `json:"is_archived" bson:"isArchived"`
 }
+
+type ArchiveBook struct {
+	IsArchived bool `json:"is_archived" bson:"isArchived"`
+}
