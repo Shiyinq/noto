@@ -27,7 +27,9 @@ func NewBookHandler(bookService service.BookService) BookHandler {
 func (s *BookHandlerImpl) CreateBook(c *fiber.Ctx) error {
 	note := new(model.Book)
 	if err := c.BodyParser(note); err != nil {
-		return c.Status(400).SendString(err.Error())
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Cannot parse JSON",
+		})
 	}
 	newNote, _ := s.bookService.CreateBook(note)
 	return c.JSON(newNote)
