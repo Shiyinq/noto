@@ -13,6 +13,7 @@ type BookHandler interface {
 	GetBooks(c *fiber.Ctx) error
 	GetBook(c *fiber.Ctx) error
 	UpdateBook(c *fiber.Ctx) error
+	ArchiveBook(c *fiber.Ctx) error
 }
 
 type BookHandlerImpl struct {
@@ -93,4 +94,23 @@ func (s *BookHandlerImpl) UpdateBook(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(updatedBook)
+}
+
+func (s *BookHandlerImpl) ArchiveBook(c *fiber.Ctx) error {
+	id := c.Params("id")
+	archive := new(model.ArchiveBook)
+	if err := c.BodyParser(&archive); err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"error": "Cannot parse JSON",
+		})
+	}
+
+	archived, err := s.bookService.ArchiveBook(id, archive)
+	if err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "Book not found",
+		})
+	}
+
+	return c.JSON(archived)
 }

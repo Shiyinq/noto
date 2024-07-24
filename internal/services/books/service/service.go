@@ -10,6 +10,7 @@ type BookService interface {
 	GetAllBooks(isArchived bool) ([]model.BookResponse, error)
 	GetBook(id string) (*model.BookResponse, error)
 	UpdateBook(id string, title string) (*model.BookResponse, error)
+	ArchiveBook(id string, book *model.ArchiveBook) (*model.BookResponse, error)
 }
 
 type BookServiceImpl struct {
@@ -39,4 +40,12 @@ func (s *BookServiceImpl) UpdateBook(id string, title string) (*model.BookRespon
 		return nil, err
 	}
 	return updatedBook, nil
+}
+
+func (s *BookServiceImpl) ArchiveBook(id string, book *model.ArchiveBook) (*model.BookResponse, error) {
+	archived, err := s.bookRepo.ArchiveBook(id, book)
+	if err != nil {
+		return nil, err
+	}
+	return archived, nil
 }
