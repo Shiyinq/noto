@@ -16,7 +16,7 @@ import (
 
 type BookRepository interface {
 	CreateBook(book *model.Book) (*model.Book, error)
-	GetAllBooks() ([]model.BookResponse, error)
+	GetAllBooks(isArchived bool) ([]model.BookResponse, error)
 	GetBookByID(id string) (*model.BookResponse, error)
 	UpdateBook(id string, title string) (*model.BookResponse, error)
 }
@@ -41,9 +41,10 @@ func (r *BookRepositoryImpl) CreateBook(book *model.Book) (*model.Book, error) {
 	return book, nil
 }
 
-func (r *BookRepositoryImpl) GetAllBooks() ([]model.BookResponse, error) {
+func (r *BookRepositoryImpl) GetAllBooks(isArchived bool) ([]model.BookResponse, error) {
 	var books []model.BookResponse
-	cursor, err := r.books.Find(context.Background(), bson.D{})
+	filter := bson.M{"isArchived": isArchived}
+	cursor, err := r.books.Find(context.Background(), filter)
 	if err != nil {
 		return nil, err
 	}
