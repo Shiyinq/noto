@@ -1,8 +1,8 @@
-# NOTO
+# NOTO ![Status](https://img.shields.io/badge/status-in%20development-yellow)
 Noto ノート (nōto) is an app for storing your notes privately. You can host it on your localhost or your own server, ensuring that your data is entirely yours and not owned by anyone else.
 
 # Table of Contents
-- [NOTO](#noto)
+- [NOTO ](#noto-)
 - [Table of Contents](#table-of-contents)
   - [Development](#development)
     - [Running Local Server](#running-local-server)
@@ -61,7 +61,7 @@ Noto ノート (nōto) is an app for storing your notes privately. You can host 
 Before you begin, ensure you have [Docker](https://docs.docker.com/engine/install/) installed.
 
 **1. Clone the Repository**
-```bash
+```sh
 git clone https://github.com/Shiyinq/noto.git
 cd noto
 ```
@@ -83,7 +83,7 @@ cd ../../
 Open each `.env` file you have created and update the values as needed.
 
 **3. Build and Run the Docker Containers**
-```bash
+```sh
 docker compose up --build -d
 ```
 Wait a few minutes for the setup to complete. You can then access:
