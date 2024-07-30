@@ -24,6 +24,15 @@ func NewBookHandler(bookService service.BookService) BookHandler {
 	return &BookHandlerImpl{bookService: bookService}
 }
 
+// CreateBook
+// @Summary		Create a new book
+// @Description	Create a new book
+// @Tags		Books
+// @Accept		json
+// @Produce		json
+// @Param		book	body		model.Book	true	"Book to create"
+// @Success		201		{object}	model.Book
+// @Router		/books [post]
 func (s *BookHandlerImpl) CreateBook(c *fiber.Ctx) error {
 	note := new(model.Book)
 	if err := c.BodyParser(note); err != nil {
@@ -35,6 +44,13 @@ func (s *BookHandlerImpl) CreateBook(c *fiber.Ctx) error {
 	return c.JSON(newNote)
 }
 
+// GetBooks
+// @Summary		Get all book
+// @Description	Get all book
+// @Tags		Books
+// @Produce		json
+// @Success		200		{object}	[]model.BookResponse
+// @Router		/books [get]
 func (s *BookHandlerImpl) GetBooks(c *fiber.Ctx) error {
 	isArchivedStr := c.Query("is_archived")
 	var isArchived bool
@@ -56,6 +72,15 @@ func (s *BookHandlerImpl) GetBooks(c *fiber.Ctx) error {
 	return c.JSON(books)
 }
 
+// GetBook
+// @Summary		Get book by id
+// @Description	Get book by id
+// @Tags		Books
+// @Produce		json
+// @Param 		id path string true "Book ID"
+// @Success		200		{object}	model.BookResponse
+// @Failure 	404 {object} fiber.Map
+// @Router		/books/{id} [get]
 func (s *BookHandlerImpl) GetBook(c *fiber.Ctx) error {
 	id := c.Params("id")
 	book, err := s.bookService.GetBook(id)
@@ -72,6 +97,16 @@ func (s *BookHandlerImpl) GetBook(c *fiber.Ctx) error {
 	return c.JSON(book)
 }
 
+// UpdateBook
+// @Summary		Update book by id
+// @Description	Update book by id
+// @Tags		Books
+// @Produce		json
+// @Accept		json
+// @Param 		id path string true "Book ID"
+// @Param		book	body		map[string]string true	"Book to update"
+// @Success		200		{object}	model.BookResponse
+// @Router		/books/{id} [put]
 func (s *BookHandlerImpl) UpdateBook(c *fiber.Ctx) error {
 	id := c.Params("id")
 	var data map[string]string
@@ -98,6 +133,16 @@ func (s *BookHandlerImpl) UpdateBook(c *fiber.Ctx) error {
 	return c.JSON(updatedBook)
 }
 
+// ArchiveBook
+// @Summary		Archive book by id
+// @Description	Archive book by id
+// @Tags		Books
+// @Produce		json
+// @Accept		json
+// @Param 		id path string true "Book ID"
+// @Param		book	body		model.ArchiveBook true	"Book to archive"
+// @Success		200		{object}	model.BookResponse
+// @Router		/books/{id} [patch]
 func (s *BookHandlerImpl) ArchiveBook(c *fiber.Ctx) error {
 	id := c.Params("id")
 	archive := new(model.ArchiveBook)

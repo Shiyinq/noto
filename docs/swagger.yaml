@@ -1,9 +1,155 @@
 basePath: /
+definitions:
+  fiber.Map:
+    additionalProperties: true
+    type: object
+  noto_internal_services_books_model.ArchiveBook:
+    properties:
+      is_archived:
+        type: boolean
+    type: object
+  noto_internal_services_books_model.Book:
+    properties:
+      created_at:
+        type: string
+      is_archived:
+        type: boolean
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  noto_internal_services_books_model.BookResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      is_archived:
+        type: boolean
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
   description: Noto API
   title: NOTO API
   version: "1.0"
-paths: {}
+paths:
+  /books:
+    get:
+      description: Get all book
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/noto_internal_services_books_model.BookResponse'
+            type: array
+      summary: Get all book
+      tags:
+      - Books
+    post:
+      consumes:
+      - application/json
+      description: Create a new book
+      parameters:
+      - description: Book to create
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/noto_internal_services_books_model.Book'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/noto_internal_services_books_model.Book'
+      summary: Create a new book
+      tags:
+      - Books
+  /books/{id}:
+    get:
+      description: Get book by id
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/noto_internal_services_books_model.BookResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/fiber.Map'
+      summary: Get book by id
+      tags:
+      - Books
+    patch:
+      consumes:
+      - application/json
+      description: Archive book by id
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Book to archive
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/noto_internal_services_books_model.ArchiveBook'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/noto_internal_services_books_model.BookResponse'
+      summary: Archive book by id
+      tags:
+      - Books
+    put:
+      consumes:
+      - application/json
+      description: Update book by id
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Book to update
+        in: body
+        name: book
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/noto_internal_services_books_model.BookResponse'
+      summary: Update book by id
+      tags:
+      - Books
 swagger: "2.0"
