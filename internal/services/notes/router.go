@@ -8,14 +8,13 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-var repo = repository.NewNoteRepository()
-var serv = service.NewNoteService(repo)
-var hand = handler.NewNoteHandler(serv)
-
 func NotesRouter(app *fiber.App) {
-	app.Get("/notes", hand.GetNotes)
-	app.Get("/notes/:id", hand.GetNote)
-	app.Post("/notes", hand.CreateNote)
-	app.Put("/notes/:id", hand.UpdateNote)
-	app.Delete("/notes/:id", hand.DeleteNote)
+	var repo = repository.NewNoteRepository()
+	var serv = service.NewNoteService(repo)
+	var hand = handler.NewNoteHandler(serv)
+
+	app.Get("/books/:bookId/notes", hand.GetNotes)
+	app.Post("/books/:bookId/notes", hand.CreateNote)
+	app.Patch("/books/:bookId/notes/:noteId", hand.UpdateNote)
+	app.Delete("/books/:bookId/notes/:noteId", hand.DeleteNote)
 }
