@@ -6,11 +6,10 @@ import (
 )
 
 type NoteService interface {
-	GetAllNotes() ([]model.Note, error)
-	GetNoteByID(id string) (*model.Note, error)
+	GetAllNotes(bookId string) ([]model.NoteResponse, error)
 	CreateNote(note *model.Note) (*model.Note, error)
-	UpdateNoteByID(id string, NewNote *model.Note) (*model.Note, error)
-	DeleteNoteByID(id string) error
+	UpdateNote(bookId string, noteId string, note *model.NoteUpdate) (*model.NoteResponse, error)
+	DeleteNote(bookId string, noteId string) error
 }
 
 type NoteServiceImpl struct {
@@ -21,14 +20,9 @@ func NewNoteService(noteRepo repository.NoteRepository) NoteService {
 	return &NoteServiceImpl{noteRepo: noteRepo}
 }
 
-func (r *NoteServiceImpl) GetAllNotes() ([]model.Note, error) {
-	var notes, err = r.noteRepo.GetAllNotes()
+func (r *NoteServiceImpl) GetAllNotes(bookId string) ([]model.NoteResponse, error) {
+	var notes, err = r.noteRepo.GetAllNotes(bookId)
 	return notes, err
-}
-
-func (r *NoteServiceImpl) GetNoteByID(id string) (*model.Note, error) {
-	var note, err = r.noteRepo.GetNoteByID(id)
-	return note, err
 }
 
 func (r *NoteServiceImpl) CreateNote(note *model.Note) (*model.Note, error) {
@@ -36,12 +30,12 @@ func (r *NoteServiceImpl) CreateNote(note *model.Note) (*model.Note, error) {
 	return newNote, err
 }
 
-func (r *NoteServiceImpl) UpdateNoteByID(id string, newNote *model.Note) (*model.Note, error) {
-	var updated, err = r.noteRepo.UpdateNoteByID(id, newNote)
+func (r *NoteServiceImpl) UpdateNote(bookId string, noteId string, note *model.NoteUpdate) (*model.NoteResponse, error) {
+	var updated, err = r.noteRepo.UpdateNote(bookId, noteId, note)
 	return updated, err
 }
 
-func (r *NoteServiceImpl) DeleteNoteByID(id string) error {
-	var err = r.noteRepo.DeleteNoteByID(id)
+func (r *NoteServiceImpl) DeleteNote(bookId string, noteId string) error {
+	var err = r.noteRepo.DeleteNote(bookId, noteId)
 	return err
 }
