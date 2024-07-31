@@ -32,6 +32,26 @@ definitions:
       updated_at:
         type: string
     type: object
+  noto_internal_services_labels_model.Label:
+    properties:
+      created_at:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  noto_internal_services_labels_model.LabelResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
   noto_internal_services_notes_model.Note:
     properties:
       book_id:
@@ -285,4 +305,40 @@ paths:
       summary: Update book by id
       tags:
       - Books
+  /labels:
+    get:
+      description: Get all labels
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/noto_internal_services_labels_model.LabelResponse'
+            type: array
+      summary: Get all labels
+      tags:
+      - Labels
+    post:
+      consumes:
+      - application/json
+      description: Create a new label
+      parameters:
+      - description: Label to create
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/noto_internal_services_labels_model.Label'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/noto_internal_services_labels_model.Label'
+      summary: Create a new label
+      tags:
+      - Labels
 swagger: "2.0"
