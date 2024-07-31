@@ -8,11 +8,11 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-var repo = repository.NewLabelRepository()
-var serv = service.NewLabelService(repo)
-var hand = handler.NewLabelHandler(serv)
-
 func LabelsRouter(app *fiber.App) {
+	var repo = repository.NewLabelRepository()
+	var serv = service.NewLabelService(repo)
+	var hand = handler.NewLabelHandler(serv)
+
+	app.Post("/labels", hand.CreateLabel)
 	app.Get("/labels", hand.GetLabels)
-	app.Get("/labels/:id", hand.GetLabel)
 }
