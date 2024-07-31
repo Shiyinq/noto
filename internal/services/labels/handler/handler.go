@@ -1,14 +1,15 @@
 package handler
 
 import (
+	"noto/internal/services/labels/model"
 	"noto/internal/services/labels/service"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 type LabelHandler interface {
+	CreateLabel(c *fiber.Ctx) error
 	GetLabels(c *fiber.Ctx) error
-	GetLabel(c *fiber.Ctx) error
 }
 
 type LabelHandlerImpl struct {
@@ -19,16 +20,47 @@ func NewLabelHandler(labelService service.LabelService) LabelHandler {
 	return &LabelHandlerImpl{labelService: labelService}
 }
 
-func (s *LabelHandlerImpl) GetLabels(c *fiber.Ctx) error {
-	labels := s.labelService.GetAllLabels()
-	return c.JSON(labels)
+// CreateLabel
+// @Summary		Create a new label
+// @Description	Create a new label
+// @Tags		Labels
+// @Accept		json
+// @Produce		json
+// @Param		book	body		model.Label	true	"Label to create"
+// @Success		201		{object}	model.Label
+// @Router		/labels [post]
+func (s *LabelHandlerImpl) CreateLabel(c *fiber.Ctx) error {
+	label := new(model.Label)
+	if err := c.BodyParser(label); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
+
+	newLabel, err := s.labelService.CreateLabel(label)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
+
+	return c.JSON(newLabel)
 }
 
-func (s *LabelHandlerImpl) GetLabel(c *fiber.Ctx) error {
-	id := c.Params("id")
-	label, err := s.labelService.GetLabelByID(id)
+// GetLabels
+// @Summary		Get all labels
+// @Description	Get all labels
+// @Tags		Labels
+// @Produce		json
+// @Success		200		{object}	[]model.LabelResponse
+// @Router		/labels [get]
+func (s *LabelHandlerImpl) GetLabels(c *fiber.Ctx) error {
+	labels, err := s.labelService.GetLabels()
 	if err != nil {
-		return c.Status(404).SendString("Label not found")
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": err.Error(),
+		})
 	}
-	return c.JSON(label)
+
+	return c.JSON(labels)
 }
