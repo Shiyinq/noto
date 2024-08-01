@@ -89,7 +89,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/noto_internal_services_notes_model.Note"
+                                "$ref": "#/definitions/noto_internal_services_notes_model.NoteResponse"
                             }
                         }
                     }
@@ -121,7 +121,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/noto_internal_services_notes_model.Note"
+                            "$ref": "#/definitions/noto_internal_services_notes_model.NoteCreateSwagger"
                         }
                     }
                 ],
@@ -129,7 +129,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/noto_internal_services_notes_model.Note"
+                            "$ref": "#/definitions/noto_internal_services_notes_model.NoteCreate"
                         }
                     }
                 }
@@ -527,7 +527,7 @@
                 }
             }
         },
-        "noto_internal_services_notes_model.Note": {
+        "noto_internal_services_notes_model.NoteCreate": {
             "type": "object",
             "properties": {
                 "book_id": {
@@ -536,10 +536,21 @@
                 "created_at": {
                     "type": "string"
                 },
+                "id": {
+                    "type": "string"
+                },
                 "text": {
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "noto_internal_services_notes_model.NoteCreateSwagger": {
+            "type": "object",
+            "properties": {
+                "text": {
                     "type": "string"
                 }
             }
