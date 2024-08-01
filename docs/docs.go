@@ -56,7 +56,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/noto_internal_services_books_model.Book"
+                            "$ref": "#/definitions/noto_internal_services_books_model.BookCreateSwagger"
                         }
                     }
                 ],
@@ -64,7 +64,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/noto_internal_services_books_model.Book"
+                            "$ref": "#/definitions/noto_internal_services_books_model.BookCreate"
                         }
                     }
                 }
@@ -443,10 +443,13 @@ const docTemplate = `{
                 }
             }
         },
-        "noto_internal_services_books_model.Book": {
+        "noto_internal_services_books_model.BookCreate": {
             "type": "object",
             "properties": {
                 "created_at": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 },
                 "is_archived": {
@@ -456,6 +459,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "noto_internal_services_books_model.BookCreateSwagger": {
+            "type": "object",
+            "properties": {
+                "title": {
                     "type": "string"
                 }
             }
