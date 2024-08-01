@@ -2,17 +2,20 @@ package repository
 
 import (
 	"context"
+	"errors"
 	"noto/internal/config"
 	"noto/internal/services/labels/model"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type LabelRepository interface {
 	CreateLabel(label *model.Label) (*model.Label, error)
 	GetLabels() ([]model.LabelResponse, error)
+	DeleteLabel(labelId string) error
 }
 
 type LabelRepositoryImpl struct {
@@ -63,4 +66,23 @@ func (r *LabelRepositoryImpl) GetLabels() ([]model.LabelResponse, error) {
 	}
 
 	return labels, nil
+}
+
+func (r *LabelRepositoryImpl) DeleteLabel(labelId string) error {
+	labelObjectID, err := primitive.ObjectIDFromHex(labelId)
+	if err != nil {
+		return errors.New("invalid bookId format")
+	}
+
+	filter := bson.M{"_id": labelObjectID}
+	deleted, err := r.labels.DeleteOne(context.Background(), filter)
+	if err != nil {
+		return err
+	}
+
+	if deleted.DeletedCount == 0 {
+		return errors.New("label note found or not deleted")
+	}
+
+	return nil
 }
