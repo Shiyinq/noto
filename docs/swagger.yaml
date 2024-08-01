@@ -8,15 +8,22 @@ definitions:
       is_archived:
         type: boolean
     type: object
-  noto_internal_services_books_model.Book:
+  noto_internal_services_books_model.BookCreate:
     properties:
       created_at:
+        type: string
+      id:
         type: string
       is_archived:
         type: boolean
       title:
         type: string
       updated_at:
+        type: string
+    type: object
+  noto_internal_services_books_model.BookCreateSwagger:
+    properties:
+      title:
         type: string
     type: object
   noto_internal_services_books_model.BookResponse:
@@ -120,14 +127,14 @@ paths:
         name: book
         required: true
         schema:
-          $ref: '#/definitions/noto_internal_services_books_model.Book'
+          $ref: '#/definitions/noto_internal_services_books_model.BookCreateSwagger'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/noto_internal_services_books_model.Book'
+            $ref: '#/definitions/noto_internal_services_books_model.BookCreate'
       summary: Create a new book
       tags:
       - Books
