@@ -40,18 +40,15 @@ func (r *LabelRepositoryImpl) CreateLabel(label *model.LabelCreate) (*model.Labe
 				return nil, err
 			}
 			label.ID = newLabel.InsertedID.(primitive.ObjectID)
-			return label, nil
+		}
+	} else {
+		err := nameIsExist.Decode(&label)
+		if err != nil {
+			return nil, err
 		}
 	}
 
-	var exisLabel model.LabelCreate
-	err := nameIsExist.Decode(&exisLabel)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &exisLabel, nil
+	return label, nil
 }
 
 func (r *LabelRepositoryImpl) GetLabels() ([]model.LabelResponse, error) {
