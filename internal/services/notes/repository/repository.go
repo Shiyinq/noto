@@ -15,7 +15,7 @@ import (
 
 type NoteRepository interface {
 	GetAllNotes(bookId string) ([]model.NoteResponse, error)
-	CreateNote(Note *model.Note) (*model.Note, error)
+	CreateNote(bookId string, note *model.NoteCreate) (*model.NoteCreate, error)
 	UpdateNote(bookId string, noteId string, note *model.NoteUpdate) (*model.NoteResponse, error)
 	DeleteNote(bookId string, noteId string) error
 }
@@ -48,19 +48,22 @@ func (r *NoteRepositoryImpl) GetAllNotes(bookId string) ([]model.NoteResponse, e
 	return notes, nil
 }
 
-func (r *NoteRepositoryImpl) CreateNote(note *model.Note) (*model.Note, error) {
-	var idErr error
-	note.CreatedAt = time.Now()
-	note.UpdatedAt = time.Now()
-	note.BookId, idErr = primitive.ObjectIDFromHex(note.BookId.Hex())
-	if idErr != nil {
-		return nil, errors.New("invalid ID format")
+func (r *NoteRepositoryImpl) CreateNote(bookId string, note *model.NoteCreate) (*model.NoteCreate, error) {
+	objectID, err := primitive.ObjectIDFromHex(bookId)
+	if err != nil {
+		return nil, errors.New("invalid bookId format")
 	}
 
-	_, err := r.notes.InsertOne(context.Background(), note)
+	note.BookId = objectID
+	note.CreatedAt = time.Now()
+	note.UpdatedAt = time.Now()
+
+	newNote, err := r.notes.InsertOne(context.Background(), note)
 	if err != nil {
 		return nil, err
 	}
+
+	note.ID = newNote.InsertedID.(primitive.ObjectID)
 
 	return note, nil
 }
