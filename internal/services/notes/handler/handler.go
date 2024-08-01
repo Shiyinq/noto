@@ -28,7 +28,7 @@ func NewNoteHandler(noteService service.NoteService) NoteHandler {
 // @Tags		Notes
 // @Produce		json
 // @Param		bookId path string true "Book ID"
-// @Success		200		{object}	[]model.Note
+// @Success		200		{object}	[]model.NoteResponse
 // @Router		/books/{bookId}/notes [get]
 func (s *NoteHandlerImpl) GetNotes(c *fiber.Ctx) error {
 	bookId := c.Params("bookId")
@@ -46,16 +46,17 @@ func (s *NoteHandlerImpl) GetNotes(c *fiber.Ctx) error {
 // @Accept		json
 // @Produce		json
 // @Param		bookId path string true "Book ID"
-// @Param		book	body		model.Note	true	"Note to create"
-// @Success		201		{object}	model.Note
+// @Param		book	body		model.NoteCreateSwagger	true	"Note to create"
+// @Success		201		{object}	model.NoteCreate
 // @Router		/books/{bookId}/notes [post]
 func (s *NoteHandlerImpl) CreateNote(c *fiber.Ctx) error {
-	note := new(model.Note)
+	bookId := c.Params("bookId")
+	note := new(model.NoteCreate)
 	if err := c.BodyParser(note); err != nil {
 		return c.Status(400).SendString(err.Error())
 	}
-	newNote, _ := s.noteService.CreateNote(note)
-	return c.JSON(newNote)
+	newNote, _ := s.noteService.CreateNote(bookId, note)
+	return c.Status(fiber.StatusCreated).JSON(newNote)
 }
 
 // UpdateNote
