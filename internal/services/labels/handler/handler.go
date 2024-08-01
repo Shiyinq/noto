@@ -27,11 +27,11 @@ func NewLabelHandler(labelService service.LabelService) LabelHandler {
 // @Tags		Labels
 // @Accept		json
 // @Produce		json
-// @Param		book	body		model.Label	true	"Label to create"
-// @Success		201		{object}	model.Label
+// @Param		book	body		model.LabelCreateSwagger	true	"Label to create"
+// @Success		200		{object}	model.LabelCreate
 // @Router		/labels [post]
 func (s *LabelHandlerImpl) CreateLabel(c *fiber.Ctx) error {
-	label := new(model.Label)
+	label := new(model.LabelCreate)
 	if err := c.BodyParser(label); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": err.Error(),
