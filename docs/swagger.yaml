@@ -66,15 +66,22 @@ definitions:
       updated_at:
         type: string
     type: object
-  noto_internal_services_notes_model.Note:
+  noto_internal_services_notes_model.NoteCreate:
     properties:
       book_id:
         type: string
       created_at:
         type: string
+      id:
+        type: string
       text:
         type: string
       updated_at:
+        type: string
+    type: object
+  noto_internal_services_notes_model.NoteCreateSwagger:
+    properties:
+      text:
         type: string
     type: object
   noto_internal_services_notes_model.NoteResponse:
@@ -154,7 +161,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/noto_internal_services_notes_model.Note'
+              $ref: '#/definitions/noto_internal_services_notes_model.NoteResponse'
             type: array
       summary: Get notes by book id
       tags:
@@ -174,14 +181,14 @@ paths:
         name: book
         required: true
         schema:
-          $ref: '#/definitions/noto_internal_services_notes_model.Note'
+          $ref: '#/definitions/noto_internal_services_notes_model.NoteCreateSwagger'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/noto_internal_services_notes_model.Note'
+            $ref: '#/definitions/noto_internal_services_notes_model.NoteCreate'
       summary: Create a new note
       tags:
       - Notes

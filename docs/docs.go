@@ -95,7 +95,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/noto_internal_services_notes_model.Note"
+                                "$ref": "#/definitions/noto_internal_services_notes_model.NoteResponse"
                             }
                         }
                     }
@@ -127,7 +127,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/noto_internal_services_notes_model.Note"
+                            "$ref": "#/definitions/noto_internal_services_notes_model.NoteCreateSwagger"
                         }
                     }
                 ],
@@ -135,7 +135,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/noto_internal_services_notes_model.Note"
+                            "$ref": "#/definitions/noto_internal_services_notes_model.NoteCreate"
                         }
                     }
                 }
@@ -533,7 +533,7 @@ const docTemplate = `{
                 }
             }
         },
-        "noto_internal_services_notes_model.Note": {
+        "noto_internal_services_notes_model.NoteCreate": {
             "type": "object",
             "properties": {
                 "book_id": {
@@ -542,10 +542,21 @@ const docTemplate = `{
                 "created_at": {
                     "type": "string"
                 },
+                "id": {
+                    "type": "string"
+                },
                 "text": {
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "noto_internal_services_notes_model.NoteCreateSwagger": {
+            "type": "object",
+            "properties": {
+                "text": {
                     "type": "string"
                 }
             }
