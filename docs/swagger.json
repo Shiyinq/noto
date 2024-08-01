@@ -377,15 +377,15 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/noto_internal_services_labels_model.Label"
+                            "$ref": "#/definitions/noto_internal_services_labels_model.LabelCreateSwagger"
                         }
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Created",
+                    "200": {
+                        "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/noto_internal_services_labels_model.Label"
+                            "$ref": "#/definitions/noto_internal_services_labels_model.LabelCreate"
                         }
                     }
                 }
@@ -474,16 +474,27 @@
                 }
             }
         },
-        "noto_internal_services_labels_model.Label": {
+        "noto_internal_services_labels_model.LabelCreate": {
             "type": "object",
             "properties": {
                 "created_at": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 },
                 "name": {
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "noto_internal_services_labels_model.LabelCreateSwagger": {
+            "type": "object",
+            "properties": {
+                "name": {
                     "type": "string"
                 }
             }

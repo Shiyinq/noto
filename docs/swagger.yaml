@@ -32,13 +32,20 @@ definitions:
       updated_at:
         type: string
     type: object
-  noto_internal_services_labels_model.Label:
+  noto_internal_services_labels_model.LabelCreate:
     properties:
       created_at:
+        type: string
+      id:
         type: string
       name:
         type: string
       updated_at:
+        type: string
+    type: object
+  noto_internal_services_labels_model.LabelCreateSwagger:
+    properties:
+      name:
         type: string
     type: object
   noto_internal_services_labels_model.LabelResponse:
@@ -330,14 +337,14 @@ paths:
         name: book
         required: true
         schema:
-          $ref: '#/definitions/noto_internal_services_labels_model.Label'
+          $ref: '#/definitions/noto_internal_services_labels_model.LabelCreateSwagger'
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
+        "200":
+          description: OK
           schema:
-            $ref: '#/definitions/noto_internal_services_labels_model.Label'
+            $ref: '#/definitions/noto_internal_services_labels_model.LabelCreate'
       summary: Create a new label
       tags:
       - Labels
