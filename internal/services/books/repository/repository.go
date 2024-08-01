@@ -15,7 +15,7 @@ import (
 )
 
 type BookRepository interface {
-	CreateBook(book *model.Book) (*model.Book, error)
+	CreateBook(book *model.BookCreate) (*model.BookCreate, error)
 	GetAllBooks(isArchived bool) ([]model.BookResponse, error)
 	GetBookByID(id string) (*model.BookResponse, error)
 	UpdateBook(id string, title string) (*model.BookResponse, error)
@@ -30,15 +30,18 @@ func NewBookRepository() BookRepository {
 	return &BookRepositoryImpl{books: config.DB.Collection("books")}
 }
 
-func (r *BookRepositoryImpl) CreateBook(book *model.Book) (*model.Book, error) {
+func (r *BookRepositoryImpl) CreateBook(book *model.BookCreate) (*model.BookCreate, error) {
 	book.CreatedAt = time.Now()
 	book.UpdatedAt = time.Now()
 	book.IsArchived = book.IsArchived || false
 
-	_, err := r.books.InsertOne(context.Background(), book)
+	newBook, err := r.books.InsertOne(context.Background(), book)
 	if err != nil {
 		return nil, err
 	}
+
+	book.ID = newBook.InsertedID.(primitive.ObjectID)
+
 	return book, nil
 }
 

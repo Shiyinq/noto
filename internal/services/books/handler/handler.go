@@ -30,18 +30,19 @@ func NewBookHandler(bookService service.BookService) BookHandler {
 // @Tags		Books
 // @Accept		json
 // @Produce		json
-// @Param		book	body		model.Book	true	"Book to create"
-// @Success		201		{object}	model.Book
+// @Param		book	body		model.BookCreateSwagger	true	"Book to create"
+// @Success		201		{object}	model.BookCreate
 // @Router		/books [post]
 func (s *BookHandlerImpl) CreateBook(c *fiber.Ctx) error {
-	note := new(model.Book)
+	note := new(model.BookCreate)
 	if err := c.BodyParser(note); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Cannot parse JSON",
 		})
 	}
 	newNote, _ := s.bookService.CreateBook(note)
-	return c.JSON(newNote)
+
+	return c.Status(fiber.StatusCreated).JSON(newNote)
 }
 
 // GetBooks

@@ -6,7 +6,7 @@ import (
 )
 
 type BookService interface {
-	CreateBook(book *model.Book) (*model.Book, error)
+	CreateBook(book *model.BookCreate) (*model.BookCreate, error)
 	GetAllBooks(isArchived bool) ([]model.BookResponse, error)
 	GetBook(id string) (*model.BookResponse, error)
 	UpdateBook(id string, title string) (*model.BookResponse, error)
@@ -21,7 +21,7 @@ func NewBookService(bookRepo repository.BookRepository) BookService {
 	return &BookServiceImpl{bookRepo: bookRepo}
 }
 
-func (r *BookServiceImpl) CreateBook(book *model.Book) (*model.Book, error) {
+func (r *BookServiceImpl) CreateBook(book *model.BookCreate) (*model.BookCreate, error) {
 	book, err := r.bookRepo.CreateBook(book)
 	return book, err
 }
