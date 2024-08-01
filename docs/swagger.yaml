@@ -341,4 +341,25 @@ paths:
       summary: Create a new label
       tags:
       - Labels
+  /labels/{labelId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete label
+      parameters:
+      - description: Label ID
+        in: path
+        name: labelId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+      summary: Delete label
+      tags:
+      - Labels
 swagger: "2.0"
