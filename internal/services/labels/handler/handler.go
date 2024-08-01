@@ -10,6 +10,7 @@ import (
 type LabelHandler interface {
 	CreateLabel(c *fiber.Ctx) error
 	GetLabels(c *fiber.Ctx) error
+	DeleteLabel(c *fiber.Ctx) error
 }
 
 type LabelHandlerImpl struct {
@@ -63,4 +64,27 @@ func (s *LabelHandlerImpl) GetLabels(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(labels)
+}
+
+// DeleteLabel
+// @Summary		Delete label
+// @Description	Delete label
+// @Tags		Labels
+// @Accept		json
+// @Produce		json
+// @Param		labelId path string true "Label ID"
+// @Success		200	{object} interface{}
+// @Router		/labels/{labelId} [delete]
+func (s *LabelHandlerImpl) DeleteLabel(c *fiber.Ctx) error {
+	labelId := c.Params("labelId")
+
+	if err := s.labelService.DeleteLabel(labelId); err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"success": "label deleted",
+	})
 }

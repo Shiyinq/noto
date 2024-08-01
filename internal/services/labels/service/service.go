@@ -8,6 +8,7 @@ import (
 type LabelService interface {
 	CreateLabel(label *model.Label) (*model.Label, error)
 	GetLabels() ([]model.LabelResponse, error)
+	DeleteLabel(labelId string) error
 }
 
 type LabelServiceImpl struct {
@@ -24,4 +25,8 @@ func (r *LabelServiceImpl) CreateLabel(label *model.Label) (*model.Label, error)
 
 func (r *LabelServiceImpl) GetLabels() ([]model.LabelResponse, error) {
 	return r.labelRepo.GetLabels()
+}
+
+func (r *LabelServiceImpl) DeleteLabel(labelId string) error {
+	return r.labelRepo.DeleteLabel(labelId)
 }
