@@ -6,7 +6,7 @@ import (
 )
 
 type LabelService interface {
-	CreateLabel(label *model.Label) (*model.Label, error)
+	CreateLabel(label *model.LabelCreate) (*model.LabelCreate, error)
 	GetLabels() ([]model.LabelResponse, error)
 	DeleteLabel(labelId string) error
 }
@@ -19,7 +19,7 @@ func NewLabelService(labelRepo repository.LabelRepository) LabelService {
 	return &LabelServiceImpl{labelRepo: labelRepo}
 }
 
-func (r *LabelServiceImpl) CreateLabel(label *model.Label) (*model.Label, error) {
+func (r *LabelServiceImpl) CreateLabel(label *model.LabelCreate) (*model.LabelCreate, error) {
 	return r.labelRepo.CreateLabel(label)
 }
 
