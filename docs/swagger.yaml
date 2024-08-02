@@ -39,6 +39,13 @@ definitions:
       updated_at:
         type: string
     type: object
+  noto_internal_services_labels_model.AddBookLabel:
+    properties:
+      book_id:
+        type: string
+      label_name:
+        type: string
+    type: object
   noto_internal_services_labels_model.LabelCreate:
     properties:
       created_at:
@@ -339,6 +346,27 @@ paths:
               $ref: '#/definitions/noto_internal_services_labels_model.LabelResponse'
             type: array
       summary: Get all labels
+      tags:
+      - Labels
+    patch:
+      consumes:
+      - application/json
+      description: Add label to book
+      parameters:
+      - description: Label to add
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/noto_internal_services_labels_model.AddBookLabel'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/noto_internal_services_labels_model.AddBookLabel'
+      summary: Add label to book
       tags:
       - Labels
     post:
