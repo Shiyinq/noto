@@ -11,6 +11,7 @@ type LabelHandler interface {
 	CreateLabel(c *fiber.Ctx) error
 	GetLabels(c *fiber.Ctx) error
 	DeleteLabel(c *fiber.Ctx) error
+	AddBookLabel(c *fiber.Ctx) error
 }
 
 type LabelHandlerImpl struct {
@@ -87,4 +88,31 @@ func (s *LabelHandlerImpl) DeleteLabel(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"success": "label deleted",
 	})
+}
+
+// AddBookLabel
+// @Summary		Add label to book
+// @Description	Add label to book
+// @Tags		Labels
+// @Accept		json
+// @Produce		json
+// @Param		book	body		model.AddBookLabel	true	"Label to add"
+// @Success		201	{object}		model.AddBookLabel
+// @Router		/labels [patch]
+func (s *LabelHandlerImpl) AddBookLabel(c *fiber.Ctx) error {
+	label := new(model.AddBookLabel)
+	if err := c.BodyParser(label); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
+
+	added, err := s.labelService.AddBookLabel(label)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusCreated).JSON(added)
 }

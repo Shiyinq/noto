@@ -13,42 +13,86 @@ import (
 )
 
 type LabelRepository interface {
+	CheckAndInsertLabel(label *model.LabelCreate) (*model.LabelCreate, error)
 	CreateLabel(label *model.LabelCreate) (*model.LabelCreate, error)
 	GetLabels() ([]model.LabelResponse, error)
 	DeleteLabel(labelId string) error
+	AddBookLabel(book *model.AddBookLabel) (*model.AddBookLabelResponse, error)
 }
 
 type LabelRepositoryImpl struct {
-	labels *mongo.Collection
+	labels      *mongo.Collection
+	book_labels *mongo.Collection
 }
 
 func NewLabelRepository() LabelRepository {
-	return &LabelRepositoryImpl{labels: config.DB.Collection("labels")}
+	return &LabelRepositoryImpl{labels: config.DB.Collection("labels"), book_labels: config.DB.Collection("book_labels")}
 }
 
-func (r *LabelRepositoryImpl) CreateLabel(label *model.LabelCreate) (*model.LabelCreate, error) {
-	label.CreatedAt = time.Now()
-	label.UpdatedAt = time.Now()
-
+func (r *LabelRepositoryImpl) CheckAndInsertLabel(label *model.LabelCreate) (*model.LabelCreate, error) {
 	filter := bson.M{"name": label.Name}
-	nameIsExist := r.labels.FindOne(context.Background(), filter)
+	existingLabel := r.labels.FindOne(context.Background(), filter)
 
-	if nameIsExist.Err() != nil {
-		if nameIsExist.Err() == mongo.ErrNoDocuments {
+	if existingLabel.Err() != nil {
+		if existingLabel.Err() == mongo.ErrNoDocuments {
 			newLabel, err := r.labels.InsertOne(context.Background(), label)
 			if err != nil {
 				return nil, err
 			}
 			label.ID = newLabel.InsertedID.(primitive.ObjectID)
+		} else {
+			return nil, existingLabel.Err()
 		}
 	} else {
-		err := nameIsExist.Decode(&label)
+		err := existingLabel.Decode(&label)
 		if err != nil {
 			return nil, err
 		}
 	}
 
 	return label, nil
+}
+
+func (r *LabelRepositoryImpl) CreateLabel(label *model.LabelCreate) (*model.LabelCreate, error) {
+	label.CreatedAt = time.Now()
+	label.UpdatedAt = time.Now()
+
+	result, err := r.CheckAndInsertLabel(label)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+func (r *LabelRepositoryImpl) AddBookLabel(book *model.AddBookLabel) (*model.AddBookLabelResponse, error) {
+	label := &model.LabelCreate{
+		Name:      book.LabelName,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
+
+	result, err := r.CheckAndInsertLabel(label)
+	if err != nil {
+		return nil, err
+	}
+
+	bookLabel := bson.M{
+		"bookId":  book.BookId,
+		"labelId": result.ID,
+	}
+	bookLabelResult, err := r.book_labels.InsertOne(context.Background(), bookLabel)
+	if err != nil {
+		return nil, err
+	}
+
+	var newBookLabel model.AddBookLabelResponse
+	err = r.book_labels.FindOne(context.Background(), bson.M{"_id": bookLabelResult.InsertedID}).Decode(&newBookLabel)
+	if err != nil {
+		return nil, err
+	}
+
+	return &newBookLabel, nil
 }
 
 func (r *LabelRepositoryImpl) GetLabels() ([]model.LabelResponse, error) {
