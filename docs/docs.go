@@ -70,6 +70,47 @@ const docTemplate = `{
                 }
             }
         },
+        "/books/{bookId}/labels": {
+            "post": {
+                "description": "Add label to book",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Labels"
+                ],
+                "summary": "Add label to book",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Book ID",
+                        "name": "bookId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Label to add",
+                        "name": "book",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/noto_internal_services_labels_model.AddBookLabel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/noto_internal_services_labels_model.AddBookLabel"
+                        }
+                    }
+                }
+            }
+        },
         "/books/{bookId}/notes": {
             "get": {
                 "description": "Get notes by book id",
@@ -392,38 +433,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/noto_internal_services_labels_model.LabelCreate"
-                        }
-                    }
-                }
-            },
-            "patch": {
-                "description": "Add label to book",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Labels"
-                ],
-                "summary": "Add label to book",
-                "parameters": [
-                    {
-                        "description": "Label to add",
-                        "name": "book",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/noto_internal_services_labels_model.AddBookLabel"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/noto_internal_services_labels_model.AddBookLabel"
                         }
                     }
                 }
