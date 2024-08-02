@@ -5,6 +5,7 @@ import (
 	"noto/internal/services/labels/service"
 
 	"github.com/gofiber/fiber/v2"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type LabelHandler interface {
@@ -96,11 +97,22 @@ func (s *LabelHandlerImpl) DeleteLabel(c *fiber.Ctx) error {
 // @Tags		Labels
 // @Accept		json
 // @Produce		json
+// @Param		bookId path string true "Book ID"
 // @Param		book	body		model.AddBookLabel	true	"Label to add"
-// @Success		201	{object}		model.AddBookLabel
-// @Router		/labels [patch]
+// @Success		201	{object}	model.AddBookLabel
+// @Router		/books/{bookId}/labels [post]
 func (s *LabelHandlerImpl) AddBookLabel(c *fiber.Ctx) error {
+	bookId := c.Params("bookId")
 	label := new(model.AddBookLabel)
+	objectBookId, err := primitive.ObjectIDFromHex(bookId)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
+
+	label.BookId = objectBookId
+
 	if err := c.BodyParser(label); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": err.Error(),
