@@ -152,6 +152,33 @@ paths:
       summary: Create a new book
       tags:
       - Books
+  /books/{bookId}/labels:
+    post:
+      consumes:
+      - application/json
+      description: Add label to book
+      parameters:
+      - description: Book ID
+        in: path
+        name: bookId
+        required: true
+        type: string
+      - description: Label to add
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/noto_internal_services_labels_model.AddBookLabel'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/noto_internal_services_labels_model.AddBookLabel'
+      summary: Add label to book
+      tags:
+      - Labels
   /books/{bookId}/notes:
     get:
       description: Get notes by book id
@@ -346,27 +373,6 @@ paths:
               $ref: '#/definitions/noto_internal_services_labels_model.LabelResponse'
             type: array
       summary: Get all labels
-      tags:
-      - Labels
-    patch:
-      consumes:
-      - application/json
-      description: Add label to book
-      parameters:
-      - description: Label to add
-        in: body
-        name: book
-        required: true
-        schema:
-          $ref: '#/definitions/noto_internal_services_labels_model.AddBookLabel'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/noto_internal_services_labels_model.AddBookLabel'
-      summary: Add label to book
       tags:
       - Labels
     post:
