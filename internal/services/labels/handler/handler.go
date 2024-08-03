@@ -13,6 +13,7 @@ type LabelHandler interface {
 	GetLabels(c *fiber.Ctx) error
 	DeleteLabel(c *fiber.Ctx) error
 	AddBookLabel(c *fiber.Ctx) error
+	DeleteBookLabel(c *fiber.Ctx) error
 }
 
 type LabelHandlerImpl struct {
@@ -98,12 +99,12 @@ func (s *LabelHandlerImpl) DeleteLabel(c *fiber.Ctx) error {
 // @Accept		json
 // @Produce		json
 // @Param		bookId path string true "Book ID"
-// @Param		book	body		model.AddBookLabel	true	"Label to add"
+// @Param		book	body		model.BookLabelSwagger	true	"Label to add"
 // @Success		201	{object}	model.AddBookLabel
 // @Router		/books/{bookId}/labels [post]
 func (s *LabelHandlerImpl) AddBookLabel(c *fiber.Ctx) error {
 	bookId := c.Params("bookId")
-	label := new(model.AddBookLabel)
+	label := new(model.BookLabel)
 	objectBookId, err := primitive.ObjectIDFromHex(bookId)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -127,4 +128,44 @@ func (s *LabelHandlerImpl) AddBookLabel(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(added)
+}
+
+// DeleteBookLabel
+// @Summary		Delete label from book
+// @Description	Delete label from book
+// @Tags		Labels
+// @Accept		json
+// @Produce		json
+// @Param		bookId path string true "Book ID"
+// @Param		book	body		model.BookLabelSwagger	true	"Label to delete"
+// @Success		200	{object} interface{}
+// @Router		/books/{bookId}/labels [delete]
+func (s *LabelHandlerImpl) DeleteBookLabel(c *fiber.Ctx) error {
+	bookId := c.Params("bookId")
+	label := new(model.BookLabel)
+	objectBookId, err := primitive.ObjectIDFromHex(bookId)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
+
+	label.BookId = objectBookId
+
+	if err := c.BodyParser(label); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
+
+	deleted := s.labelService.DeleteBookLabel(label)
+	if deleted != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": deleted.Error(),
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"success": "deleted",
+	})
 }
