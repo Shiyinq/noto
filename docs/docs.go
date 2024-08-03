@@ -102,10 +102,10 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/noto_internal_services_labels_model.AddBookLabelResponse"
                         }
                     }
                 }
@@ -567,6 +567,20 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "noto_internal_services_labels_model.AddBookLabelResponse": {
+            "type": "object",
+            "properties": {
+                "book_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "label_id": {
                     "type": "string"
                 }
             }
