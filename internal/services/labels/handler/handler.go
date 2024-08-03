@@ -31,7 +31,7 @@ func NewLabelHandler(labelService service.LabelService) LabelHandler {
 // @Accept		json
 // @Produce		json
 // @Param		book	body		model.LabelCreateSwagger	true	"Label to create"
-// @Success		200		{object}	model.LabelCreate
+// @Success		201		{object}	model.LabelCreate
 // @Router		/labels [post]
 func (s *LabelHandlerImpl) CreateLabel(c *fiber.Ctx) error {
 	label := new(model.LabelCreate)
@@ -48,7 +48,7 @@ func (s *LabelHandlerImpl) CreateLabel(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.JSON(newLabel)
+	return c.Status(fiber.StatusCreated).JSON(newLabel)
 }
 
 // GetLabels
