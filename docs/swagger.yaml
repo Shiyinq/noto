@@ -39,10 +39,8 @@ definitions:
       updated_at:
         type: string
     type: object
-  noto_internal_services_labels_model.AddBookLabel:
+  noto_internal_services_labels_model.BookLabelSwagger:
     properties:
-      book_id:
-        type: string
       label_name:
         type: string
     type: object
@@ -153,6 +151,32 @@ paths:
       tags:
       - Books
   /books/{bookId}/labels:
+    delete:
+      consumes:
+      - application/json
+      description: Delete label from book
+      parameters:
+      - description: Book ID
+        in: path
+        name: bookId
+        required: true
+        type: string
+      - description: Label to delete
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/noto_internal_services_labels_model.BookLabelSwagger'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+      summary: Delete label from book
+      tags:
+      - Labels
     post:
       consumes:
       - application/json
@@ -168,14 +192,14 @@ paths:
         name: book
         required: true
         schema:
-          $ref: '#/definitions/noto_internal_services_labels_model.AddBookLabel'
+          $ref: '#/definitions/noto_internal_services_labels_model.BookLabelSwagger'
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
+        "200":
+          description: OK
           schema:
-            $ref: '#/definitions/noto_internal_services_labels_model.AddBookLabel'
+            type: object
       summary: Add label to book
       tags:
       - Labels
