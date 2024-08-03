@@ -22,13 +22,17 @@ type LabelUpdate struct {
 }
 
 type LabelResponse struct {
-	ID        string    `json:"id" bson:"_id"`
-	Name      string    `json:"name" bson:"name"`
-	CreatedAt time.Time `json:"created_at" bson:"createdAt"`
-	UpdatedAt time.Time `json:"updated_at" bson:"updatedAt"`
+	ID        primitive.ObjectID `json:"id" bson:"_id"`
+	Name      string             `json:"name" bson:"name"`
+	CreatedAt time.Time          `json:"created_at" bson:"createdAt"`
+	UpdatedAt time.Time          `json:"updated_at" bson:"updatedAt"`
 }
 
-type AddBookLabel struct {
+type BookLabelSwagger struct {
+	LabelName string `json:"label_name" bson:"labelName"`
+}
+
+type BookLabel struct {
 	BookId    primitive.ObjectID `json:"book_id" bson:"book"`
 	LabelName string             `json:"label_name" bson:"labelName"`
 }

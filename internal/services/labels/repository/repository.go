@@ -17,7 +17,8 @@ type LabelRepository interface {
 	CreateLabel(label *model.LabelCreate) (*model.LabelCreate, error)
 	GetLabels() ([]model.LabelResponse, error)
 	DeleteLabel(labelId string) error
-	AddBookLabel(book *model.AddBookLabel) (*model.AddBookLabelResponse, error)
+	AddBookLabel(book *model.BookLabel) (*model.AddBookLabelResponse, error)
+	DeleteBookLabel(book *model.BookLabel) error
 }
 
 type LabelRepositoryImpl struct {
@@ -65,7 +66,7 @@ func (r *LabelRepositoryImpl) CreateLabel(label *model.LabelCreate) (*model.Labe
 	return result, nil
 }
 
-func (r *LabelRepositoryImpl) AddBookLabel(book *model.AddBookLabel) (*model.AddBookLabelResponse, error) {
+func (r *LabelRepositoryImpl) AddBookLabel(book *model.BookLabel) (*model.AddBookLabelResponse, error) {
 	label := &model.LabelCreate{
 		Name:      book.LabelName,
 		CreatedAt: time.Now(),
@@ -93,6 +94,31 @@ func (r *LabelRepositoryImpl) AddBookLabel(book *model.AddBookLabel) (*model.Add
 	}
 
 	return &newBookLabel, nil
+}
+
+func (r *LabelRepositoryImpl) DeleteBookLabel(book *model.BookLabel) error {
+	filter := bson.M{"name": book.LabelName}
+	labelExist := r.labels.FindOne(context.Background(), filter)
+
+	if labelExist.Err() != nil {
+		return labelExist.Err()
+	}
+
+	var existingLabel model.LabelResponse
+	labelExist.Decode(&existingLabel)
+
+	filterDelete := bson.M{"bookId": book.BookId, "labelId": existingLabel.ID}
+
+	deleted, err := r.book_labels.DeleteMany(context.Background(), filterDelete)
+	if err != nil {
+		return err
+	}
+
+	if deleted.DeletedCount == 0 {
+		return errors.New("book label not found or not deleted")
+	}
+
+	return nil
 }
 
 func (r *LabelRepositoryImpl) GetLabels() ([]model.LabelResponse, error) {
@@ -123,7 +149,7 @@ func (r *LabelRepositoryImpl) DeleteLabel(labelId string) error {
 	}
 
 	if deleted.DeletedCount == 0 {
-		return errors.New("label note found or not deleted")
+		return errors.New("label not found or not deleted")
 	}
 
 	return nil
