@@ -97,15 +97,54 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/noto_internal_services_labels_model.AddBookLabel"
+                            "$ref": "#/definitions/noto_internal_services_labels_model.BookLabelSwagger"
                         }
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Created",
+                    "200": {
+                        "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/noto_internal_services_labels_model.AddBookLabel"
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete label from book",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Labels"
+                ],
+                "summary": "Delete label from book",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Book ID",
+                        "name": "bookId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Label to delete",
+                        "name": "book",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/noto_internal_services_labels_model.BookLabelSwagger"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
                         }
                     }
                 }
@@ -532,12 +571,9 @@ const docTemplate = `{
                 }
             }
         },
-        "noto_internal_services_labels_model.AddBookLabel": {
+        "noto_internal_services_labels_model.BookLabelSwagger": {
             "type": "object",
             "properties": {
-                "book_id": {
-                    "type": "string"
-                },
                 "label_name": {
                     "type": "string"
                 }
