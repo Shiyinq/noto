@@ -422,8 +422,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/noto_internal_services_labels_model.LabelCreate'
       summary: Create a new label
