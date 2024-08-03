@@ -100,7 +100,7 @@ func (s *LabelHandlerImpl) DeleteLabel(c *fiber.Ctx) error {
 // @Produce		json
 // @Param		bookId path string true "Book ID"
 // @Param		book	body		model.BookLabelSwagger	true	"Label to add"
-// @Success		201	{object}	model.AddBookLabel
+// @Success		201	{object}	model.AddBookLabelResponse
 // @Router		/books/{bookId}/labels [post]
 func (s *LabelHandlerImpl) AddBookLabel(c *fiber.Ctx) error {
 	bookId := c.Params("bookId")
