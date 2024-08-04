@@ -211,5 +211,9 @@ func (r *LabelRepositoryImpl) GetBookByLabel(labelName string) ([]model.BookResp
 		return nil, err
 	}
 
+	if len(results) == 0 {
+		return []model.BookResponse{}, nil
+	}
+
 	return results, err
 }
