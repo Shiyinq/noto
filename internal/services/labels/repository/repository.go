@@ -19,6 +19,7 @@ type LabelRepository interface {
 	DeleteLabel(labelId string) error
 	AddBookLabel(book *model.BookLabel) (*model.AddBookLabelResponse, error)
 	DeleteBookLabel(book *model.BookLabel) error
+	GetBookByLabel(labelName string) ([]model.BookResponse, error)
 }
 
 type LabelRepositoryImpl struct {
@@ -153,4 +154,62 @@ func (r *LabelRepositoryImpl) DeleteLabel(labelId string) error {
 	}
 
 	return nil
+}
+
+func (r *LabelRepositoryImpl) GetBookByLabel(labelName string) ([]model.BookResponse, error) {
+	pipeline := mongo.Pipeline{
+		{{Key: "$match", Value: bson.D{{Key: "name", Value: labelName}}}},
+		{{Key: "$lookup", Value: bson.D{
+			{Key: "from", Value: "book_labels"},
+			{Key: "localField", Value: "_id"},
+			{Key: "foreignField", Value: "labelId"},
+			{Key: "as", Value: "book_labels"},
+		}}},
+		{{Key: "$unwind", Value: bson.D{
+			{Key: "path", Value: "$book_labels"},
+			{Key: "preserveNullAndEmptyArrays", Value: true},
+		}}},
+		{{Key: "$project", Value: bson.D{
+			{Key: "_id", Value: 0},
+			{Key: "labelId", Value: "$book_labels.labelId"},
+			{Key: "bookId", Value: "$book_labels.bookId"},
+		}}},
+		{{Key: "$lookup", Value: bson.D{
+			{Key: "from", Value: "books"},
+			{Key: "localField", Value: "bookId"},
+			{Key: "foreignField", Value: "_id"},
+			{Key: "as", Value: "books"},
+		}}},
+		{{Key: "$unwind", Value: bson.D{
+			{Key: "path", Value: "$books"},
+			{Key: "preserveNullAndEmptyArrays", Value: true},
+		}}},
+		{{Key: "$project", Value: bson.D{
+			{Key: "_id", Value: "$books._id"},
+			{Key: "title", Value: "$books.title"},
+			{Key: "createdAt", Value: "$books.createdAt"},
+			{Key: "updatedAt", Value: "$books.updatedAt"},
+			{Key: "isArchived", Value: "$books.isArchived"},
+		}}},
+		{{Key: "$group", Value: bson.D{
+			{Key: "_id", Value: "$_id"},
+			{Key: "title", Value: bson.D{{Key: "$first", Value: "$title"}}},
+			{Key: "createdAt", Value: bson.D{{Key: "$first", Value: "$createdAt"}}},
+			{Key: "updatedAt", Value: bson.D{{Key: "$first", Value: "$updatedAt"}}},
+			{Key: "isArchived", Value: bson.D{{Key: "$first", Value: "$isArchived"}}},
+		}}},
+		{{Key: "$sort", Value: bson.D{{Key: "updatedAt", Value: -1}}}},
+	}
+
+	cursor, err := r.labels.Aggregate(context.Background(), pipeline)
+	if err != nil {
+		return nil, err
+	}
+
+	var results []model.BookResponse
+	if err = cursor.All(context.Background(), &results); err != nil {
+		return nil, err
+	}
+
+	return results, err
 }
