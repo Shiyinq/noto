@@ -11,6 +11,7 @@ type LabelService interface {
 	DeleteLabel(labelId string) error
 	AddBookLabel(book *model.BookLabel) (*model.AddBookLabelResponse, error)
 	DeleteBookLabel(book *model.BookLabel) error
+	GetBookByLabel(labelName string) ([]model.BookResponse, error)
 }
 
 type LabelServiceImpl struct {
@@ -39,4 +40,8 @@ func (r *LabelServiceImpl) AddBookLabel(book *model.BookLabel) (*model.AddBookLa
 
 func (r *LabelServiceImpl) DeleteBookLabel(book *model.BookLabel) error {
 	return r.labelRepo.DeleteBookLabel(book)
+}
+
+func (r *LabelServiceImpl) GetBookByLabel(labelName string) ([]model.BookResponse, error) {
+	return r.labelRepo.GetBookByLabel(labelName)
 }

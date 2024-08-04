@@ -18,4 +18,5 @@ func LabelsRouter(app *fiber.App) {
 	app.Delete("/labels/:labelId", hand.DeleteLabel)
 	app.Post("/books/:bookId/labels", hand.AddBookLabel)
 	app.Delete("/books/:bookId/labels", hand.DeleteBookLabel)
+	app.Get("/labels/:labelName/books", hand.GetBookByLabel)
 }

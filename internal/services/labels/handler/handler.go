@@ -14,6 +14,7 @@ type LabelHandler interface {
 	DeleteLabel(c *fiber.Ctx) error
 	AddBookLabel(c *fiber.Ctx) error
 	DeleteBookLabel(c *fiber.Ctx) error
+	GetBookByLabel(c *fiber.Ctx) error
 }
 
 type LabelHandlerImpl struct {
@@ -168,4 +169,31 @@ func (s *LabelHandlerImpl) DeleteBookLabel(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"success": "deleted",
 	})
+}
+
+// GetBookByLabel
+// @Summary		Get book by label name
+// @Description	Get book by label name
+// @Tags		Labels
+// @Produce		json
+// @Param		labelName path string true "Label Name"
+// @Success		200	{object} model.BookResponse
+// @Router		/labels/{labelName}/books [get]
+func (s *LabelHandlerImpl) GetBookByLabel(c *fiber.Ctx) error {
+	labelName := c.Params("labelName")
+	if labelName == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "label name required!",
+		})
+	}
+
+	books, err := s.labelService.GetBookByLabel(labelName)
+
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
+
+	return c.JSON(books)
 }
