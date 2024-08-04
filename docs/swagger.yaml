@@ -53,6 +53,19 @@ definitions:
       label_name:
         type: string
     type: object
+  noto_internal_services_labels_model.BookResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      is_archived:
+        type: boolean
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
   noto_internal_services_labels_model.LabelCreate:
     properties:
       created_at:
@@ -448,6 +461,25 @@ paths:
           schema:
             type: object
       summary: Delete label
+      tags:
+      - Labels
+  /labels/{labelName}/books:
+    get:
+      description: Get book by label name
+      parameters:
+      - description: Label Name
+        in: path
+        name: labelName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/noto_internal_services_labels_model.BookResponse'
+      summary: Get book by label name
       tags:
       - Labels
 swagger: "2.0"

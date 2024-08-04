@@ -508,6 +508,35 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/labels/{labelName}/books": {
+            "get": {
+                "description": "Get book by label name",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Labels"
+                ],
+                "summary": "Get book by label name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Label Name",
+                        "name": "labelName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/noto_internal_services_labels_model.BookResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -589,6 +618,26 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "label_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "noto_internal_services_labels_model.BookResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "is_archived": {
+                    "type": "boolean"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updated_at": {
                     "type": "string"
                 }
             }
