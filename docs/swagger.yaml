@@ -34,9 +34,20 @@ definitions:
         type: string
       is_archived:
         type: boolean
+      labels:
+        items:
+          $ref: '#/definitions/noto_internal_services_books_model.Label'
+        type: array
       title:
         type: string
       updated_at:
+        type: string
+    type: object
+  noto_internal_services_books_model.Label:
+    properties:
+      id:
+        type: string
+      name:
         type: string
     type: object
   noto_internal_services_labels_model.AddBookLabelResponse:
