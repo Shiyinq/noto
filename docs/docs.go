@@ -592,10 +592,27 @@ const docTemplate = `{
                 "is_archived": {
                     "type": "boolean"
                 },
+                "labels": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/noto_internal_services_books_model.Label"
+                    }
+                },
                 "title": {
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "noto_internal_services_books_model.Label": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
                     "type": "string"
                 }
             }
