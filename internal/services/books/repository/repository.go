@@ -46,15 +46,54 @@ func (r *BookRepositoryImpl) CreateBook(book *model.BookCreate) (*model.BookCrea
 }
 
 func (r *BookRepositoryImpl) GetAllBooks(isArchived bool) ([]model.BookResponse, error) {
+	pipline := mongo.Pipeline{
+		{
+			{Key: "$match",
+				Value: bson.D{
+					{Key: "isArchived", Value: isArchived},
+				},
+			},
+		},
+		{
+			{Key: "$lookup",
+				Value: bson.D{
+					{Key: "from", Value: "book_labels"},
+					{Key: "localField", Value: "_id"},
+					{Key: "foreignField", Value: "bookId"},
+					{Key: "as", Value: "book_labels"},
+				},
+			},
+		},
+		{
+			{Key: "$lookup",
+				Value: bson.D{
+					{Key: "from", Value: "labels"},
+					{Key: "localField", Value: "book_labels.labelId"},
+					{Key: "foreignField", Value: "_id"},
+					{Key: "as", Value: "labels"},
+				},
+			},
+		},
+		{
+			{Key: "$project",
+				Value: bson.D{
+					{Key: "book_labels", Value: 0},
+					{Key: "labels.createdAt", Value: 0},
+					{Key: `labels.updatedAt`, Value: 0},
+				},
+			},
+		},
+	}
+
 	var books []model.BookResponse
-	filter := bson.M{"isArchived": isArchived}
-	cursor, err := r.books.Find(context.Background(), filter)
+	cursor, err := r.books.Aggregate(context.Background(), pipline)
 	if err != nil {
 		return nil, err
 	}
 	if err := cursor.All(context.Background(), &books); err != nil {
 		return nil, err
 	}
+
 	return books, nil
 }
 
