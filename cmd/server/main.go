@@ -18,7 +18,7 @@ import (
 // @host		localhost:8080
 // @BasePath	/
 func main() {
-	config.ConnectMongoDB()
+	config.LoadConfig()
 
 	app := fiber.New(fiber.Config{
 		EnablePrintRoutes: false,
