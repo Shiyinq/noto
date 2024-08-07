@@ -5,6 +5,7 @@ go 1.21.3
 require github.com/gofiber/fiber/v2 v2.52.5
 
 require (
+	cloud.google.com/go/compute/metadata v0.3.0 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/PuerkitoBio/purell v1.2.1 // indirect
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
@@ -15,6 +16,7 @@ require (
 	github.com/go-openapi/spec v0.21.0 // indirect
 	github.com/go-openapi/swag v0.23.0 // indirect
 	github.com/gofiber/swagger v1.1.0 // indirect
+	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
@@ -42,6 +44,7 @@ require (
 	go.mongodb.org/mongo-driver v1.16.0 // indirect
 	golang.org/x/crypto v0.25.0 // indirect
 	golang.org/x/net v0.27.0 // indirect
+	golang.org/x/oauth2 v0.22.0 // indirect
 	golang.org/x/sync v0.7.0 // indirect
 	golang.org/x/sys v0.22.0 // indirect
 	golang.org/x/text v0.16.0 // indirect
