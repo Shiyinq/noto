@@ -12,8 +12,11 @@ import (
 )
 
 var DB *mongo.Database
+var GoogleClientID string
+var GoogleClientSecret string
+var JWTSecret []byte
 
-func ConnectMongoDB() {
+func LoadConfig() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Println("Error loading .env file, using environment variables")
@@ -21,7 +24,14 @@ func ConnectMongoDB() {
 
 	mongoURI := os.Getenv("MONGODB_URI")
 	dbName := os.Getenv("DB_NAME")
+	GoogleClientID = os.Getenv("GOOGLE_CLIENT_ID")
+	GoogleClientSecret = os.Getenv("GOOGLE_CLIENT_SECRET")
+	JWTSecret = []byte(os.Getenv("JWT_SECRET"))
 
+	ConnectMongoDB(mongoURI, dbName)
+}
+
+func ConnectMongoDB(mongoURI, dbName string) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	clientOptions := options.Client().ApplyURI(mongoURI)
