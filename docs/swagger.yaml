@@ -147,6 +147,44 @@ info:
   title: NOTO API
   version: "1.0"
 paths:
+  /auth/google:
+    get:
+      description: Redirects the user to Google's OAuth consent screen
+      produces:
+      - application/json
+      responses:
+        "302":
+          description: Redirect to Google's OAuth consent screen
+          schema:
+            type: string
+      summary: Initiate Google OAuth login
+      tags:
+      - Auth
+  /auth/google/callback:
+    get:
+      consumes:
+      - application/json
+      description: Processes the OAuth code returned by Google and returns a token
+      parameters:
+      - description: The authorization code returned by Google
+        in: query
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Map'
+      summary: Handle Google OAuth callback
+      tags:
+      - Auth
   /books:
     get:
       description: Get all book
