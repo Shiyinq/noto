@@ -29,6 +29,7 @@ func NewLabelHandler(labelService service.LabelService) LabelHandler {
 // @Summary		Create a new label
 // @Description	Create a new label
 // @Tags		Labels
+// @Security 	BearerAuth
 // @Accept		json
 // @Produce		json
 // @Param		book	body		model.LabelCreateSwagger	true	"Label to create"
@@ -56,6 +57,7 @@ func (s *LabelHandlerImpl) CreateLabel(c *fiber.Ctx) error {
 // @Summary		Get all labels
 // @Description	Get all labels
 // @Tags		Labels
+// @Security 	BearerAuth
 // @Produce		json
 // @Success		200		{object}	[]model.LabelResponse
 // @Router		/api/labels [get]
@@ -74,6 +76,7 @@ func (s *LabelHandlerImpl) GetLabels(c *fiber.Ctx) error {
 // @Summary		Delete label
 // @Description	Delete label
 // @Tags		Labels
+// @Security 	BearerAuth
 // @Accept		json
 // @Produce		json
 // @Param		labelId path string true "Label ID"
@@ -97,6 +100,7 @@ func (s *LabelHandlerImpl) DeleteLabel(c *fiber.Ctx) error {
 // @Summary		Add label to book
 // @Description	Add label to book
 // @Tags		Labels
+// @Security 	BearerAuth
 // @Accept		json
 // @Produce		json
 // @Param		bookId path string true "Book ID"
@@ -135,6 +139,7 @@ func (s *LabelHandlerImpl) AddBookLabel(c *fiber.Ctx) error {
 // @Summary		Delete label from book
 // @Description	Delete label from book
 // @Tags		Labels
+// @Security 	BearerAuth
 // @Accept		json
 // @Produce		json
 // @Param		bookId path string true "Book ID"
@@ -175,6 +180,7 @@ func (s *LabelHandlerImpl) DeleteBookLabel(c *fiber.Ctx) error {
 // @Summary		Get book by label name
 // @Description	Get book by label name
 // @Tags		Labels
+// @Security 	BearerAuth
 // @Produce		json
 // @Param		labelName path string true "Label Name"
 // @Success		200	{object} model.BookResponse

@@ -28,6 +28,7 @@ func NewBookHandler(bookService service.BookService) BookHandler {
 // @Summary		Create a new book
 // @Description	Create a new book
 // @Tags		Books
+// @Security 	BearerAuth
 // @Accept		json
 // @Produce		json
 // @Param		book	body		model.BookCreateSwagger	true	"Book to create"
@@ -49,6 +50,7 @@ func (s *BookHandlerImpl) CreateBook(c *fiber.Ctx) error {
 // @Summary		Get all book
 // @Description	Get all book
 // @Tags		Books
+// @Security 	BearerAuth
 // @Produce		json
 // @Success		200		{object}	[]model.BookResponse
 // @Router		/api/books [get]
@@ -77,6 +79,7 @@ func (s *BookHandlerImpl) GetBooks(c *fiber.Ctx) error {
 // @Summary		Get book by id
 // @Description	Get book by id
 // @Tags		Books
+// @Security 	BearerAuth
 // @Produce		json
 // @Param 		id path string true "Book ID"
 // @Success		200		{object}	model.BookResponse
@@ -102,6 +105,7 @@ func (s *BookHandlerImpl) GetBook(c *fiber.Ctx) error {
 // @Summary		Update book by id
 // @Description	Update book by id
 // @Tags		Books
+// @Security 	BearerAuth
 // @Produce		json
 // @Accept		json
 // @Param 		id path string true "Book ID"
@@ -138,6 +142,7 @@ func (s *BookHandlerImpl) UpdateBook(c *fiber.Ctx) error {
 // @Summary		Archive book by id
 // @Description	Archive book by id
 // @Tags		Books
+// @Security 	BearerAuth
 // @Produce		json
 // @Accept		json
 // @Param 		id path string true "Book ID"

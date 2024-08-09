@@ -15,6 +15,12 @@ import (
 // @title		NOTO API
 // @version		1.0
 // @description	Noto API
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description Enter your bearer token in the format **Bearer &lt;token&gt;**
+
 // @host		localhost:8080
 // @BasePath	/
 func main() {
