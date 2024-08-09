@@ -8,15 +8,15 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func LabelsRouter(app *fiber.App) {
+func LabelsRouter(router fiber.Router) {
 	var repo = repository.NewLabelRepository()
 	var serv = service.NewLabelService(repo)
 	var hand = handler.NewLabelHandler(serv)
 
-	app.Post("/labels", hand.CreateLabel)
-	app.Get("/labels", hand.GetLabels)
-	app.Delete("/labels/:labelId", hand.DeleteLabel)
-	app.Post("/books/:bookId/labels", hand.AddBookLabel)
-	app.Delete("/books/:bookId/labels", hand.DeleteBookLabel)
-	app.Get("/labels/:labelName/books", hand.GetBookByLabel)
+	router.Post("/labels", hand.CreateLabel)
+	router.Get("/labels", hand.GetLabels)
+	router.Delete("/labels/:labelId", hand.DeleteLabel)
+	router.Post("/books/:bookId/labels", hand.AddBookLabel)
+	router.Delete("/books/:bookId/labels", hand.DeleteBookLabel)
+	router.Get("/labels/:labelName/books", hand.GetBookByLabel)
 }

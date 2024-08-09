@@ -8,15 +8,15 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func BooksRouter(app *fiber.App) {
+func BooksRouter(router fiber.Router) {
 
 	repo := repository.NewBookRepository()
 	serv := service.NewBookService(repo)
 	hand := handler.NewBookHandler(serv)
 
-	app.Post("/books", hand.CreateBook)
-	app.Put("/books/:id", hand.UpdateBook)
-	app.Get("/books", hand.GetBooks)
-	app.Get("/books/:id", hand.GetBook)
-	app.Patch("/books/:id", hand.ArchiveBook)
+	router.Post("/books", hand.CreateBook)
+	router.Put("/books/:id", hand.UpdateBook)
+	router.Get("/books", hand.GetBooks)
+	router.Get("/books/:id", hand.GetBook)
+	router.Patch("/books/:id", hand.ArchiveBook)
 }

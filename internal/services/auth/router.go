@@ -11,7 +11,7 @@ import (
 	"golang.org/x/oauth2/google"
 )
 
-func AuthRouter(app *fiber.App) {
+func AuthRouter(router fiber.Router) {
 	googleOauthConfig := &oauth2.Config{
 		RedirectURL:  "http://localhost:8080/auth/google/callback",
 		ClientID:     config.GoogleClientID,
@@ -25,7 +25,6 @@ func AuthRouter(app *fiber.App) {
 	authService := service.NewAuthService(authRepo, googleOauthConfig, config.JWTSecret)
 	authHandler := handler.NewAuthHandler(authService)
 
-	auth := app.Group("/auth")
-	auth.Get("/google", authHandler.HandleGoogleLogin)
-	auth.Get("/google/callback", authHandler.HandleGoogleCallback)
+	router.Get("/auth/google", authHandler.HandleGoogleLogin)
+	router.Get("/auth/google/callback", authHandler.HandleGoogleCallback)
 }
