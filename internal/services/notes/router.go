@@ -8,13 +8,13 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func NotesRouter(app *fiber.App) {
+func NotesRouter(router fiber.Router) {
 	var repo = repository.NewNoteRepository()
 	var serv = service.NewNoteService(repo)
 	var hand = handler.NewNoteHandler(serv)
 
-	app.Get("/books/:bookId/notes", hand.GetNotes)
-	app.Post("/books/:bookId/notes", hand.CreateNote)
-	app.Patch("/books/:bookId/notes/:noteId", hand.UpdateNote)
-	app.Delete("/books/:bookId/notes/:noteId", hand.DeleteNote)
+	router.Get("/books/:bookId/notes", hand.GetNotes)
+	router.Post("/books/:bookId/notes", hand.CreateNote)
+	router.Patch("/books/:bookId/notes/:noteId", hand.UpdateNote)
+	router.Delete("/books/:bookId/notes/:noteId", hand.DeleteNote)
 }
