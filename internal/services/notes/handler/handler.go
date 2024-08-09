@@ -29,7 +29,7 @@ func NewNoteHandler(noteService service.NoteService) NoteHandler {
 // @Produce		json
 // @Param		bookId path string true "Book ID"
 // @Success		200		{object}	[]model.NoteResponse
-// @Router		/books/{bookId}/notes [get]
+// @Router		/api/books/{bookId}/notes [get]
 func (s *NoteHandlerImpl) GetNotes(c *fiber.Ctx) error {
 	bookId := c.Params("bookId")
 	notes, err := s.noteService.GetAllNotes(bookId)
@@ -48,7 +48,7 @@ func (s *NoteHandlerImpl) GetNotes(c *fiber.Ctx) error {
 // @Param		bookId path string true "Book ID"
 // @Param		book	body		model.NoteCreateSwagger	true	"Note to create"
 // @Success		201		{object}	model.NoteCreate
-// @Router		/books/{bookId}/notes [post]
+// @Router		/api/books/{bookId}/notes [post]
 func (s *NoteHandlerImpl) CreateNote(c *fiber.Ctx) error {
 	bookId := c.Params("bookId")
 	note := new(model.NoteCreate)
@@ -69,7 +69,7 @@ func (s *NoteHandlerImpl) CreateNote(c *fiber.Ctx) error {
 // @Param		noteId path string true "Note ID"
 // @Param		book	body		model.NoteUpdate	true	"Note to update"
 // @Success		201		{object}	model.NoteResponse
-// @Router		/books/{bookId}/notes/{noteId} [patch]
+// @Router		/api/books/{bookId}/notes/{noteId} [patch]
 func (s *NoteHandlerImpl) UpdateNote(c *fiber.Ctx) error {
 	bookId := c.Params("bookId")
 	noteId := c.Params("noteId")
@@ -99,7 +99,7 @@ func (s *NoteHandlerImpl) UpdateNote(c *fiber.Ctx) error {
 // @Param		bookId path string true "Book ID"
 // @Param		noteId path string true "Note ID"
 // @Success		201		{object} interface{}
-// @Router		/books/{bookId}/notes/{noteId} [delete]
+// @Router		/api/books/{bookId}/notes/{noteId} [delete]
 func (s *NoteHandlerImpl) DeleteNote(c *fiber.Ctx) error {
 	bookId := c.Params("bookId")
 	noteId := c.Params("noteId")

@@ -15,65 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/auth/google": {
-            "get": {
-                "description": "Redirects the user to Google's OAuth consent screen",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Initiate Google OAuth login",
-                "responses": {
-                    "302": {
-                        "description": "Redirect to Google's OAuth consent screen",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/auth/google/callback": {
-            "get": {
-                "description": "Processes the OAuth code returned by Google and returns a token",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Handle Google OAuth callback",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "The authorization code returned by Google",
-                        "name": "code",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/fiber.Map"
-                        }
-                    }
-                }
-            }
-        },
-        "/books": {
+        "/api/books": {
             "get": {
                 "description": "Get all book",
                 "produces": [
@@ -128,7 +70,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/books/{bookId}/labels": {
+        "/api/books/{bookId}/labels": {
             "post": {
                 "description": "Add label to book",
                 "consumes": [
@@ -208,7 +150,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/books/{bookId}/notes": {
+        "/api/books/{bookId}/notes": {
             "get": {
                 "description": "Get notes by book id",
                 "produces": [
@@ -279,7 +221,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/books/{bookId}/notes/{noteId}": {
+        "/api/books/{bookId}/notes/{noteId}": {
             "delete": {
                 "description": "Deelete note",
                 "consumes": [
@@ -364,7 +306,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/books/{id}": {
+        "/api/books/{id}": {
             "get": {
                 "description": "Get book by id",
                 "produces": [
@@ -480,7 +422,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/labels": {
+        "/api/labels": {
             "get": {
                 "description": "Get all labels",
                 "produces": [
@@ -535,7 +477,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/labels/{labelId}": {
+        "/api/labels/{labelId}": {
             "delete": {
                 "description": "Delete label",
                 "consumes": [
@@ -567,7 +509,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/labels/{labelName}/books": {
+        "/api/labels/{labelName}/books": {
             "get": {
                 "description": "Get book by label name",
                 "produces": [
@@ -591,6 +533,64 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/noto_internal_services_labels_model.BookResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/google": {
+            "get": {
+                "description": "Redirects the user to Google's OAuth consent screen",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Initiate Google OAuth login",
+                "responses": {
+                    "302": {
+                        "description": "Redirect to Google's OAuth consent screen",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/google/callback": {
+            "get": {
+                "description": "Processes the OAuth code returned by Google and returns a token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Handle Google OAuth callback",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The authorization code returned by Google",
+                        "name": "code",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
                         }
                     }
                 }
