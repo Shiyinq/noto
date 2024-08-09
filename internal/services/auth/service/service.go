@@ -18,14 +18,14 @@ type AuthService interface {
 }
 
 type authService struct {
-	repo              repository.AuthRepository
+	authRepo          repository.AuthRepository
 	googleOauthConfig *oauth2.Config
 	jwtSecret         []byte
 }
 
-func NewAuthService(repo repository.AuthRepository, googleOauthConfig *oauth2.Config, jwtSecret []byte) AuthService {
+func NewAuthService(authRepo repository.AuthRepository, googleOauthConfig *oauth2.Config, jwtSecret []byte) AuthService {
 	return &authService{
-		repo:              repo,
+		authRepo:          authRepo,
 		googleOauthConfig: googleOauthConfig,
 		jwtSecret:         jwtSecret,
 	}
@@ -53,12 +53,12 @@ func (s *authService) HandleGoogleCallback(code string) (*model.AuthToken, error
 		PhotoURL: userInfo["picture"].(string),
 	}
 
-	err = s.repo.FindOrCreateUser(context.Background(), user)
+	currentUser, err := s.authRepo.FindOrCreateUser(context.Background(), user)
 	if err != nil {
 		return nil, err
 	}
 
-	jwtToken, err := s.createJWTToken(user)
+	jwtToken, err := s.createJWTToken(currentUser)
 	if err != nil {
 		return nil, err
 	}
