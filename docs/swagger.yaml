@@ -147,45 +147,7 @@ info:
   title: NOTO API
   version: "1.0"
 paths:
-  /auth/google:
-    get:
-      description: Redirects the user to Google's OAuth consent screen
-      produces:
-      - application/json
-      responses:
-        "302":
-          description: Redirect to Google's OAuth consent screen
-          schema:
-            type: string
-      summary: Initiate Google OAuth login
-      tags:
-      - Auth
-  /auth/google/callback:
-    get:
-      consumes:
-      - application/json
-      description: Processes the OAuth code returned by Google and returns a token
-      parameters:
-      - description: The authorization code returned by Google
-        in: query
-        name: code
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/fiber.Map'
-      summary: Handle Google OAuth callback
-      tags:
-      - Auth
-  /books:
+  /api/books:
     get:
       description: Get all book
       produces:
@@ -221,7 +183,7 @@ paths:
       summary: Create a new book
       tags:
       - Books
-  /books/{bookId}/labels:
+  /api/books/{bookId}/labels:
     delete:
       consumes:
       - application/json
@@ -274,7 +236,7 @@ paths:
       summary: Add label to book
       tags:
       - Labels
-  /books/{bookId}/notes:
+  /api/books/{bookId}/notes:
     get:
       description: Get notes by book id
       parameters:
@@ -321,7 +283,7 @@ paths:
       summary: Create a new note
       tags:
       - Notes
-  /books/{bookId}/notes/{noteId}:
+  /api/books/{bookId}/notes/{noteId}:
     delete:
       consumes:
       - application/json
@@ -378,7 +340,7 @@ paths:
       summary: Update note
       tags:
       - Notes
-  /books/{id}:
+  /api/books/{id}:
     get:
       description: Get book by id
       parameters:
@@ -455,7 +417,7 @@ paths:
       summary: Update book by id
       tags:
       - Books
-  /labels:
+  /api/labels:
     get:
       description: Get all labels
       produces:
@@ -491,7 +453,7 @@ paths:
       summary: Create a new label
       tags:
       - Labels
-  /labels/{labelId}:
+  /api/labels/{labelId}:
     delete:
       consumes:
       - application/json
@@ -512,7 +474,7 @@ paths:
       summary: Delete label
       tags:
       - Labels
-  /labels/{labelName}/books:
+  /api/labels/{labelName}/books:
     get:
       description: Get book by label name
       parameters:
@@ -531,4 +493,42 @@ paths:
       summary: Get book by label name
       tags:
       - Labels
+  /auth/google:
+    get:
+      description: Redirects the user to Google's OAuth consent screen
+      produces:
+      - application/json
+      responses:
+        "302":
+          description: Redirect to Google's OAuth consent screen
+          schema:
+            type: string
+      summary: Initiate Google OAuth login
+      tags:
+      - Auth
+  /auth/google/callback:
+    get:
+      consumes:
+      - application/json
+      description: Processes the OAuth code returned by Google and returns a token
+      parameters:
+      - description: The authorization code returned by Google
+        in: query
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Map'
+      summary: Handle Google OAuth callback
+      tags:
+      - Auth
 swagger: "2.0"
