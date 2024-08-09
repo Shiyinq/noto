@@ -17,6 +17,11 @@ const docTemplate = `{
     "paths": {
         "/api/books": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get all book",
                 "produces": [
                     "application/json"
@@ -38,6 +43,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a new book",
                 "consumes": [
                     "application/json"
@@ -72,6 +82,11 @@ const docTemplate = `{
         },
         "/api/books/{bookId}/labels": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Add label to book",
                 "consumes": [
                     "application/json"
@@ -111,6 +126,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete label from book",
                 "consumes": [
                     "application/json"
@@ -152,6 +172,11 @@ const docTemplate = `{
         },
         "/api/books/{bookId}/notes": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get notes by book id",
                 "produces": [
                     "application/json"
@@ -182,6 +207,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a new note",
                 "consumes": [
                     "application/json"
@@ -223,6 +253,11 @@ const docTemplate = `{
         },
         "/api/books/{bookId}/notes/{noteId}": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Deelete note",
                 "consumes": [
                     "application/json"
@@ -260,6 +295,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update note",
                 "consumes": [
                     "application/json"
@@ -308,6 +348,11 @@ const docTemplate = `{
         },
         "/api/books/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get book by id",
                 "produces": [
                     "application/json"
@@ -341,6 +386,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update book by id",
                 "consumes": [
                     "application/json"
@@ -383,6 +433,11 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Archive book by id",
                 "consumes": [
                     "application/json"
@@ -424,6 +479,11 @@ const docTemplate = `{
         },
         "/api/labels": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get all labels",
                 "produces": [
                     "application/json"
@@ -445,6 +505,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a new label",
                 "consumes": [
                     "application/json"
@@ -479,6 +544,11 @@ const docTemplate = `{
         },
         "/api/labels/{labelId}": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete label",
                 "consumes": [
                     "application/json"
@@ -511,6 +581,11 @@ const docTemplate = `{
         },
         "/api/labels/{labelName}/books": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get book by label name",
                 "produces": [
                     "application/json"
@@ -814,6 +889,14 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "description": "Enter your bearer token in the format **Bearer \u0026lt;token\u0026gt;**",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

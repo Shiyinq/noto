@@ -26,6 +26,7 @@ func NewNoteHandler(noteService service.NoteService) NoteHandler {
 // @Summary		Get notes by book id
 // @Description	Get notes by book id
 // @Tags		Notes
+// @Security 	BearerAuth
 // @Produce		json
 // @Param		bookId path string true "Book ID"
 // @Success		200		{object}	[]model.NoteResponse
@@ -43,6 +44,7 @@ func (s *NoteHandlerImpl) GetNotes(c *fiber.Ctx) error {
 // @Summary		Create a new note
 // @Description	Create a new note
 // @Tags		Notes
+// @Security 	BearerAuth
 // @Accept		json
 // @Produce		json
 // @Param		bookId path string true "Book ID"
@@ -63,6 +65,7 @@ func (s *NoteHandlerImpl) CreateNote(c *fiber.Ctx) error {
 // @Summary		Update note
 // @Description	Update note
 // @Tags		Notes
+// @Security 	BearerAuth
 // @Accept		json
 // @Produce		json
 // @Param		bookId path string true "Book ID"
@@ -94,6 +97,7 @@ func (s *NoteHandlerImpl) UpdateNote(c *fiber.Ctx) error {
 // @Summary		Delete note
 // @Description	Deelete note
 // @Tags		Notes
+// @Security 	BearerAuth
 // @Accept		json
 // @Produce		json
 // @Param		bookId path string true "Book ID"
