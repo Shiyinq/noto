@@ -12,7 +12,7 @@ import (
 )
 
 type AuthRepository interface {
-	FindOrCreateUser(ctx context.Context, user *model.User) error
+	FindOrCreateUser(ctx context.Context, user *model.User) (*model.User, error)
 }
 
 type AuthRepositoryImpl struct {
@@ -23,7 +23,7 @@ func NewAuthRepository() AuthRepository {
 	return &AuthRepositoryImpl{users: config.DB.Collection("users")}
 }
 
-func (r *AuthRepositoryImpl) FindOrCreateUser(ctx context.Context, user *model.User) error {
+func (r *AuthRepositoryImpl) FindOrCreateUser(ctx context.Context, user *model.User) (*model.User, error) {
 	now := time.Now()
 	filter := bson.M{"email": user.Email}
 	update := bson.M{
@@ -39,5 +39,15 @@ func (r *AuthRepositoryImpl) FindOrCreateUser(ctx context.Context, user *model.U
 	opts := options.Update().SetUpsert(true)
 
 	_, err := r.users.UpdateOne(ctx, filter, update, opts)
-	return err
+	if err != nil {
+		return nil, err
+	}
+
+	var currentUser model.User
+	err = r.users.FindOne(ctx, filter).Decode(&currentUser)
+	if err != nil {
+		return nil, err
+	}
+
+	return &currentUser, err
 }
