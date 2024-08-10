@@ -3,6 +3,7 @@ package handler
 import (
 	"noto/internal/services/notes/model"
 	service "noto/internal/services/notes/service"
+	"noto/internal/utils"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -33,10 +34,12 @@ func NewNoteHandler(noteService service.NoteService) NoteHandler {
 // @Router		/api/books/{bookId}/notes [get]
 func (s *NoteHandlerImpl) GetNotes(c *fiber.Ctx) error {
 	bookId := c.Params("bookId")
+
 	notes, err := s.noteService.GetAllNotes(bookId)
 	if err != nil {
-		return err
+		return utils.ErrorInternalServer(c, err.Error())
 	}
+
 	return c.JSON(notes)
 }
 
@@ -53,11 +56,17 @@ func (s *NoteHandlerImpl) GetNotes(c *fiber.Ctx) error {
 // @Router		/api/books/{bookId}/notes [post]
 func (s *NoteHandlerImpl) CreateNote(c *fiber.Ctx) error {
 	bookId := c.Params("bookId")
+
 	note := new(model.NoteCreate)
 	if err := c.BodyParser(note); err != nil {
-		return c.Status(400).SendString(err.Error())
+		return utils.ErrorBadRequest(c, "failed to parse json: "+err.Error())
 	}
-	newNote, _ := s.noteService.CreateNote(bookId, note)
+
+	newNote, err := s.noteService.CreateNote(bookId, note)
+	if err != nil {
+		return utils.ErrorInternalServer(c, "failed to create note: "+err.Error())
+	}
+
 	return c.Status(fiber.StatusCreated).JSON(newNote)
 }
 
@@ -76,18 +85,15 @@ func (s *NoteHandlerImpl) CreateNote(c *fiber.Ctx) error {
 func (s *NoteHandlerImpl) UpdateNote(c *fiber.Ctx) error {
 	bookId := c.Params("bookId")
 	noteId := c.Params("noteId")
+
 	note := new(model.NoteUpdate)
 	if err := c.BodyParser(note); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return utils.ErrorBadRequest(c, "failed to parse json: "+err.Error())
 	}
 
 	updatedNote, err := s.noteService.UpdateNote(bookId, noteId, note)
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return utils.ErrorInternalServer(c, "failed to update note: "+err.Error())
 	}
 
 	return c.JSON(updatedNote)
@@ -109,10 +115,9 @@ func (s *NoteHandlerImpl) DeleteNote(c *fiber.Ctx) error {
 	noteId := c.Params("noteId")
 
 	if err := s.noteService.DeleteNote(bookId, noteId); err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return utils.ErrorInternalServer(c, "failed to delete note: "+err.Error())
 	}
+
 	return c.JSON(fiber.Map{
 		"success": "note deleted",
 	})
