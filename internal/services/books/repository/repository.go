@@ -19,7 +19,7 @@ type BookRepository interface {
 	GetBooks(userId primitive.ObjectID, isArchived bool) ([]model.BookResponse, error)
 	GetBook(userId primitive.ObjectID, bookId string) (*model.BookResponse, error)
 	UpdateBook(id string, title string) (*model.BookResponse, error)
-	ArchiveBook(id string, book *model.ArchiveBook) (*model.BookResponse, error)
+	ArchiveBook(userId primitive.ObjectID, bookId string, book *model.ArchiveBook) (*model.BookResponse, error)
 }
 
 type BookRepositoryImpl struct {
@@ -165,13 +165,13 @@ func (r *BookRepositoryImpl) UpdateBook(id string, title string) (*model.BookRes
 	return &updatedBook, nil
 }
 
-func (r *BookRepositoryImpl) ArchiveBook(id string, book *model.ArchiveBook) (*model.BookResponse, error) {
-	objectID, err := primitive.ObjectIDFromHex(id)
+func (r *BookRepositoryImpl) ArchiveBook(userId primitive.ObjectID, bookId string, book *model.ArchiveBook) (*model.BookResponse, error) {
+	objectBookId, err := primitive.ObjectIDFromHex(bookId)
 	if err != nil {
 		return nil, errors.New("invalid ID format")
 	}
 
-	filter := bson.M{"_id": objectID}
+	filter := bson.M{"userId": userId, "_id": objectBookId}
 	update := bson.M{
 		"$set": bson.M{
 			"isArchived": book.IsArchived,

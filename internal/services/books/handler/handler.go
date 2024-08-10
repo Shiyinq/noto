@@ -173,7 +173,12 @@ func (s *BookHandlerImpl) UpdateBook(c *fiber.Ctx) error {
 // @Success		200		{object}	model.BookResponse
 // @Router		/api/books/{id} [patch]
 func (s *BookHandlerImpl) ArchiveBook(c *fiber.Ctx) error {
-	id := c.Params("id")
+	objUserId, err := utils.GetUserID(c)
+	if err != nil {
+		return err
+	}
+
+	bookId := c.Params("id")
 	archive := new(model.ArchiveBook)
 	if err := c.BodyParser(&archive); err != nil {
 		return c.Status(400).JSON(fiber.Map{
@@ -181,7 +186,7 @@ func (s *BookHandlerImpl) ArchiveBook(c *fiber.Ctx) error {
 		})
 	}
 
-	archived, err := s.bookService.ArchiveBook(id, archive)
+	archived, err := s.bookService.ArchiveBook(objUserId, bookId, archive)
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"error": "Book not found",
