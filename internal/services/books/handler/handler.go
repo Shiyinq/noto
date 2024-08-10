@@ -104,8 +104,13 @@ func (s *BookHandlerImpl) GetBooks(c *fiber.Ctx) error {
 // @Failure 	404 {object} fiber.Map
 // @Router		/api/books/{id} [get]
 func (s *BookHandlerImpl) GetBook(c *fiber.Ctx) error {
-	id := c.Params("id")
-	book, err := s.bookService.GetBook(id)
+	objUserId, err := utils.GetUserID(c)
+	if err != nil {
+		return err
+	}
+
+	bookId := c.Params("id")
+	book, err := s.bookService.GetBook(objUserId, bookId)
 	if err != nil {
 		if err.Error() == "book not found" {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{

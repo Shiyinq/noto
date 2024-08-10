@@ -10,7 +10,7 @@ import (
 type BookService interface {
 	CreateBook(book *model.BookCreate) (*model.BookCreate, error)
 	GetBooks(userId primitive.ObjectID, isArchived bool) ([]model.BookResponse, error)
-	GetBook(id string) (*model.BookResponse, error)
+	GetBook(userId primitive.ObjectID, bookId string) (*model.BookResponse, error)
 	UpdateBook(id string, title string) (*model.BookResponse, error)
 	ArchiveBook(id string, book *model.ArchiveBook) (*model.BookResponse, error)
 }
@@ -32,8 +32,8 @@ func (r *BookServiceImpl) GetBooks(userId primitive.ObjectID, isArchived bool) (
 	return r.bookRepo.GetBooks(userId, isArchived)
 }
 
-func (r *BookServiceImpl) GetBook(id string) (*model.BookResponse, error) {
-	return r.bookRepo.GetBookByID(id)
+func (r *BookServiceImpl) GetBook(userId primitive.ObjectID, bookId string) (*model.BookResponse, error) {
+	return r.bookRepo.GetBook(userId, bookId)
 }
 
 func (s *BookServiceImpl) UpdateBook(id string, title string) (*model.BookResponse, error) {
