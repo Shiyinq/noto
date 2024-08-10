@@ -109,7 +109,11 @@ func (s *BookHandlerImpl) GetBook(c *fiber.Ctx) error {
 		return err
 	}
 
-	bookId := c.Params("id")
+	bookId, err := utils.ToObjectID(c.Params("id"))
+	if err != nil {
+		return err
+	}
+
 	book, err := s.bookService.GetBook(objUserId, bookId)
 	if err != nil {
 		if err.Error() == "book not found" {

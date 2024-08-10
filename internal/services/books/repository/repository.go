@@ -17,7 +17,7 @@ import (
 type BookRepository interface {
 	CreateBook(book *model.BookCreate) (*model.BookCreate, error)
 	GetBooks(userId primitive.ObjectID, isArchived bool) ([]model.BookResponse, error)
-	GetBook(userId primitive.ObjectID, bookId string) (*model.BookResponse, error)
+	GetBook(userId primitive.ObjectID, bookId primitive.ObjectID) (*model.BookResponse, error)
 	UpdateBook(book *model.BookUpdate) (*model.BookResponse, error)
 	ArchiveBook(userId primitive.ObjectID, bookId string, book *model.ArchiveBook) (*model.BookResponse, error)
 }
@@ -106,17 +106,12 @@ func (r *BookRepositoryImpl) GetBooks(userId primitive.ObjectID, isArchived bool
 	return books, nil
 }
 
-func (r *BookRepositoryImpl) GetBook(userId primitive.ObjectID, bookId string) (*model.BookResponse, error) {
+func (r *BookRepositoryImpl) GetBook(userId primitive.ObjectID, bookId primitive.ObjectID) (*model.BookResponse, error) {
 	var book []model.BookResponse
-
-	objectBookId, err := primitive.ObjectIDFromHex(bookId)
-	if err != nil {
-		return nil, errors.New("invalid ID format")
-	}
 
 	filter := bson.D{
 		{Key: "userId", Value: userId},
-		{Key: "_id", Value: objectBookId},
+		{Key: "_id", Value: bookId},
 	}
 	pipeline := bookAgregate(filter)
 
