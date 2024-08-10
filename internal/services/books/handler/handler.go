@@ -38,22 +38,18 @@ func NewBookHandler(bookService service.BookService) BookHandler {
 func (s *BookHandlerImpl) CreateBook(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
 	if err != nil {
-		return err
+		return utils.ErrorUnauthorized(c, err.Error())
 	}
 
 	book := new(model.BookCreate)
 	if err := c.BodyParser(book); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Failed to parse JSON: " + err.Error(),
-		})
+		return utils.ErrorBadRequest(c, "failed to parse json: "+err.Error())
 	}
 
 	book.UserID = userId
 	newBook, err := s.bookService.CreateBook(book)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Failed to create book: " + err.Error(),
-		})
+		return utils.ErrorInternalServer(c, "failed to create book: "+err.Error())
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(newBook)
@@ -70,7 +66,7 @@ func (s *BookHandlerImpl) CreateBook(c *fiber.Ctx) error {
 func (s *BookHandlerImpl) GetBooks(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
 	if err != nil {
-		return err
+		return utils.ErrorUnauthorized(c, err.Error())
 	}
 
 	isArchivedStr := c.Query("is_archived")
@@ -80,15 +76,13 @@ func (s *BookHandlerImpl) GetBooks(c *fiber.Ctx) error {
 		var errConv error
 		isArchived, errConv = strconv.ParseBool(isArchivedStr)
 		if errConv != nil {
-			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid value for is_archived"})
+			return utils.ErrorBadRequest(c, "invalid value for is_archived")
 		}
 	}
 
 	books, err := s.bookService.GetBooks(userId, isArchived)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return utils.ErrorInternalServer(c, err.Error())
 	}
 	return c.JSON(books)
 }
@@ -106,24 +100,20 @@ func (s *BookHandlerImpl) GetBooks(c *fiber.Ctx) error {
 func (s *BookHandlerImpl) GetBook(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
 	if err != nil {
-		return err
+		return utils.ErrorUnauthorized(c, err.Error())
 	}
 
 	bookId, err := utils.ToObjectID(c.Params("id"))
 	if err != nil {
-		return err
+		return utils.ErrorBadRequest(c, err.Error())
 	}
 
 	book, err := s.bookService.GetBook(userId, bookId)
 	if err != nil {
 		if err.Error() == "book not found" {
-			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-				"error": err.Error(),
-			})
+			return utils.ErrorNotFound(c, err.Error())
 		}
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return utils.ErrorInternalServer(c, err.Error())
 	}
 	return c.JSON(book)
 }
@@ -142,35 +132,29 @@ func (s *BookHandlerImpl) GetBook(c *fiber.Ctx) error {
 func (s *BookHandlerImpl) UpdateBook(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
 	if err != nil {
-		return err
+		return utils.ErrorUnauthorized(c, err.Error())
 	}
 
 	bookId, err := utils.ToObjectID(c.Params("id"))
 	if err != nil {
-		return err
+		return utils.ErrorBadRequest(c, err.Error())
 	}
 
 	book := new(model.BookUpdate)
 	if err := c.BodyParser(&book); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Cannot parse JSON",
-		})
+		return utils.ErrorBadRequest(c, "cannot parse json: "+err.Error())
 	}
 
 	title := book.Title
 	if title == "" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Title is required",
-		})
+		return utils.ErrorBadRequest(c, "title is required")
 	}
 
 	book.ID = bookId
 	book.UserID = userId
 	updatedBook, err := s.bookService.UpdateBook(book)
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"error": "Book not found",
-		})
+		return utils.ErrorInternalServer(c, "failed to update book: "+err.Error())
 	}
 
 	return c.JSON(updatedBook)
@@ -190,28 +174,24 @@ func (s *BookHandlerImpl) UpdateBook(c *fiber.Ctx) error {
 func (s *BookHandlerImpl) ArchiveBook(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
 	if err != nil {
-		return err
+		return utils.ErrorUnauthorized(c, err.Error())
 	}
 
 	bookId, err := utils.ToObjectID(c.Params("id"))
 	if err != nil {
-		return err
+		return utils.ErrorBadRequest(c, err.Error())
 	}
 
 	book := new(model.ArchiveBook)
 	if err := c.BodyParser(&book); err != nil {
-		return c.Status(400).JSON(fiber.Map{
-			"error": "Cannot parse JSON",
-		})
+		return utils.ErrorBadRequest(c, "cannot parse json: "+err.Error())
 	}
 
 	book.ID = bookId
 	book.UserID = userId
 	archived, err := s.bookService.ArchiveBook(book)
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"error": "Book not found",
-		})
+		return utils.ErrorInternalServer(c, "failed to archive book: "+err.Error())
 	}
 
 	return c.JSON(archived)
