@@ -132,26 +132,37 @@ func (s *BookHandlerImpl) GetBook(c *fiber.Ctx) error {
 // @Produce		json
 // @Accept		json
 // @Param 		id path string true "Book ID"
-// @Param		book	body		map[string]string true	"Book to update"
+// @Param		book	body		model.BookUpdateSwagger	true	"Book to update"
 // @Success		200		{object}	model.BookResponse
 // @Router		/api/books/{id} [put]
 func (s *BookHandlerImpl) UpdateBook(c *fiber.Ctx) error {
-	id := c.Params("id")
-	var data map[string]string
-	if err := c.BodyParser(&data); err != nil {
+	userId, err := utils.GetUserID(c)
+	if err != nil {
+		return err
+	}
+
+	bookId, err := utils.ToObjectID(c.Params("id"))
+	if err != nil {
+		return err
+	}
+
+	book := new(model.BookUpdate)
+	if err := c.BodyParser(&book); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Cannot parse JSON",
 		})
 	}
 
-	title, ok := data["title"]
-	if !ok {
+	title := book.Title
+	if title == "" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Title is required",
 		})
 	}
 
-	updatedBook, err := s.bookService.UpdateBook(id, title)
+	book.ID = bookId
+	book.UserID = userId
+	updatedBook, err := s.bookService.UpdateBook(book)
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"error": "Book not found",
