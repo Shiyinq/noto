@@ -36,7 +36,7 @@ func NewBookHandler(bookService service.BookService) BookHandler {
 // @Success		201		{object}	model.BookCreate
 // @Router		/api/books [post]
 func (s *BookHandlerImpl) CreateBook(c *fiber.Ctx) error {
-	objUserId, err := utils.GetUserID(c)
+	userId, err := utils.GetUserID(c)
 	if err != nil {
 		return err
 	}
@@ -48,7 +48,7 @@ func (s *BookHandlerImpl) CreateBook(c *fiber.Ctx) error {
 		})
 	}
 
-	book.UserID = objUserId
+	book.UserID = userId
 	newBook, err := s.bookService.CreateBook(book)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -68,7 +68,7 @@ func (s *BookHandlerImpl) CreateBook(c *fiber.Ctx) error {
 // @Success		200		{object}	[]model.BookResponse
 // @Router		/api/books [get]
 func (s *BookHandlerImpl) GetBooks(c *fiber.Ctx) error {
-	objUserId, err := utils.GetUserID(c)
+	userId, err := utils.GetUserID(c)
 	if err != nil {
 		return err
 	}
@@ -84,7 +84,7 @@ func (s *BookHandlerImpl) GetBooks(c *fiber.Ctx) error {
 		}
 	}
 
-	books, err := s.bookService.GetBooks(objUserId, isArchived)
+	books, err := s.bookService.GetBooks(userId, isArchived)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),
@@ -104,7 +104,7 @@ func (s *BookHandlerImpl) GetBooks(c *fiber.Ctx) error {
 // @Failure 	404 {object} fiber.Map
 // @Router		/api/books/{id} [get]
 func (s *BookHandlerImpl) GetBook(c *fiber.Ctx) error {
-	objUserId, err := utils.GetUserID(c)
+	userId, err := utils.GetUserID(c)
 	if err != nil {
 		return err
 	}
@@ -114,7 +114,7 @@ func (s *BookHandlerImpl) GetBook(c *fiber.Ctx) error {
 		return err
 	}
 
-	book, err := s.bookService.GetBook(objUserId, bookId)
+	book, err := s.bookService.GetBook(userId, bookId)
 	if err != nil {
 		if err.Error() == "book not found" {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
