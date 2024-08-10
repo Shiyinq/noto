@@ -3,7 +3,7 @@ definitions:
   fiber.Map:
     additionalProperties: true
     type: object
-  noto_internal_services_books_model.ArchiveBook:
+  noto_internal_services_books_model.ArchiveBookSwagger:
     properties:
       is_archived:
         type: boolean
@@ -19,6 +19,8 @@ definitions:
       title:
         type: string
       updated_at:
+        type: string
+      user_id:
         type: string
     type: object
   noto_internal_services_books_model.BookCreateSwagger:
@@ -41,6 +43,11 @@ definitions:
       title:
         type: string
       updated_at:
+        type: string
+    type: object
+  noto_internal_services_books_model.BookUpdateSwagger:
+    properties:
+      title:
         type: string
     type: object
   noto_internal_services_books_model.Label:
@@ -396,7 +403,7 @@ paths:
         name: book
         required: true
         schema:
-          $ref: '#/definitions/noto_internal_services_books_model.ArchiveBook'
+          $ref: '#/definitions/noto_internal_services_books_model.ArchiveBookSwagger'
       produces:
       - application/json
       responses:
@@ -424,9 +431,7 @@ paths:
         name: book
         required: true
         schema:
-          additionalProperties:
-            type: string
-          type: object
+          $ref: '#/definitions/noto_internal_services_books_model.BookUpdateSwagger'
       produces:
       - application/json
       responses:

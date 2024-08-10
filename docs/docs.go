@@ -416,10 +416,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/noto_internal_services_books_model.BookUpdateSwagger"
                         }
                     }
                 ],
@@ -463,7 +460,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/noto_internal_services_books_model.ArchiveBook"
+                            "$ref": "#/definitions/noto_internal_services_books_model.ArchiveBookSwagger"
                         }
                     }
                 ],
@@ -677,7 +674,7 @@ const docTemplate = `{
             "type": "object",
             "additionalProperties": true
         },
-        "noto_internal_services_books_model.ArchiveBook": {
+        "noto_internal_services_books_model.ArchiveBookSwagger": {
             "type": "object",
             "properties": {
                 "is_archived": {
@@ -701,6 +698,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                },
+                "user_id": {
                     "type": "string"
                 }
             }
@@ -735,6 +735,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "noto_internal_services_books_model.BookUpdateSwagger": {
+            "type": "object",
+            "properties": {
+                "title": {
                     "type": "string"
                 }
             }
