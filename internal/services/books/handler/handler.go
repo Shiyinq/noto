@@ -3,6 +3,7 @@ package handler
 import (
 	"noto/internal/services/books/model"
 	"noto/internal/services/books/service"
+	"noto/internal/utils"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -35,15 +36,27 @@ func NewBookHandler(bookService service.BookService) BookHandler {
 // @Success		201		{object}	model.BookCreate
 // @Router		/api/books [post]
 func (s *BookHandlerImpl) CreateBook(c *fiber.Ctx) error {
-	note := new(model.BookCreate)
-	if err := c.BodyParser(note); err != nil {
+	objUserId, err := utils.GetUserID(c)
+	if err != nil {
+		return err
+	}
+
+	book := new(model.BookCreate)
+	if err := c.BodyParser(book); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Cannot parse JSON",
+			"error": "Failed to parse JSON: " + err.Error(),
 		})
 	}
-	newNote, _ := s.bookService.CreateBook(note)
 
-	return c.Status(fiber.StatusCreated).JSON(newNote)
+	book.UserID = objUserId
+	newBook, err := s.bookService.CreateBook(book)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to create book: " + err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusCreated).JSON(newBook)
 }
 
 // GetBooks
