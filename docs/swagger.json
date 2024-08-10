@@ -410,10 +410,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/noto_internal_services_books_model.BookUpdateSwagger"
                         }
                     }
                 ],
@@ -457,7 +454,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/noto_internal_services_books_model.ArchiveBook"
+                            "$ref": "#/definitions/noto_internal_services_books_model.ArchiveBookSwagger"
                         }
                     }
                 ],
@@ -671,7 +668,7 @@
             "type": "object",
             "additionalProperties": true
         },
-        "noto_internal_services_books_model.ArchiveBook": {
+        "noto_internal_services_books_model.ArchiveBookSwagger": {
             "type": "object",
             "properties": {
                 "is_archived": {
@@ -695,6 +692,9 @@
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                },
+                "user_id": {
                     "type": "string"
                 }
             }
@@ -729,6 +729,14 @@
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "noto_internal_services_books_model.BookUpdateSwagger": {
+            "type": "object",
+            "properties": {
+                "title": {
                     "type": "string"
                 }
             }
