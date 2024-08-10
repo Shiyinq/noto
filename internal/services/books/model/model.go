@@ -12,6 +12,7 @@ type BookCreateSwagger struct {
 
 type BookCreate struct {
 	ID         primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	UserID     primitive.ObjectID `json:"user_id" bson:"userId"`
 	Title      string             `json:"title" bson:"title"`
 	CreatedAt  time.Time          `json:"created_at" bson:"createdAt"`
 	UpdatedAt  time.Time          `json:"updated_at" bson:"updatedAt"`
