@@ -184,24 +184,30 @@ func (s *BookHandlerImpl) UpdateBook(c *fiber.Ctx) error {
 // @Produce		json
 // @Accept		json
 // @Param 		id path string true "Book ID"
-// @Param		book	body		model.ArchiveBook true	"Book to archive"
+// @Param		book	body		model.ArchiveBookSwagger true	"Book to archive"
 // @Success		200		{object}	model.BookResponse
 // @Router		/api/books/{id} [patch]
 func (s *BookHandlerImpl) ArchiveBook(c *fiber.Ctx) error {
-	objUserId, err := utils.GetUserID(c)
+	userId, err := utils.GetUserID(c)
 	if err != nil {
 		return err
 	}
 
-	bookId := c.Params("id")
-	archive := new(model.ArchiveBook)
-	if err := c.BodyParser(&archive); err != nil {
+	bookId, err := utils.ToObjectID(c.Params("id"))
+	if err != nil {
+		return err
+	}
+
+	book := new(model.ArchiveBook)
+	if err := c.BodyParser(&book); err != nil {
 		return c.Status(400).JSON(fiber.Map{
 			"error": "Cannot parse JSON",
 		})
 	}
 
-	archived, err := s.bookService.ArchiveBook(objUserId, bookId, archive)
+	book.ID = bookId
+	book.UserID = userId
+	archived, err := s.bookService.ArchiveBook(book)
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"error": "Book not found",

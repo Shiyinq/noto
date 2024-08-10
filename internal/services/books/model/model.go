@@ -43,6 +43,12 @@ type BookResponse struct {
 	Labels     []Label   `json:"labels" bson:"labels"`
 }
 
-type ArchiveBook struct {
+type ArchiveBookSwagger struct {
 	IsArchived bool `json:"is_archived" bson:"isArchived"`
+}
+
+type ArchiveBook struct {
+	ID         primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	UserID     primitive.ObjectID `json:"user_id" bson:"userId"`
+	IsArchived bool               `json:"is_archived" bson:"isArchived"`
 }
