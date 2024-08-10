@@ -68,18 +68,23 @@ func (s *BookHandlerImpl) CreateBook(c *fiber.Ctx) error {
 // @Success		200		{object}	[]model.BookResponse
 // @Router		/api/books [get]
 func (s *BookHandlerImpl) GetBooks(c *fiber.Ctx) error {
-	isArchivedStr := c.Query("is_archived")
-	var isArchived bool
-	var err error
+	objUserId, err := utils.GetUserID(c)
+	if err != nil {
+		return err
+	}
 
+	isArchivedStr := c.Query("is_archived")
+
+	var isArchived bool
 	if isArchivedStr != "" {
-		isArchived, err = strconv.ParseBool(isArchivedStr)
-		if err != nil {
+		var errConv error
+		isArchived, errConv = strconv.ParseBool(isArchivedStr)
+		if errConv != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid value for is_archived"})
 		}
 	}
 
-	books, err := s.bookService.GetAllBooks(isArchived)
+	books, err := s.bookService.GetBooks(objUserId, isArchived)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),

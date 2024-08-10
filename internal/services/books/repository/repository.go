@@ -16,7 +16,7 @@ import (
 
 type BookRepository interface {
 	CreateBook(book *model.BookCreate) (*model.BookCreate, error)
-	GetAllBooks(isArchived bool) ([]model.BookResponse, error)
+	GetBooks(userId primitive.ObjectID, isArchived bool) ([]model.BookResponse, error)
 	GetBookByID(id string) (*model.BookResponse, error)
 	UpdateBook(id string, title string) (*model.BookResponse, error)
 	ArchiveBook(id string, book *model.ArchiveBook) (*model.BookResponse, error)
@@ -82,10 +82,11 @@ func (r *BookRepositoryImpl) CreateBook(book *model.BookCreate) (*model.BookCrea
 	return book, nil
 }
 
-func (r *BookRepositoryImpl) GetAllBooks(isArchived bool) ([]model.BookResponse, error) {
+func (r *BookRepositoryImpl) GetBooks(userId primitive.ObjectID, isArchived bool) ([]model.BookResponse, error) {
 	var books []model.BookResponse
 
 	filter := bson.D{
+		{Key: "userId", Value: userId},
 		{Key: "isArchived", Value: isArchived},
 	}
 	pipeline := bookAgregate(filter)
