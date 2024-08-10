@@ -19,6 +19,16 @@ type BookCreate struct {
 	IsArchived bool               `json:"is_archived" bson:"isArchived"`
 }
 
+type BookUpdateSwagger struct {
+	Title string `json:"title" bson:"title"`
+}
+
+type BookUpdate struct {
+	ID     primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	UserID primitive.ObjectID `json:"user_id" bson:"userId"`
+	Title  string             `json:"title" bson:"title"`
+}
+
 type Label struct {
 	ID   string `json:"id" bson:"_id"`
 	Name string `json:"name" bson:"name"`

@@ -11,7 +11,7 @@ type BookService interface {
 	CreateBook(book *model.BookCreate) (*model.BookCreate, error)
 	GetBooks(userId primitive.ObjectID, isArchived bool) ([]model.BookResponse, error)
 	GetBook(userId primitive.ObjectID, bookId string) (*model.BookResponse, error)
-	UpdateBook(id string, title string) (*model.BookResponse, error)
+	UpdateBook(book *model.BookUpdate) (*model.BookResponse, error)
 	ArchiveBook(userId primitive.ObjectID, bookId string, book *model.ArchiveBook) (*model.BookResponse, error)
 }
 
@@ -36,8 +36,8 @@ func (r *BookServiceImpl) GetBook(userId primitive.ObjectID, bookId string) (*mo
 	return r.bookRepo.GetBook(userId, bookId)
 }
 
-func (s *BookServiceImpl) UpdateBook(id string, title string) (*model.BookResponse, error) {
-	updatedBook, err := s.bookRepo.UpdateBook(id, title)
+func (s *BookServiceImpl) UpdateBook(book *model.BookUpdate) (*model.BookResponse, error) {
+	updatedBook, err := s.bookRepo.UpdateBook(book)
 	if err != nil {
 		return nil, err
 	}
