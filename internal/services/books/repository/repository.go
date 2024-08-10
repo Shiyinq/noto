@@ -19,7 +19,7 @@ type BookRepository interface {
 	GetBooks(userId primitive.ObjectID, isArchived bool) ([]model.BookResponse, error)
 	GetBook(userId primitive.ObjectID, bookId primitive.ObjectID) (*model.BookResponse, error)
 	UpdateBook(book *model.BookUpdate) (*model.BookResponse, error)
-	ArchiveBook(userId primitive.ObjectID, bookId string, book *model.ArchiveBook) (*model.BookResponse, error)
+	ArchiveBook(book *model.ArchiveBook) (*model.BookResponse, error)
 }
 
 type BookRepositoryImpl struct {
@@ -155,13 +155,8 @@ func (r *BookRepositoryImpl) UpdateBook(book *model.BookUpdate) (*model.BookResp
 	return &updatedBook, nil
 }
 
-func (r *BookRepositoryImpl) ArchiveBook(userId primitive.ObjectID, bookId string, book *model.ArchiveBook) (*model.BookResponse, error) {
-	objectBookId, err := primitive.ObjectIDFromHex(bookId)
-	if err != nil {
-		return nil, errors.New("invalid ID format")
-	}
-
-	filter := bson.M{"userId": userId, "_id": objectBookId}
+func (r *BookRepositoryImpl) ArchiveBook(book *model.ArchiveBook) (*model.BookResponse, error) {
+	filter := bson.M{"userId": book.UserID, "_id": book.ID}
 	update := bson.M{
 		"$set": bson.M{
 			"isArchived": book.IsArchived,
@@ -178,9 +173,10 @@ func (r *BookRepositoryImpl) ArchiveBook(userId primitive.ObjectID, bookId strin
 	}
 
 	var updatedBook model.BookResponse
-	err = result.Decode(&updatedBook)
+	err := result.Decode(&updatedBook)
 	if err != nil {
 		return nil, err
 	}
+
 	return &updatedBook, nil
 }
