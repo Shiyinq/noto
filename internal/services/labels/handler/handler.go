@@ -3,6 +3,7 @@ package handler
 import (
 	"noto/internal/services/labels/model"
 	"noto/internal/services/labels/service"
+	"noto/internal/utils"
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -38,16 +39,12 @@ func NewLabelHandler(labelService service.LabelService) LabelHandler {
 func (s *LabelHandlerImpl) CreateLabel(c *fiber.Ctx) error {
 	label := new(model.LabelCreate)
 	if err := c.BodyParser(label); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return utils.ErrorBadRequest(c, "failed to parse json: "+err.Error())
 	}
 
 	newLabel, err := s.labelService.CreateLabel(label)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return utils.ErrorInternalServer(c, "failed to create label: "+err.Error())
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(newLabel)
@@ -64,9 +61,7 @@ func (s *LabelHandlerImpl) CreateLabel(c *fiber.Ctx) error {
 func (s *LabelHandlerImpl) GetLabels(c *fiber.Ctx) error {
 	labels, err := s.labelService.GetLabels()
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return utils.ErrorInternalServer(c, err.Error())
 	}
 
 	return c.JSON(labels)
@@ -86,9 +81,7 @@ func (s *LabelHandlerImpl) DeleteLabel(c *fiber.Ctx) error {
 	labelId := c.Params("labelId")
 
 	if err := s.labelService.DeleteLabel(labelId); err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return utils.ErrorInternalServer(c, "failed to delete label: "+err.Error())
 	}
 
 	return c.JSON(fiber.Map{
@@ -112,24 +105,18 @@ func (s *LabelHandlerImpl) AddBookLabel(c *fiber.Ctx) error {
 	label := new(model.BookLabel)
 	objectBookId, err := primitive.ObjectIDFromHex(bookId)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return utils.ErrorBadRequest(c, err.Error())
 	}
 
 	label.BookId = objectBookId
 
 	if err := c.BodyParser(label); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return utils.ErrorBadRequest(c, "failed to parse json: "+err.Error())
 	}
 
 	added, err := s.labelService.AddBookLabel(label)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return utils.ErrorInternalServer(c, "failed to add book label: "+err.Error())
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(added)
@@ -151,24 +138,18 @@ func (s *LabelHandlerImpl) DeleteBookLabel(c *fiber.Ctx) error {
 	label := new(model.BookLabel)
 	objectBookId, err := primitive.ObjectIDFromHex(bookId)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return utils.ErrorBadRequest(c, err.Error())
 	}
 
 	label.BookId = objectBookId
 
 	if err := c.BodyParser(label); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return utils.ErrorBadRequest(c, "failed to parse json: "+err.Error())
 	}
 
 	deleted := s.labelService.DeleteBookLabel(label)
 	if deleted != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": deleted.Error(),
-		})
+		return utils.ErrorInternalServer(c, "failed to delete book label: "+deleted.Error())
 	}
 
 	return c.JSON(fiber.Map{
@@ -188,17 +169,13 @@ func (s *LabelHandlerImpl) DeleteBookLabel(c *fiber.Ctx) error {
 func (s *LabelHandlerImpl) GetBookByLabel(c *fiber.Ctx) error {
 	labelName := c.Params("labelName")
 	if labelName == "" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "label name required!",
-		})
+		return utils.ErrorBadRequest(c, "label name required!")
 	}
 
 	books, err := s.labelService.GetBookByLabel(labelName)
 
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return utils.ErrorInternalServer(c, err.Error())
 	}
 
 	return c.JSON(books)
