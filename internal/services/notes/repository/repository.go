@@ -15,8 +15,8 @@ import (
 
 type NoteRepository interface {
 	GetNotes(userId primitive.ObjectID, bookId primitive.ObjectID) ([]model.NoteResponse, error)
-	CreateNote(bookId string, note *model.NoteCreate) (*model.NoteCreate, error)
-	UpdateNote(bookId string, noteId string, note *model.NoteUpdate) (*model.NoteResponse, error)
+	CreateNote(note *model.NoteCreate) (*model.NoteCreate, error)
+	UpdateNote(note *model.NoteUpdate) (*model.NoteResponse, error)
 	DeleteNote(userId primitive.ObjectID, bookId primitive.ObjectID, noteId primitive.ObjectID) error
 }
 
@@ -44,13 +44,7 @@ func (r *NoteRepositoryImpl) GetNotes(userId primitive.ObjectID, bookId primitiv
 	return notes, nil
 }
 
-func (r *NoteRepositoryImpl) CreateNote(bookId string, note *model.NoteCreate) (*model.NoteCreate, error) {
-	objectID, err := primitive.ObjectIDFromHex(bookId)
-	if err != nil {
-		return nil, errors.New("invalid bookId format")
-	}
-
-	note.BookId = objectID
+func (r *NoteRepositoryImpl) CreateNote(note *model.NoteCreate) (*model.NoteCreate, error) {
 	note.CreatedAt = time.Now()
 	note.UpdatedAt = time.Now()
 
@@ -64,18 +58,8 @@ func (r *NoteRepositoryImpl) CreateNote(bookId string, note *model.NoteCreate) (
 	return note, nil
 }
 
-func (r *NoteRepositoryImpl) UpdateNote(bookId string, noteId string, note *model.NoteUpdate) (*model.NoteResponse, error) {
-	bookObjectID, err := primitive.ObjectIDFromHex(bookId)
-	if err != nil {
-		return nil, errors.New("invalid bookId format")
-	}
-
-	noteObjectID, err := primitive.ObjectIDFromHex(noteId)
-	if err != nil {
-		return nil, errors.New("invalid noteId format")
-	}
-
-	filter := bson.M{"_id": noteObjectID, "bookId": bookObjectID}
+func (r *NoteRepositoryImpl) UpdateNote(note *model.NoteUpdate) (*model.NoteResponse, error) {
+	filter := bson.M{"_id": note.ID, "userId": note.UserId, "bookId": note.BookId}
 	update := bson.M{
 		"$set": bson.M{
 			"text":      note.Text,
@@ -93,7 +77,7 @@ func (r *NoteRepositoryImpl) UpdateNote(bookId string, noteId string, note *mode
 	}
 
 	var updatedNote model.NoteResponse
-	err = result.Decode(&updatedNote)
+	err := result.Decode(&updatedNote)
 	if err != nil {
 		return nil, err
 	}

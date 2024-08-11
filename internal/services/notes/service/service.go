@@ -9,8 +9,8 @@ import (
 
 type NoteService interface {
 	GetNotes(userId primitive.ObjectID, bookId primitive.ObjectID) ([]model.NoteResponse, error)
-	CreateNote(bookId string, note *model.NoteCreate) (*model.NoteCreate, error)
-	UpdateNote(bookId string, noteId string, note *model.NoteUpdate) (*model.NoteResponse, error)
+	CreateNote(note *model.NoteCreate) (*model.NoteCreate, error)
+	UpdateNote(note *model.NoteUpdate) (*model.NoteResponse, error)
 	DeleteNote(userId primitive.ObjectID, bookId primitive.ObjectID, noteId primitive.ObjectID) error
 }
 
@@ -27,13 +27,13 @@ func (r *NoteServiceImpl) GetNotes(userId primitive.ObjectID, bookId primitive.O
 	return notes, err
 }
 
-func (r *NoteServiceImpl) CreateNote(bookId string, note *model.NoteCreate) (*model.NoteCreate, error) {
-	var newNote, err = r.noteRepo.CreateNote(bookId, note)
+func (r *NoteServiceImpl) CreateNote(note *model.NoteCreate) (*model.NoteCreate, error) {
+	var newNote, err = r.noteRepo.CreateNote(note)
 	return newNote, err
 }
 
-func (r *NoteServiceImpl) UpdateNote(bookId string, noteId string, note *model.NoteUpdate) (*model.NoteResponse, error) {
-	var updated, err = r.noteRepo.UpdateNote(bookId, noteId, note)
+func (r *NoteServiceImpl) UpdateNote(note *model.NoteUpdate) (*model.NoteResponse, error) {
+	var updated, err = r.noteRepo.UpdateNote(note)
 	return updated, err
 }
 
