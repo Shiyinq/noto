@@ -93,7 +93,7 @@ func (s *BookHandlerImpl) GetBooks(c *fiber.Ctx) error {
 // @Tags		Books
 // @Security 	BearerAuth
 // @Produce		json
-// @Param 		id path string true "Book ID"
+// @Param 		bookId path string true "Book ID"
 // @Success		200		{object}	model.BookResponse
 // @Failure 	404 {object} fiber.Map
 // @Router		/api/books/{bookId} [get]
@@ -125,7 +125,7 @@ func (s *BookHandlerImpl) GetBook(c *fiber.Ctx) error {
 // @Security 	BearerAuth
 // @Produce		json
 // @Accept		json
-// @Param 		id path string true "Book ID"
+// @Param 		bookId path string true "Book ID"
 // @Param		book	body		model.BookUpdateSwagger	true	"Book to update"
 // @Success		200		{object}	model.BookResponse
 // @Router		/api/books/{bookId} [put]
@@ -167,7 +167,7 @@ func (s *BookHandlerImpl) UpdateBook(c *fiber.Ctx) error {
 // @Security 	BearerAuth
 // @Produce		json
 // @Accept		json
-// @Param 		id path string true "Book ID"
+// @Param 		bookId path string true "Book ID"
 // @Param		book	body		model.ArchiveBookSwagger true	"Book to archive"
 // @Success		200		{object}	model.BookResponse
 // @Router		/api/books/{bookId} [patch]
