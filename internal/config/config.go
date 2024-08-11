@@ -11,6 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+var PORT string
 var DB *mongo.Database
 var GoogleClientID string
 var GoogleClientSecret string
@@ -22,6 +23,7 @@ func LoadConfig() {
 		log.Println("Error loading .env file, using environment variables")
 	}
 
+	PORT = ":" + os.Getenv("PORT")
 	mongoURI := os.Getenv("MONGODB_URI")
 	dbName := os.Getenv("DB_NAME")
 	GoogleClientID = os.Getenv("GOOGLE_CLIENT_ID")
