@@ -24,8 +24,7 @@ func NewBookService(bookRepo repository.BookRepository) BookService {
 }
 
 func (r *BookServiceImpl) CreateBook(book *model.BookCreate) (*model.BookCreate, error) {
-	book, err := r.bookRepo.CreateBook(book)
-	return book, err
+	return r.bookRepo.CreateBook(book)
 }
 
 func (r *BookServiceImpl) GetBooks(userId primitive.ObjectID, isArchived bool) ([]model.BookResponse, error) {
@@ -37,17 +36,9 @@ func (r *BookServiceImpl) GetBook(userId primitive.ObjectID, bookId primitive.Ob
 }
 
 func (s *BookServiceImpl) UpdateBook(book *model.BookUpdate) (*model.BookResponse, error) {
-	updatedBook, err := s.bookRepo.UpdateBook(book)
-	if err != nil {
-		return nil, err
-	}
-	return updatedBook, nil
+	return s.bookRepo.UpdateBook(book)
 }
 
 func (s *BookServiceImpl) ArchiveBook(book *model.ArchiveBook) (*model.BookResponse, error) {
-	archived, err := s.bookRepo.ArchiveBook(book)
-	if err != nil {
-		return nil, err
-	}
-	return archived, nil
+	return s.bookRepo.ArchiveBook(book)
 }
