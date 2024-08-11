@@ -33,9 +33,17 @@ func NewNoteHandler(noteService service.NoteService) NoteHandler {
 // @Success		200		{object}	[]model.NoteResponse
 // @Router		/api/books/{bookId}/notes [get]
 func (s *NoteHandlerImpl) GetNotes(c *fiber.Ctx) error {
-	bookId := c.Params("bookId")
+	userId, err := utils.GetUserID(c)
+	if err != nil {
+		return utils.ErrorUnauthorized(c, err.Error())
+	}
 
-	notes, err := s.noteService.GetAllNotes(bookId)
+	bookId, err := utils.ToObjectID(c.Params("bookId"))
+	if err != nil {
+		return utils.ErrorBadRequest(c, err.Error())
+	}
+
+	notes, err := s.noteService.GetNotes(userId, bookId)
 	if err != nil {
 		return utils.ErrorInternalServer(c, err.Error())
 	}
@@ -111,10 +119,22 @@ func (s *NoteHandlerImpl) UpdateNote(c *fiber.Ctx) error {
 // @Success		201		{object} interface{}
 // @Router		/api/books/{bookId}/notes/{noteId} [delete]
 func (s *NoteHandlerImpl) DeleteNote(c *fiber.Ctx) error {
-	bookId := c.Params("bookId")
-	noteId := c.Params("noteId")
+	userId, err := utils.GetUserID(c)
+	if err != nil {
+		return utils.ErrorUnauthorized(c, err.Error())
+	}
 
-	if err := s.noteService.DeleteNote(bookId, noteId); err != nil {
+	bookId, err := utils.ToObjectID(c.Params("bookId"))
+	if err != nil {
+		return utils.ErrorBadRequest(c, err.Error())
+	}
+
+	noteId, err := utils.ToObjectID(c.Params("noteId"))
+	if err != nil {
+		return utils.ErrorBadRequest(c, err.Error())
+	}
+
+	if err := s.noteService.DeleteNote(userId, bookId, noteId); err != nil {
 		return utils.ErrorInternalServer(c, "failed to delete note: "+err.Error())
 	}
 
