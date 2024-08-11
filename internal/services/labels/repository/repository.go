@@ -159,50 +159,95 @@ func (r *LabelRepositoryImpl) DeleteLabel(userId primitive.ObjectID, labelId pri
 
 func (r *LabelRepositoryImpl) GetBookByLabel(userId primitive.ObjectID, labelName string) ([]model.BookResponse, error) {
 	pipeline := mongo.Pipeline{
-		{{Key: "$match", Value: bson.D{
-			{Key: "userId", Value: userId},
-			{Key: "name", Value: labelName}},
+		{{
+			Key: "$match", Value: bson.M{
+				"userId": userId,
+				"name":   labelName,
+			},
 		}},
-		{{Key: "$lookup", Value: bson.D{
-			{Key: "from", Value: "book_labels"},
-			{Key: "localField", Value: "_id"},
-			{Key: "foreignField", Value: "labelId"},
-			{Key: "as", Value: "book_labels"},
-		}}},
-		{{Key: "$unwind", Value: bson.D{
-			{Key: "path", Value: "$book_labels"},
-			{Key: "preserveNullAndEmptyArrays", Value: true},
-		}}},
-		{{Key: "$project", Value: bson.D{
-			{Key: "_id", Value: 0},
-			{Key: "labelId", Value: "$book_labels.labelId"},
-			{Key: "bookId", Value: "$book_labels.bookId"},
-		}}},
-		{{Key: "$lookup", Value: bson.D{
-			{Key: "from", Value: "books"},
-			{Key: "localField", Value: "bookId"},
-			{Key: "foreignField", Value: "_id"},
-			{Key: "as", Value: "books"},
-		}}},
-		{{Key: "$unwind", Value: bson.D{
-			{Key: "path", Value: "$books"},
-			{Key: "preserveNullAndEmptyArrays", Value: false},
-		}}},
-		{{Key: "$project", Value: bson.D{
-			{Key: "_id", Value: "$books._id"},
-			{Key: "title", Value: "$books.title"},
-			{Key: "createdAt", Value: "$books.createdAt"},
-			{Key: "updatedAt", Value: "$books.updatedAt"},
-			{Key: "isArchived", Value: "$books.isArchived"},
-		}}},
-		{{Key: "$group", Value: bson.D{
-			{Key: "_id", Value: "$_id"},
-			{Key: "title", Value: bson.D{{Key: "$first", Value: "$title"}}},
-			{Key: "createdAt", Value: bson.D{{Key: "$first", Value: "$createdAt"}}},
-			{Key: "updatedAt", Value: bson.D{{Key: "$first", Value: "$updatedAt"}}},
-			{Key: "isArchived", Value: bson.D{{Key: "$first", Value: "$isArchived"}}},
-		}}},
-		{{Key: "$sort", Value: bson.D{{Key: "updatedAt", Value: -1}}}},
+		{{
+			Key: "$lookup", Value: bson.M{
+				"from":         "book_labels",
+				"localField":   "_id",
+				"foreignField": "labelId",
+				"as":           "book_labels",
+			},
+		}},
+		{{
+			Key: "$unwind", Value: bson.M{
+				"path":                       "$book_labels",
+				"preserveNullAndEmptyArrays": true,
+			},
+		}},
+		{{
+			Key: "$project", Value: bson.M{
+				"_id":     0,
+				"labelId": "$book_labels.labelId",
+				"bookId":  "$book_labels.bookId",
+			},
+		}},
+		{{
+			Key: "$lookup", Value: bson.M{
+				"from":         "books",
+				"localField":   "bookId",
+				"foreignField": "_id",
+				"as":           "books",
+			},
+		}},
+		{{
+			Key: "$unwind", Value: bson.M{
+				"path":                       "$books",
+				"preserveNullAndEmptyArrays": false,
+			},
+		}},
+		{{
+			Key: "$project", Value: bson.M{
+				"_id":        "$books._id",
+				"title":      "$books.title",
+				"createdAt":  "$books.createdAt",
+				"updatedAt":  "$books.updatedAt",
+				"isArchived": "$books.isArchived",
+			},
+		}},
+		{{
+			Key: "$group", Value: bson.M{
+				"_id":        "$_id",
+				"title":      bson.M{"$first": "$title"},
+				"createdAt":  bson.M{"$first": "$createdAt"},
+				"updatedAt":  bson.M{"$first": "$updatedAt"},
+				"isArchived": bson.M{"$first": "$isArchived"},
+			},
+		}},
+		{{
+			Key: "$sort", Value: bson.M{"updatedAt": -1},
+		}},
+		{{
+			Key: "$lookup", Value: bson.M{
+				"from":         "book_labels",
+				"localField":   "_id",
+				"foreignField": "bookId",
+				"as":           "book_labels",
+			},
+		}},
+		{{
+			Key: "$lookup", Value: bson.M{
+				"from":         "labels",
+				"localField":   "book_labels.labelId",
+				"foreignField": "_id",
+				"as":           "labels",
+			},
+		}},
+		{{
+			Key: "$project", Value: bson.M{
+				"book_labels":      0,
+				"labels.userId":    0,
+				"labels.createdAt": 0,
+				"labels.updatedAt": 0,
+			},
+		}},
+		{{
+			Key: "$sort", Value: bson.M{"updatedAt": -1},
+		}},
 	}
 
 	cursor, err := r.labels.Aggregate(context.Background(), pipeline)
