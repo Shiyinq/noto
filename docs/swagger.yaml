@@ -146,6 +146,28 @@ definitions:
       updated_at:
         type: string
     type: object
+  noto_internal_services_labels_model.PaginatedBookResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/noto_internal_services_labels_model.BookResponse'
+        type: array
+      metadata:
+        $ref: '#/definitions/noto_internal_services_labels_model.PaginationMetadata'
+    type: object
+  noto_internal_services_labels_model.PaginationMetadata:
+    properties:
+      currentPage:
+        type: integer
+      nextPage:
+        type: integer
+      previousPage:
+        type: integer
+      totalData:
+        type: integer
+      totalPage:
+        type: integer
+    type: object
   noto_internal_services_notes_model.NoteCreate:
     properties:
       book_id:
@@ -596,13 +618,23 @@ paths:
         name: labelName
         required: true
         type: string
+      - description: Page number for pagination
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - description: Number of items per page
+        in: query
+        minimum: 1
+        name: limit
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/noto_internal_services_labels_model.BookResponse'
+            $ref: '#/definitions/noto_internal_services_labels_model.PaginatedBookResponse'
       security:
       - BearerAuth: []
       summary: Get book by label name
