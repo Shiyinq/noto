@@ -64,6 +64,7 @@ func bookAgregate(matchCondition bson.D) mongo.Pipeline {
 				},
 			},
 		},
+		{{Key: "$sort", Value: bson.D{{Key: "updatedAt", Value: -1}}}},
 	}
 }
 
