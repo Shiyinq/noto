@@ -19,7 +19,7 @@ type LabelRepository interface {
 	DeleteLabel(userId primitive.ObjectID, labelId primitive.ObjectID) error
 	AddBookLabel(book *model.BookLabel) (*model.AddBookLabelResponse, error)
 	DeleteBookLabel(book *model.BookLabel) error
-	GetBookByLabel(labelName string) ([]model.BookResponse, error)
+	GetBookByLabel(userId primitive.ObjectID, labelName string) ([]model.BookResponse, error)
 }
 
 type LabelRepositoryImpl struct {
@@ -153,9 +153,12 @@ func (r *LabelRepositoryImpl) DeleteLabel(userId primitive.ObjectID, labelId pri
 	return nil
 }
 
-func (r *LabelRepositoryImpl) GetBookByLabel(labelName string) ([]model.BookResponse, error) {
+func (r *LabelRepositoryImpl) GetBookByLabel(userId primitive.ObjectID, labelName string) ([]model.BookResponse, error) {
 	pipeline := mongo.Pipeline{
-		{{Key: "$match", Value: bson.D{{Key: "name", Value: labelName}}}},
+		{{Key: "$match", Value: bson.D{
+			{Key: "userId", Value: userId},
+			{Key: "name", Value: labelName}},
+		}},
 		{{Key: "$lookup", Value: bson.D{
 			{Key: "from", Value: "book_labels"},
 			{Key: "localField", Value: "_id"},
