@@ -12,6 +12,7 @@ type LabelCreateSwagger struct {
 
 type LabelCreate struct {
 	ID        primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	UserId    primitive.ObjectID `json:"user_id" bson:"userId"`
 	Name      string             `json:"name" bson:"name"`
 	CreatedAt time.Time          `json:"created_at" bson:"createdAt"`
 	UpdatedAt time.Time          `json:"updated_at" bson:"updatedAt"`

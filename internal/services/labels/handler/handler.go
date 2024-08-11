@@ -37,11 +37,17 @@ func NewLabelHandler(labelService service.LabelService) LabelHandler {
 // @Success		201		{object}	model.LabelCreate
 // @Router		/api/labels [post]
 func (s *LabelHandlerImpl) CreateLabel(c *fiber.Ctx) error {
+	userId, err := utils.GetUserID(c)
+	if err != nil {
+		return utils.ErrorUnauthorized(c, err.Error())
+	}
+
 	label := new(model.LabelCreate)
 	if err := c.BodyParser(label); err != nil {
 		return utils.ErrorBadRequest(c, "failed to parse json: "+err.Error())
 	}
 
+	label.UserId = userId
 	newLabel, err := s.labelService.CreateLabel(label)
 	if err != nil {
 		return utils.ErrorInternalServer(c, "failed to create label: "+err.Error())
