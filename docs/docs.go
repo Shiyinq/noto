@@ -628,13 +628,27 @@ const docTemplate = `{
                         "name": "labelName",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "Page number for pagination",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "Number of items per page",
+                        "name": "limit",
+                        "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/noto_internal_services_labels_model.BookResponse"
+                            "$ref": "#/definitions/noto_internal_services_labels_model.PaginatedBookResponse"
                         }
                     }
                 }
@@ -923,6 +937,40 @@ const docTemplate = `{
                 },
                 "updated_at": {
                     "type": "string"
+                }
+            }
+        },
+        "noto_internal_services_labels_model.PaginatedBookResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/noto_internal_services_labels_model.BookResponse"
+                    }
+                },
+                "metadata": {
+                    "$ref": "#/definitions/noto_internal_services_labels_model.PaginationMetadata"
+                }
+            }
+        },
+        "noto_internal_services_labels_model.PaginationMetadata": {
+            "type": "object",
+            "properties": {
+                "currentPage": {
+                    "type": "integer"
+                },
+                "nextPage": {
+                    "type": "integer"
+                },
+                "previousPage": {
+                    "type": "integer"
+                },
+                "totalData": {
+                    "type": "integer"
+                },
+                "totalPage": {
+                    "type": "integer"
                 }
             }
         },
