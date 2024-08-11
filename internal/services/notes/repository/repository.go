@@ -14,10 +14,10 @@ import (
 )
 
 type NoteRepository interface {
-	GetAllNotes(bookId string) ([]model.NoteResponse, error)
+	GetNotes(userId primitive.ObjectID, bookId primitive.ObjectID) ([]model.NoteResponse, error)
 	CreateNote(bookId string, note *model.NoteCreate) (*model.NoteCreate, error)
 	UpdateNote(bookId string, noteId string, note *model.NoteUpdate) (*model.NoteResponse, error)
-	DeleteNote(bookId string, noteId string) error
+	DeleteNote(userId primitive.ObjectID, bookId primitive.ObjectID, noteId primitive.ObjectID) error
 }
 
 type NoteRepositoryImpl struct {
@@ -28,14 +28,10 @@ func NewNoteRepository() NoteRepository {
 	return &NoteRepositoryImpl{notes: config.DB.Collection("notes")}
 }
 
-func (r *NoteRepositoryImpl) GetAllNotes(bookId string) ([]model.NoteResponse, error) {
+func (r *NoteRepositoryImpl) GetNotes(userId primitive.ObjectID, bookId primitive.ObjectID) ([]model.NoteResponse, error) {
 	var notes []model.NoteResponse
-	objectID, err := primitive.ObjectIDFromHex(bookId)
-	if err != nil {
-		return nil, errors.New("invalid bookId format")
-	}
 
-	filter := bson.M{"bookId": objectID}
+	filter := bson.M{"userId": userId, "bookId": bookId}
 	cursor, err := r.notes.Find(context.Background(), filter)
 	if err != nil {
 		return nil, err
@@ -105,18 +101,8 @@ func (r *NoteRepositoryImpl) UpdateNote(bookId string, noteId string, note *mode
 	return &updatedNote, nil
 }
 
-func (r *NoteRepositoryImpl) DeleteNote(bookId string, noteId string) error {
-	bookObjectID, err := primitive.ObjectIDFromHex(bookId)
-	if err != nil {
-		return errors.New("invalid bookId format")
-	}
-
-	noteObjectID, err := primitive.ObjectIDFromHex(noteId)
-	if err != nil {
-		return errors.New("invalid noteId format")
-	}
-
-	filter := bson.M{"_id": noteObjectID, "bookId": bookObjectID}
+func (r *NoteRepositoryImpl) DeleteNote(userId primitive.ObjectID, bookId primitive.ObjectID, noteId primitive.ObjectID) error {
+	filter := bson.M{"_id": noteId, "userId": userId, "bookId": bookId}
 
 	deleted, err := r.notes.DeleteOne(context.Background(), filter)
 
