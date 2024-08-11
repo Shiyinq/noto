@@ -204,7 +204,7 @@ paths:
       parameters:
       - description: Book ID
         in: path
-        name: id
+        name: bookId
         required: true
         type: string
       produces:
@@ -230,7 +230,7 @@ paths:
       parameters:
       - description: Book ID
         in: path
-        name: id
+        name: bookId
         required: true
         type: string
       - description: Book to archive
@@ -258,7 +258,7 @@ paths:
       parameters:
       - description: Book ID
         in: path
-        name: id
+        name: bookId
         required: true
         type: string
       - description: Book to update

@@ -99,7 +99,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Book ID",
-                        "name": "id",
+                        "name": "bookId",
                         "in": "path",
                         "required": true
                     }
@@ -140,7 +140,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Book ID",
-                        "name": "id",
+                        "name": "bookId",
                         "in": "path",
                         "required": true
                     },
@@ -184,7 +184,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Book ID",
-                        "name": "id",
+                        "name": "bookId",
                         "in": "path",
                         "required": true
                     },
