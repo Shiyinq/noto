@@ -375,6 +375,16 @@ paths:
     get:
       description: Get notes by book id
       parameters:
+      - description: Page number for pagination
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - description: Number of items per page
+        in: query
+        minimum: 1
+        name: limit
+        type: integer
       - description: Book ID
         in: path
         name: bookId
