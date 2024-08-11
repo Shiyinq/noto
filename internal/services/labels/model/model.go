@@ -45,10 +45,16 @@ type AddBookLabelResponse struct {
 	BookId  primitive.ObjectID `json:"book_id" bson:"bookId"`
 }
 
+type Label struct {
+	ID   string `json:"id" bson:"_id"`
+	Name string `json:"name" bson:"name"`
+}
+
 type BookResponse struct {
 	ID         string    `json:"id" bson:"_id"`
 	Title      string    `json:"title" bson:"title"`
 	CreatedAt  time.Time `json:"created_at" bson:"createdAt"`
 	UpdatedAt  time.Time `json:"updated_at" bson:"updatedAt"`
 	IsArchived bool      `json:"is_archived" bson:"isArchived"`
+	Labels     []Label   `json:"labels" bson:"labels"`
 }
