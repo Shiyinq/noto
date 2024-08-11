@@ -34,6 +34,7 @@ type BookLabelSwagger struct {
 }
 
 type BookLabel struct {
+	UserId    primitive.ObjectID `json:"user_id" bson:"userId"`
 	BookId    primitive.ObjectID `json:"book_id" bson:"book"`
 	LabelName string             `json:"label_name" bson:"labelName"`
 }
