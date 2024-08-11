@@ -5,6 +5,7 @@ import (
 	"errors"
 	"noto/internal/config"
 	model "noto/internal/services/notes/model"
+	"noto/internal/utils"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -14,7 +15,7 @@ import (
 )
 
 type NoteRepository interface {
-	GetNotes(userId primitive.ObjectID, bookId primitive.ObjectID) ([]model.NoteResponse, error)
+	GetNotes(userId primitive.ObjectID, bookId primitive.ObjectID, page int, limit int) (*model.PaginatedNoteResponse, error)
 	CreateNote(note *model.NoteCreate) (*model.NoteCreate, error)
 	UpdateNote(note *model.NoteUpdate) (*model.NoteResponse, error)
 	DeleteNote(userId primitive.ObjectID, bookId primitive.ObjectID, noteId primitive.ObjectID) error
@@ -28,11 +29,17 @@ func NewNoteRepository() NoteRepository {
 	return &NoteRepositoryImpl{notes: config.DB.Collection("notes")}
 }
 
-func (r *NoteRepositoryImpl) GetNotes(userId primitive.ObjectID, bookId primitive.ObjectID) ([]model.NoteResponse, error) {
-	var notes []model.NoteResponse
+func (r *NoteRepositoryImpl) GetNotes(userId primitive.ObjectID, bookId primitive.ObjectID, page int, limit int) (*model.PaginatedNoteResponse, error) {
+	var notes []model.PaginatedNoteResponse
 
-	filter := bson.M{"userId": userId, "bookId": bookId}
-	cursor, err := r.notes.Find(context.Background(), filter)
+	pipeline := mongo.Pipeline{
+		{{Key: "$match", Value: bson.M{"userId": userId, "bookId": bookId}}},
+		{{Key: "$sort", Value: bson.M{"createdAt": -1}}},
+		{{Key: "$facet", Value: utils.PaginationAggregate(page, limit)}},
+		{{Key: "$unwind", Value: "$metadata"}},
+	}
+
+	cursor, err := r.notes.Aggregate(context.Background(), pipeline)
 	if err != nil {
 		return nil, err
 	}
@@ -42,10 +49,13 @@ func (r *NoteRepositoryImpl) GetNotes(userId primitive.ObjectID, bookId primitiv
 	}
 
 	if len(notes) == 0 {
-		return []model.NoteResponse{}, nil
+		return &model.PaginatedNoteResponse{
+			Data:     []model.NoteResponse{},
+			Metadata: model.PaginationMetadata{},
+		}, nil
 	}
 
-	return notes, nil
+	return &notes[0], nil
 }
 
 func (r *NoteRepositoryImpl) CreateNote(note *model.NoteCreate) (*model.NoteCreate, error) {

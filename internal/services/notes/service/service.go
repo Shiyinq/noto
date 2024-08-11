@@ -8,7 +8,7 @@ import (
 )
 
 type NoteService interface {
-	GetNotes(userId primitive.ObjectID, bookId primitive.ObjectID) ([]model.NoteResponse, error)
+	GetNotes(userId primitive.ObjectID, bookId primitive.ObjectID, page int, limit int) (*model.PaginatedNoteResponse, error)
 	CreateNote(note *model.NoteCreate) (*model.NoteCreate, error)
 	UpdateNote(note *model.NoteUpdate) (*model.NoteResponse, error)
 	DeleteNote(userId primitive.ObjectID, bookId primitive.ObjectID, noteId primitive.ObjectID) error
@@ -22,8 +22,8 @@ func NewNoteService(noteRepo repository.NoteRepository) NoteService {
 	return &NoteServiceImpl{noteRepo: noteRepo}
 }
 
-func (r *NoteServiceImpl) GetNotes(userId primitive.ObjectID, bookId primitive.ObjectID) ([]model.NoteResponse, error) {
-	return r.noteRepo.GetNotes(userId, bookId)
+func (r *NoteServiceImpl) GetNotes(userId primitive.ObjectID, bookId primitive.ObjectID, page int, limit int) (*model.PaginatedNoteResponse, error) {
+	return r.noteRepo.GetNotes(userId, bookId, page, limit)
 }
 
 func (r *NoteServiceImpl) CreateNote(note *model.NoteCreate) (*model.NoteCreate, error) {

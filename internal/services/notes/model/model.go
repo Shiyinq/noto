@@ -37,3 +37,16 @@ type NoteResponse struct {
 	CreatedAt time.Time          `json:"created_at" bson:"createdAt"`
 	UpdatedAt time.Time          `json:"updated_at" bson:"updatedAt"`
 }
+
+type PaginationMetadata struct {
+	TotalData    int  `json:"totalData" bson:"totalData"`
+	TotalPage    int  `json:"totalPage" bson:"totalPage"`
+	PreviousPage *int `json:"previousPage" bson:"previousPage"`
+	CurrentPage  int  `json:"currentPage" bson:"currentPage"`
+	NextPage     *int `json:"nextPage" bson:"nextPage"`
+}
+
+type PaginatedNoteResponse struct {
+	Metadata PaginationMetadata `json:"metadata" bson:"metadata"`
+	Data     []NoteResponse     `json:"data" bson:"data"`
+}
