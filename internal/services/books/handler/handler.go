@@ -96,14 +96,14 @@ func (s *BookHandlerImpl) GetBooks(c *fiber.Ctx) error {
 // @Param 		id path string true "Book ID"
 // @Success		200		{object}	model.BookResponse
 // @Failure 	404 {object} fiber.Map
-// @Router		/api/books/{id} [get]
+// @Router		/api/books/{bookId} [get]
 func (s *BookHandlerImpl) GetBook(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
 	if err != nil {
 		return utils.ErrorUnauthorized(c, err.Error())
 	}
 
-	bookId, err := utils.ToObjectID(c.Params("id"))
+	bookId, err := utils.ToObjectID(c.Params("bookId"))
 	if err != nil {
 		return utils.ErrorBadRequest(c, err.Error())
 	}
@@ -128,14 +128,14 @@ func (s *BookHandlerImpl) GetBook(c *fiber.Ctx) error {
 // @Param 		id path string true "Book ID"
 // @Param		book	body		model.BookUpdateSwagger	true	"Book to update"
 // @Success		200		{object}	model.BookResponse
-// @Router		/api/books/{id} [put]
+// @Router		/api/books/{bookId} [put]
 func (s *BookHandlerImpl) UpdateBook(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
 	if err != nil {
 		return utils.ErrorUnauthorized(c, err.Error())
 	}
 
-	bookId, err := utils.ToObjectID(c.Params("id"))
+	bookId, err := utils.ToObjectID(c.Params("bookId"))
 	if err != nil {
 		return utils.ErrorBadRequest(c, err.Error())
 	}
@@ -170,14 +170,14 @@ func (s *BookHandlerImpl) UpdateBook(c *fiber.Ctx) error {
 // @Param 		id path string true "Book ID"
 // @Param		book	body		model.ArchiveBookSwagger true	"Book to archive"
 // @Success		200		{object}	model.BookResponse
-// @Router		/api/books/{id} [patch]
+// @Router		/api/books/{bookId} [patch]
 func (s *BookHandlerImpl) ArchiveBook(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
 	if err != nil {
 		return utils.ErrorUnauthorized(c, err.Error())
 	}
 
-	bookId, err := utils.ToObjectID(c.Params("id"))
+	bookId, err := utils.ToObjectID(c.Params("bookId"))
 	if err != nil {
 		return utils.ErrorBadRequest(c, err.Error())
 	}
