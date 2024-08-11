@@ -56,10 +56,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/noto_internal_services_books_model.PaginatedBookResponse"
-                            }
+                            "$ref": "#/definitions/noto_internal_services_books_model.PaginatedBookResponse"
                         }
                     }
                 }
