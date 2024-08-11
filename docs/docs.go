@@ -30,13 +30,35 @@ const docTemplate = `{
                     "Books"
                 ],
                 "summary": "Get all book",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "Filter by archive status",
+                        "name": "is_archived",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "Page number for pagination",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "Number of items per page",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/noto_internal_services_books_model.BookResponse"
+                                "$ref": "#/definitions/noto_internal_services_books_model.PaginatedBookResponse"
                             }
                         }
                     }
@@ -755,6 +777,40 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "noto_internal_services_books_model.PaginatedBookResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/noto_internal_services_books_model.BookResponse"
+                    }
+                },
+                "metadata": {
+                    "$ref": "#/definitions/noto_internal_services_books_model.PaginationMetadata"
+                }
+            }
+        },
+        "noto_internal_services_books_model.PaginationMetadata": {
+            "type": "object",
+            "properties": {
+                "currentPage": {
+                    "type": "integer"
+                },
+                "nextPage": {
+                    "type": "integer"
+                },
+                "previousPage": {
+                    "type": "integer"
+                },
+                "totalData": {
+                    "type": "integer"
+                },
+                "totalPage": {
+                    "type": "integer"
                 }
             }
         },
