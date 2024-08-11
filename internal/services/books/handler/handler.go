@@ -46,7 +46,7 @@ func (s *BookHandlerImpl) CreateBook(c *fiber.Ctx) error {
 		return utils.ErrorBadRequest(c, "failed to parse json: "+err.Error())
 	}
 
-	book.UserID = userId
+	book.UserId = userId
 	newBook, err := s.bookService.CreateBook(book)
 	if err != nil {
 		return utils.ErrorInternalServer(c, "failed to create book: "+err.Error())
@@ -151,7 +151,7 @@ func (s *BookHandlerImpl) UpdateBook(c *fiber.Ctx) error {
 	}
 
 	book.ID = bookId
-	book.UserID = userId
+	book.UserId = userId
 	updatedBook, err := s.bookService.UpdateBook(book)
 	if err != nil {
 		return utils.ErrorInternalServer(c, "failed to update book: "+err.Error())
@@ -188,7 +188,7 @@ func (s *BookHandlerImpl) ArchiveBook(c *fiber.Ctx) error {
 	}
 
 	book.ID = bookId
-	book.UserID = userId
+	book.UserId = userId
 	archived, err := s.bookService.ArchiveBook(book)
 	if err != nil {
 		return utils.ErrorInternalServer(c, "failed to archive book: "+err.Error())

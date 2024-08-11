@@ -131,7 +131,7 @@ func (r *BookRepositoryImpl) GetBook(userId primitive.ObjectID, bookId primitive
 }
 
 func (r *BookRepositoryImpl) UpdateBook(book *model.BookUpdate) (*model.BookResponse, error) {
-	filter := bson.M{"userId": book.UserID, "_id": book.ID}
+	filter := bson.M{"userId": book.UserId, "_id": book.ID}
 	update := bson.M{
 		"$set": bson.M{
 			"title":     book.Title,
@@ -156,7 +156,7 @@ func (r *BookRepositoryImpl) UpdateBook(book *model.BookUpdate) (*model.BookResp
 }
 
 func (r *BookRepositoryImpl) ArchiveBook(book *model.ArchiveBook) (*model.BookResponse, error) {
-	filter := bson.M{"userId": book.UserID, "_id": book.ID}
+	filter := bson.M{"userId": book.UserId, "_id": book.ID}
 	update := bson.M{
 		"$set": bson.M{
 			"isArchived": book.IsArchived,
