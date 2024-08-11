@@ -63,7 +63,7 @@ func (s *BookHandlerImpl) CreateBook(c *fiber.Ctx) error {
 // @Param		is_archived	query		bool	false	"Filter by archive status"
 // @Param		page		query		int		false	"Page number for pagination"	minimum(1)
 // @Param		limit		query		int		false	"Number of items per page"	minimum(1)
-// @Success		200		{object}	[]model.PaginatedBookResponse
+// @Success		200		{object}	model.PaginatedBookResponse
 // @Router		/api/books [get]
 func (s *BookHandlerImpl) GetBooks(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)

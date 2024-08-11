@@ -16,7 +16,7 @@ import (
 
 type BookRepository interface {
 	CreateBook(book *model.BookCreate) (*model.BookCreate, error)
-	GetBooks(userId primitive.ObjectID, isArchived bool, page int, limit int) ([]model.PaginatedBookResponse, error)
+	GetBooks(userId primitive.ObjectID, isArchived bool, page int, limit int) (*model.PaginatedBookResponse, error)
 	GetBook(userId primitive.ObjectID, bookId primitive.ObjectID) (*model.BookResponse, error)
 	UpdateBook(book *model.BookUpdate) (*model.BookResponse, error)
 	ArchiveBook(book *model.ArchiveBook) (*model.BookResponse, error)
@@ -129,7 +129,7 @@ func (r *BookRepositoryImpl) CreateBook(book *model.BookCreate) (*model.BookCrea
 	return book, nil
 }
 
-func (r *BookRepositoryImpl) GetBooks(userId primitive.ObjectID, isArchived bool, page int, limit int) ([]model.PaginatedBookResponse, error) {
+func (r *BookRepositoryImpl) GetBooks(userId primitive.ObjectID, isArchived bool, page int, limit int) (*model.PaginatedBookResponse, error) {
 	var books []model.PaginatedBookResponse
 
 	filter := bson.D{
@@ -147,10 +147,13 @@ func (r *BookRepositoryImpl) GetBooks(userId primitive.ObjectID, isArchived bool
 	}
 
 	if len(books) == 0 {
-		return []model.PaginatedBookResponse{}, nil
+		return &model.PaginatedBookResponse{
+			Data:     []model.BookResponse{},
+			Metadata: model.PaginationMetadata{},
+		}, nil
 	}
 
-	return books, nil
+	return &books[0], nil
 }
 
 func (r *BookRepositoryImpl) GetBook(userId primitive.ObjectID, bookId primitive.ObjectID) (*model.BookResponse, error) {
