@@ -15,8 +15,8 @@ func BooksRouter(router fiber.Router) {
 	hand := handler.NewBookHandler(serv)
 
 	router.Post("/books", hand.CreateBook)
-	router.Put("/books/:id", hand.UpdateBook)
+	router.Put("/books/:bookId", hand.UpdateBook)
 	router.Get("/books", hand.GetBooks)
-	router.Get("/books/:id", hand.GetBook)
-	router.Patch("/books/:id", hand.ArchiveBook)
+	router.Get("/books/:bookId", hand.GetBook)
+	router.Patch("/books/:bookId", hand.ArchiveBook)
 }
