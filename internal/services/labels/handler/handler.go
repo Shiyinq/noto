@@ -120,19 +120,23 @@ func (s *LabelHandlerImpl) DeleteLabel(c *fiber.Ctx) error {
 // @Success		201	{object}	model.AddBookLabelResponse
 // @Router		/api/books/{bookId}/labels [post]
 func (s *LabelHandlerImpl) AddBookLabel(c *fiber.Ctx) error {
-	bookId := c.Params("bookId")
-	label := new(model.BookLabel)
-	objectBookId, err := primitive.ObjectIDFromHex(bookId)
+	userId, err := utils.GetUserID(c)
+	if err != nil {
+		return utils.ErrorUnauthorized(c, err.Error())
+	}
+
+	bookId, err := utils.ToObjectID(c.Params("bookId"))
 	if err != nil {
 		return utils.ErrorBadRequest(c, err.Error())
 	}
 
-	label.BookId = objectBookId
-
+	label := new(model.BookLabel)
 	if err := c.BodyParser(label); err != nil {
 		return utils.ErrorBadRequest(c, "failed to parse json: "+err.Error())
 	}
 
+	label.UserId = userId
+	label.BookId = bookId
 	added, err := s.labelService.AddBookLabel(label)
 	if err != nil {
 		return utils.ErrorInternalServer(c, "failed to add book label: "+err.Error())

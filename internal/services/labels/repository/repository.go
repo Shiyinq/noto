@@ -32,7 +32,7 @@ func NewLabelRepository() LabelRepository {
 }
 
 func (r *LabelRepositoryImpl) CheckAndInsertLabel(label *model.LabelCreate) (*model.LabelCreate, error) {
-	filter := bson.M{"name": label.Name}
+	filter := bson.M{"userId": label.UserId, "name": label.Name}
 	existingLabel := r.labels.FindOne(context.Background(), filter)
 
 	if existingLabel.Err() != nil {
@@ -69,6 +69,7 @@ func (r *LabelRepositoryImpl) CreateLabel(label *model.LabelCreate) (*model.Labe
 
 func (r *LabelRepositoryImpl) AddBookLabel(book *model.BookLabel) (*model.AddBookLabelResponse, error) {
 	label := &model.LabelCreate{
+		UserId:    book.UserId,
 		Name:      book.LabelName,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
@@ -80,6 +81,7 @@ func (r *LabelRepositoryImpl) AddBookLabel(book *model.BookLabel) (*model.AddBoo
 	}
 
 	bookLabel := bson.M{
+		"userId":  book.UserId,
 		"bookId":  book.BookId,
 		"labelId": result.ID,
 	}
