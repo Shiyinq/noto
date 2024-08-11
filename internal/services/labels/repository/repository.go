@@ -5,6 +5,7 @@ import (
 	"errors"
 	"noto/internal/config"
 	"noto/internal/services/labels/model"
+	"noto/internal/utils"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -19,7 +20,7 @@ type LabelRepository interface {
 	DeleteLabel(userId primitive.ObjectID, labelId primitive.ObjectID) error
 	AddBookLabel(book *model.BookLabel) (*model.AddBookLabelResponse, error)
 	DeleteBookLabel(book *model.BookLabel) error
-	GetBookByLabel(userId primitive.ObjectID, labelName string) ([]model.BookResponse, error)
+	GetBookByLabel(userId primitive.ObjectID, labelName string, page int, limit int) (*model.PaginatedBookResponse, error)
 }
 
 type LabelRepositoryImpl struct {
@@ -157,7 +158,7 @@ func (r *LabelRepositoryImpl) DeleteLabel(userId primitive.ObjectID, labelId pri
 	return nil
 }
 
-func (r *LabelRepositoryImpl) GetBookByLabel(userId primitive.ObjectID, labelName string) ([]model.BookResponse, error) {
+func (r *LabelRepositoryImpl) GetBookByLabel(userId primitive.ObjectID, labelName string, page int, limit int) (*model.PaginatedBookResponse, error) {
 	pipeline := mongo.Pipeline{
 		{{
 			Key: "$match", Value: bson.M{
@@ -248,6 +249,8 @@ func (r *LabelRepositoryImpl) GetBookByLabel(userId primitive.ObjectID, labelNam
 		{{
 			Key: "$sort", Value: bson.M{"updatedAt": -1},
 		}},
+		{{Key: "$facet", Value: utils.PaginationAggregate(page, limit)}},
+		{{Key: "$unwind", Value: "$metadata"}},
 	}
 
 	cursor, err := r.labels.Aggregate(context.Background(), pipeline)
@@ -255,14 +258,17 @@ func (r *LabelRepositoryImpl) GetBookByLabel(userId primitive.ObjectID, labelNam
 		return nil, err
 	}
 
-	var results []model.BookResponse
-	if err = cursor.All(context.Background(), &results); err != nil {
+	var books []model.PaginatedBookResponse
+	if err = cursor.All(context.Background(), &books); err != nil {
 		return nil, err
 	}
 
-	if len(results) == 0 {
-		return []model.BookResponse{}, nil
+	if len(books) == 0 {
+		return &model.PaginatedBookResponse{
+			Data:     []model.BookResponse{},
+			Metadata: model.PaginationMetadata{},
+		}, nil
 	}
 
-	return results, err
+	return &books[0], err
 }

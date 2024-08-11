@@ -58,3 +58,16 @@ type BookResponse struct {
 	IsArchived bool      `json:"is_archived" bson:"isArchived"`
 	Labels     []Label   `json:"labels" bson:"labels"`
 }
+
+type PaginationMetadata struct {
+	TotalData    int  `json:"totalData" bson:"totalData"`
+	TotalPage    int  `json:"totalPage" bson:"totalPage"`
+	PreviousPage *int `json:"previousPage" bson:"previousPage"`
+	CurrentPage  int  `json:"currentPage" bson:"currentPage"`
+	NextPage     *int `json:"nextPage" bson:"nextPage"`
+}
+
+type PaginatedBookResponse struct {
+	Metadata PaginationMetadata `json:"metadata" bson:"metadata"`
+	Data     []BookResponse     `json:"data" bson:"data"`
+}
