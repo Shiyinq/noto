@@ -3,12 +3,14 @@ package service
 import (
 	"noto/internal/services/labels/model"
 	"noto/internal/services/labels/repository"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type LabelService interface {
 	CreateLabel(label *model.LabelCreate) (*model.LabelCreate, error)
-	GetLabels() ([]model.LabelResponse, error)
-	DeleteLabel(labelId string) error
+	GetLabels(userId primitive.ObjectID) ([]model.LabelResponse, error)
+	DeleteLabel(userId primitive.ObjectID, labelId primitive.ObjectID) error
 	AddBookLabel(book *model.BookLabel) (*model.AddBookLabelResponse, error)
 	DeleteBookLabel(book *model.BookLabel) error
 	GetBookByLabel(labelName string) ([]model.BookResponse, error)
@@ -26,12 +28,12 @@ func (r *LabelServiceImpl) CreateLabel(label *model.LabelCreate) (*model.LabelCr
 	return r.labelRepo.CreateLabel(label)
 }
 
-func (r *LabelServiceImpl) GetLabels() ([]model.LabelResponse, error) {
-	return r.labelRepo.GetLabels()
+func (r *LabelServiceImpl) GetLabels(userId primitive.ObjectID) ([]model.LabelResponse, error) {
+	return r.labelRepo.GetLabels(userId)
 }
 
-func (r *LabelServiceImpl) DeleteLabel(labelId string) error {
-	return r.labelRepo.DeleteLabel(labelId)
+func (r *LabelServiceImpl) DeleteLabel(userId primitive.ObjectID, labelId primitive.ObjectID) error {
+	return r.labelRepo.DeleteLabel(userId, labelId)
 }
 
 func (r *LabelServiceImpl) AddBookLabel(book *model.BookLabel) (*model.AddBookLabelResponse, error) {

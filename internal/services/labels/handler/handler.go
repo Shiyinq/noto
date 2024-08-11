@@ -59,7 +59,12 @@ func (s *LabelHandlerImpl) CreateLabel(c *fiber.Ctx) error {
 // @Success		200		{object}	[]model.LabelResponse
 // @Router		/api/labels [get]
 func (s *LabelHandlerImpl) GetLabels(c *fiber.Ctx) error {
-	labels, err := s.labelService.GetLabels()
+	userId, err := utils.GetUserID(c)
+	if err != nil {
+		return utils.ErrorUnauthorized(c, err.Error())
+	}
+
+	labels, err := s.labelService.GetLabels(userId)
 	if err != nil {
 		return utils.ErrorInternalServer(c, err.Error())
 	}
@@ -78,9 +83,17 @@ func (s *LabelHandlerImpl) GetLabels(c *fiber.Ctx) error {
 // @Success		200	{object} interface{}
 // @Router		/api/labels/{labelId} [delete]
 func (s *LabelHandlerImpl) DeleteLabel(c *fiber.Ctx) error {
-	labelId := c.Params("labelId")
+	userId, err := utils.GetUserID(c)
+	if err != nil {
+		return utils.ErrorUnauthorized(c, err.Error())
+	}
 
-	if err := s.labelService.DeleteLabel(labelId); err != nil {
+	labelId, err := utils.ToObjectID(c.Params("labelId"))
+	if err != nil {
+		return utils.ErrorBadRequest(c, err.Error())
+	}
+
+	if err := s.labelService.DeleteLabel(userId, labelId); err != nil {
 		return utils.ErrorInternalServer(c, "failed to delete label: "+err.Error())
 	}
 

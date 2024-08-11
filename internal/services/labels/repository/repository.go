@@ -15,8 +15,8 @@ import (
 type LabelRepository interface {
 	CheckAndInsertLabel(label *model.LabelCreate) (*model.LabelCreate, error)
 	CreateLabel(label *model.LabelCreate) (*model.LabelCreate, error)
-	GetLabels() ([]model.LabelResponse, error)
-	DeleteLabel(labelId string) error
+	GetLabels(userId primitive.ObjectID) ([]model.LabelResponse, error)
+	DeleteLabel(userId primitive.ObjectID, labelId primitive.ObjectID) error
 	AddBookLabel(book *model.BookLabel) (*model.AddBookLabelResponse, error)
 	DeleteBookLabel(book *model.BookLabel) error
 	GetBookByLabel(labelName string) ([]model.BookResponse, error)
@@ -122,10 +122,10 @@ func (r *LabelRepositoryImpl) DeleteBookLabel(book *model.BookLabel) error {
 	return nil
 }
 
-func (r *LabelRepositoryImpl) GetLabels() ([]model.LabelResponse, error) {
+func (r *LabelRepositoryImpl) GetLabels(userId primitive.ObjectID) ([]model.LabelResponse, error) {
 	var labels []model.LabelResponse
 
-	cursor, err := r.labels.Find(context.Background(), bson.M{})
+	cursor, err := r.labels.Find(context.Background(), bson.M{"userId": userId})
 	if err != nil {
 		return nil, err
 	}
@@ -137,13 +137,8 @@ func (r *LabelRepositoryImpl) GetLabels() ([]model.LabelResponse, error) {
 	return labels, nil
 }
 
-func (r *LabelRepositoryImpl) DeleteLabel(labelId string) error {
-	labelObjectID, err := primitive.ObjectIDFromHex(labelId)
-	if err != nil {
-		return errors.New("invalid bookId format")
-	}
-
-	filter := bson.M{"_id": labelObjectID}
+func (r *LabelRepositoryImpl) DeleteLabel(userId primitive.ObjectID, labelId primitive.ObjectID) error {
+	filter := bson.M{"_id": labelId, "userId": userId}
 	deleted, err := r.labels.DeleteOne(context.Background(), filter)
 	if err != nil {
 		return err
