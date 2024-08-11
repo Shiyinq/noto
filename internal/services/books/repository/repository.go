@@ -16,7 +16,7 @@ import (
 
 type BookRepository interface {
 	CreateBook(book *model.BookCreate) (*model.BookCreate, error)
-	GetBooks(userId primitive.ObjectID, isArchived bool) ([]model.PaginatedBookResponse, error)
+	GetBooks(userId primitive.ObjectID, isArchived bool, page int, limit int) ([]model.PaginatedBookResponse, error)
 	GetBook(userId primitive.ObjectID, bookId primitive.ObjectID) (*model.BookResponse, error)
 	UpdateBook(book *model.BookUpdate) (*model.BookResponse, error)
 	ArchiveBook(book *model.ArchiveBook) (*model.BookResponse, error)
@@ -129,14 +129,14 @@ func (r *BookRepositoryImpl) CreateBook(book *model.BookCreate) (*model.BookCrea
 	return book, nil
 }
 
-func (r *BookRepositoryImpl) GetBooks(userId primitive.ObjectID, isArchived bool) ([]model.PaginatedBookResponse, error) {
+func (r *BookRepositoryImpl) GetBooks(userId primitive.ObjectID, isArchived bool, page int, limit int) ([]model.PaginatedBookResponse, error) {
 	var books []model.PaginatedBookResponse
 
 	filter := bson.D{
 		{Key: "userId", Value: userId},
 		{Key: "isArchived", Value: isArchived},
 	}
-	pipeline := bookAgregate(filter, 1, 10, true)
+	pipeline := bookAgregate(filter, page, limit, true)
 
 	cursor, err := r.books.Aggregate(context.Background(), pipeline)
 	if err != nil {

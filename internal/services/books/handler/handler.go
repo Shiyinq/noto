@@ -4,7 +4,6 @@ import (
 	"noto/internal/services/books/model"
 	"noto/internal/services/books/service"
 	"noto/internal/utils"
-	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -61,6 +60,9 @@ func (s *BookHandlerImpl) CreateBook(c *fiber.Ctx) error {
 // @Tags		Books
 // @Security 	BearerAuth
 // @Produce		json
+// @Param		is_archived	query		bool	false	"Filter by archive status"
+// @Param		page		query		int		false	"Page number for pagination"	minimum(1)
+// @Param		limit		query		int		false	"Number of items per page"	minimum(1)
 // @Success		200		{object}	[]model.PaginatedBookResponse
 // @Router		/api/books [get]
 func (s *BookHandlerImpl) GetBooks(c *fiber.Ctx) error {
@@ -69,21 +71,15 @@ func (s *BookHandlerImpl) GetBooks(c *fiber.Ctx) error {
 		return utils.ErrorUnauthorized(c, err.Error())
 	}
 
-	isArchivedStr := c.Query("is_archived")
+	page := c.QueryInt("page", 1)
+	limit := c.QueryInt("limit", 10)
+	isArchived := c.QueryBool("is_archived", false)
 
-	var isArchived bool
-	if isArchivedStr != "" {
-		var errConv error
-		isArchived, errConv = strconv.ParseBool(isArchivedStr)
-		if errConv != nil {
-			return utils.ErrorBadRequest(c, "invalid value for is_archived")
-		}
-	}
-
-	books, err := s.bookService.GetBooks(userId, isArchived)
+	books, err := s.bookService.GetBooks(userId, isArchived, page, limit)
 	if err != nil {
 		return utils.ErrorInternalServer(c, err.Error())
 	}
+
 	return c.JSON(books)
 }
 
