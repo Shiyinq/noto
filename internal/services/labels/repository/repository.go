@@ -100,7 +100,7 @@ func (r *LabelRepositoryImpl) AddBookLabel(book *model.BookLabel) (*model.AddBoo
 }
 
 func (r *LabelRepositoryImpl) DeleteBookLabel(book *model.BookLabel) error {
-	filter := bson.M{"name": book.LabelName}
+	filter := bson.M{"userId": book.UserId, "name": book.LabelName}
 	labelExist := r.labels.FindOne(context.Background(), filter)
 
 	if labelExist.Err() != nil {

@@ -6,7 +6,6 @@ import (
 	"noto/internal/utils"
 
 	"github.com/gofiber/fiber/v2"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type LabelHandler interface {
@@ -157,19 +156,23 @@ func (s *LabelHandlerImpl) AddBookLabel(c *fiber.Ctx) error {
 // @Success		200	{object} interface{}
 // @Router		/api/books/{bookId}/labels [delete]
 func (s *LabelHandlerImpl) DeleteBookLabel(c *fiber.Ctx) error {
-	bookId := c.Params("bookId")
-	label := new(model.BookLabel)
-	objectBookId, err := primitive.ObjectIDFromHex(bookId)
+	userId, err := utils.GetUserID(c)
+	if err != nil {
+		return utils.ErrorUnauthorized(c, err.Error())
+	}
+
+	bookId, err := utils.ToObjectID(c.Params("bookId"))
 	if err != nil {
 		return utils.ErrorBadRequest(c, err.Error())
 	}
 
-	label.BookId = objectBookId
-
+	label := new(model.BookLabel)
 	if err := c.BodyParser(label); err != nil {
 		return utils.ErrorBadRequest(c, "failed to parse json: "+err.Error())
 	}
 
+	label.UserId = userId
+	label.BookId = bookId
 	deleted := s.labelService.DeleteBookLabel(label)
 	if deleted != nil {
 		return utils.ErrorInternalServer(c, "failed to delete book label: "+deleted.Error())
