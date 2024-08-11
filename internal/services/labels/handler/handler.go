@@ -193,12 +193,17 @@ func (s *LabelHandlerImpl) DeleteBookLabel(c *fiber.Ctx) error {
 // @Success		200	{object} model.BookResponse
 // @Router		/api/labels/{labelName}/books [get]
 func (s *LabelHandlerImpl) GetBookByLabel(c *fiber.Ctx) error {
+	userId, err := utils.GetUserID(c)
+	if err != nil {
+		return utils.ErrorUnauthorized(c, err.Error())
+	}
+
 	labelName := c.Params("labelName")
 	if labelName == "" {
 		return utils.ErrorBadRequest(c, "label name required!")
 	}
 
-	books, err := s.labelService.GetBookByLabel(labelName)
+	books, err := s.labelService.GetBookByLabel(userId, labelName)
 
 	if err != nil {
 		return utils.ErrorInternalServer(c, err.Error())
