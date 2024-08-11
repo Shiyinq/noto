@@ -204,9 +204,7 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/noto_internal_services_books_model.PaginatedBookResponse'
-            type: array
+            $ref: '#/definitions/noto_internal_services_books_model.PaginatedBookResponse'
       security:
       - BearerAuth: []
       summary: Get all book
