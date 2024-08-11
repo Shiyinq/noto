@@ -81,7 +81,7 @@ func paginationAggregate(page, limit int) bson.M {
 	}
 }
 
-func bookAgregate(matchCondition bson.D, page, limit int, usePagination bool) mongo.Pipeline {
+func bookAgregate(matchCondition bson.D, page int, limit int, usePagination bool) mongo.Pipeline {
 	pipeline := mongo.Pipeline{
 		{{Key: "$match", Value: matchCondition}},
 		{{Key: "$lookup", Value: bson.M{
