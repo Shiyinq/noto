@@ -41,6 +41,10 @@ func (r *NoteRepositoryImpl) GetNotes(userId primitive.ObjectID, bookId primitiv
 		return nil, err
 	}
 
+	if len(notes) == 0 {
+		return []model.NoteResponse{}, nil
+	}
+
 	return notes, nil
 }
 
