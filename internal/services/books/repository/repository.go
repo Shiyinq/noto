@@ -16,7 +16,7 @@ import (
 
 type BookRepository interface {
 	CreateBook(book *model.BookCreate) (*model.BookCreate, error)
-	GetBooks(userId primitive.ObjectID, isArchived bool) ([]model.BookResponse, error)
+	GetBooks(userId primitive.ObjectID, isArchived bool) ([]model.PaginatedBookResponse, error)
 	GetBook(userId primitive.ObjectID, bookId primitive.ObjectID) (*model.BookResponse, error)
 	UpdateBook(book *model.BookUpdate) (*model.BookResponse, error)
 	ArchiveBook(book *model.ArchiveBook) (*model.BookResponse, error)
@@ -30,42 +30,88 @@ func NewBookRepository() BookRepository {
 	return &BookRepositoryImpl{books: config.DB.Collection("books")}
 }
 
-func bookAgregate(matchCondition bson.D) mongo.Pipeline {
-	return mongo.Pipeline{
-		{
-			{Key: "$match", Value: matchCondition},
-		},
-		{
-			{Key: "$lookup",
-				Value: bson.D{
-					{Key: "from", Value: "book_labels"},
-					{Key: "localField", Value: "_id"},
-					{Key: "foreignField", Value: "bookId"},
-					{Key: "as", Value: "book_labels"},
+func paginationAggregate(page, limit int) bson.M {
+	skip := limit * (page - 1)
+
+	return bson.M{
+		"metadata": []bson.M{{
+			"$count": "totalData",
+		}, {
+			"$project": bson.M{
+				"totalData": 1,
+				"totalPage": bson.M{
+					"$toInt": bson.M{
+						"$ceil": bson.M{
+							"$divide": []interface{}{"$totalData", limit},
+						},
+					},
+				},
+				"previousPage": bson.M{
+					"$cond": bson.M{
+						"if":   bson.M{"$lte": []interface{}{page, 1}},
+						"then": nil,
+						"else": bson.M{"$subtract": []interface{}{page, 1}},
+					},
+				},
+				"currentPage": bson.M{
+					"$cond": bson.M{
+						"if":   bson.M{"$eq": []interface{}{page, 1}},
+						"then": 1,
+						"else": bson.M{"$toInt": bson.M{"$ceil": bson.M{"$divide": []interface{}{page, 1}}}},
+					},
+				},
+				"nextPage": bson.M{
+					"$cond": bson.M{
+						"if": bson.M{
+							"$lte": []interface{}{
+								bson.M{"$add": []interface{}{page, 1}},
+								bson.M{"$toInt": bson.M{"$ceil": bson.M{"$divide": []interface{}{"$totalData", limit}}}},
+							},
+						},
+						"then": bson.M{"$add": []interface{}{page, 1}},
+						"else": nil,
+					},
 				},
 			},
+		}},
+		"data": []bson.M{
+			{"$skip": skip},
+			{"$limit": limit},
 		},
-		{
-			{Key: "$lookup",
-				Value: bson.D{
-					{Key: "from", Value: "labels"},
-					{Key: "localField", Value: "book_labels.labelId"},
-					{Key: "foreignField", Value: "_id"},
-					{Key: "as", Value: "labels"},
-				},
-			},
-		},
-		{
-			{Key: "$project",
-				Value: bson.D{
-					{Key: "book_labels", Value: 0},
-					{Key: "labels.createdAt", Value: 0},
-					{Key: "labels.updatedAt", Value: 0},
-				},
-			},
-		},
-		{{Key: "$sort", Value: bson.D{{Key: "updatedAt", Value: -1}}}},
 	}
+}
+
+func bookAgregate(matchCondition bson.D, page, limit int, usePagination bool) mongo.Pipeline {
+	pipeline := mongo.Pipeline{
+		{{Key: "$match", Value: matchCondition}},
+		{{Key: "$lookup", Value: bson.M{
+			"from":         "book_labels",
+			"localField":   "_id",
+			"foreignField": "bookId",
+			"as":           "book_labels",
+		}}},
+		{{Key: "$lookup", Value: bson.M{
+			"from":         "labels",
+			"localField":   "book_labels.labelId",
+			"foreignField": "_id",
+			"as":           "labels",
+		}}},
+		{{Key: "$project", Value: bson.M{
+			"book_labels":      0,
+			"labels.createdAt": 0,
+			"labels.updatedAt": 0,
+		}}},
+		{{Key: "$sort", Value: bson.M{"updatedAt": -1}}},
+	}
+
+	if usePagination {
+		pipeline = append(pipeline,
+			bson.D{{Key: "$facet", Value: paginationAggregate(page, limit)}},
+			bson.D{{Key: "$unwind", Value: "$metadata"}},
+		)
+	}
+
+	return pipeline
 }
 
 func (r *BookRepositoryImpl) CreateBook(book *model.BookCreate) (*model.BookCreate, error) {
@@ -83,14 +129,14 @@ func (r *BookRepositoryImpl) CreateBook(book *model.BookCreate) (*model.BookCrea
 	return book, nil
 }
 
-func (r *BookRepositoryImpl) GetBooks(userId primitive.ObjectID, isArchived bool) ([]model.BookResponse, error) {
-	var books []model.BookResponse
+func (r *BookRepositoryImpl) GetBooks(userId primitive.ObjectID, isArchived bool) ([]model.PaginatedBookResponse, error) {
+	var books []model.PaginatedBookResponse
 
 	filter := bson.D{
 		{Key: "userId", Value: userId},
 		{Key: "isArchived", Value: isArchived},
 	}
-	pipeline := bookAgregate(filter)
+	pipeline := bookAgregate(filter, 1, 10, true)
 
 	cursor, err := r.books.Aggregate(context.Background(), pipeline)
 	if err != nil {
@@ -101,7 +147,7 @@ func (r *BookRepositoryImpl) GetBooks(userId primitive.ObjectID, isArchived bool
 	}
 
 	if len(books) == 0 {
-		return []model.BookResponse{}, nil
+		return []model.PaginatedBookResponse{}, nil
 	}
 
 	return books, nil
@@ -114,7 +160,7 @@ func (r *BookRepositoryImpl) GetBook(userId primitive.ObjectID, bookId primitive
 		{Key: "userId", Value: userId},
 		{Key: "_id", Value: bookId},
 	}
-	pipeline := bookAgregate(filter)
+	pipeline := bookAgregate(filter, 0, 0, false)
 
 	cursor, err := r.books.Aggregate(context.Background(), pipeline)
 	if err != nil {

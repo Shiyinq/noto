@@ -9,7 +9,7 @@ import (
 
 type BookService interface {
 	CreateBook(book *model.BookCreate) (*model.BookCreate, error)
-	GetBooks(userId primitive.ObjectID, isArchived bool) ([]model.BookResponse, error)
+	GetBooks(userId primitive.ObjectID, isArchived bool) ([]model.PaginatedBookResponse, error)
 	GetBook(userId primitive.ObjectID, bookId primitive.ObjectID) (*model.BookResponse, error)
 	UpdateBook(book *model.BookUpdate) (*model.BookResponse, error)
 	ArchiveBook(book *model.ArchiveBook) (*model.BookResponse, error)
@@ -27,7 +27,7 @@ func (r *BookServiceImpl) CreateBook(book *model.BookCreate) (*model.BookCreate,
 	return r.bookRepo.CreateBook(book)
 }
 
-func (r *BookServiceImpl) GetBooks(userId primitive.ObjectID, isArchived bool) ([]model.BookResponse, error) {
+func (r *BookServiceImpl) GetBooks(userId primitive.ObjectID, isArchived bool) ([]model.PaginatedBookResponse, error) {
 	return r.bookRepo.GetBooks(userId, isArchived)
 }
 
