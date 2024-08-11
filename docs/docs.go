@@ -332,7 +332,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/noto_internal_services_notes_model.NoteUpdate"
+                            "$ref": "#/definitions/noto_internal_services_notes_model.NoteUpdateSwagger"
                         }
                     }
                 ],
@@ -859,6 +859,9 @@ const docTemplate = `{
                 },
                 "updated_at": {
                     "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
                 }
             }
         },
@@ -890,7 +893,7 @@ const docTemplate = `{
                 }
             }
         },
-        "noto_internal_services_notes_model.NoteUpdate": {
+        "noto_internal_services_notes_model.NoteUpdateSwagger": {
             "type": "object",
             "properties": {
                 "text": {
