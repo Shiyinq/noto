@@ -28,6 +28,8 @@ Noto ノート (nōto) is an app for storing your notes privately. You can host 
    ```
 
 4. **Install Air for Live Reloading**
+
+   If you don't have `air` installed on your machine, install it first:
    ```sh
    go install github.com/air-verse/air@latest
    ```
