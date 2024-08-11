@@ -94,6 +94,8 @@ definitions:
         type: string
       updated_at:
         type: string
+      user_id:
+        type: string
     type: object
   noto_internal_services_labels_model.LabelCreateSwagger:
     properties:
@@ -194,6 +196,87 @@ paths:
       security:
       - BearerAuth: []
       summary: Create a new book
+      tags:
+      - Books
+  /api/books/{bookId}:
+    get:
+      description: Get book by id
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/noto_internal_services_books_model.BookResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/fiber.Map'
+      security:
+      - BearerAuth: []
+      summary: Get book by id
+      tags:
+      - Books
+    patch:
+      consumes:
+      - application/json
+      description: Archive book by id
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Book to archive
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/noto_internal_services_books_model.ArchiveBookSwagger'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/noto_internal_services_books_model.BookResponse'
+      security:
+      - BearerAuth: []
+      summary: Archive book by id
+      tags:
+      - Books
+    put:
+      consumes:
+      - application/json
+      description: Update book by id
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Book to update
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/noto_internal_services_books_model.BookUpdateSwagger'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/noto_internal_services_books_model.BookResponse'
+      security:
+      - BearerAuth: []
+      summary: Update book by id
       tags:
       - Books
   /api/books/{bookId}/labels:
@@ -365,87 +448,6 @@ paths:
       summary: Update note
       tags:
       - Notes
-  /api/books/{id}:
-    get:
-      description: Get book by id
-      parameters:
-      - description: Book ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/noto_internal_services_books_model.BookResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/fiber.Map'
-      security:
-      - BearerAuth: []
-      summary: Get book by id
-      tags:
-      - Books
-    patch:
-      consumes:
-      - application/json
-      description: Archive book by id
-      parameters:
-      - description: Book ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Book to archive
-        in: body
-        name: book
-        required: true
-        schema:
-          $ref: '#/definitions/noto_internal_services_books_model.ArchiveBookSwagger'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/noto_internal_services_books_model.BookResponse'
-      security:
-      - BearerAuth: []
-      summary: Archive book by id
-      tags:
-      - Books
-    put:
-      consumes:
-      - application/json
-      description: Update book by id
-      parameters:
-      - description: Book ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Book to update
-        in: body
-        name: book
-        required: true
-        schema:
-          $ref: '#/definitions/noto_internal_services_books_model.BookUpdateSwagger'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/noto_internal_services_books_model.BookResponse'
-      security:
-      - BearerAuth: []
-      summary: Update book by id
-      tags:
-      - Books
   /api/labels:
     get:
       description: Get all labels
