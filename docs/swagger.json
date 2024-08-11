@@ -328,6 +328,20 @@
                 "summary": "Get notes by book id",
                 "parameters": [
                     {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "Page number for pagination",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "Number of items per page",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "Book ID",
                         "name": "bookId",
