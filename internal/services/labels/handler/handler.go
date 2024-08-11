@@ -190,7 +190,9 @@ func (s *LabelHandlerImpl) DeleteBookLabel(c *fiber.Ctx) error {
 // @Security 	BearerAuth
 // @Produce		json
 // @Param		labelName path string true "Label Name"
-// @Success		200	{object} model.BookResponse
+// @Param		page		query		int		false	"Page number for pagination"	minimum(1)
+// @Param		limit		query		int		false	"Number of items per page"	minimum(1)
+// @Success		200	{object} model.PaginatedBookResponse
 // @Router		/api/labels/{labelName}/books [get]
 func (s *LabelHandlerImpl) GetBookByLabel(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
@@ -203,7 +205,10 @@ func (s *LabelHandlerImpl) GetBookByLabel(c *fiber.Ctx) error {
 		return utils.ErrorBadRequest(c, "label name required!")
 	}
 
-	books, err := s.labelService.GetBookByLabel(userId, labelName)
+	page := c.QueryInt("page", 1)
+	limit := c.QueryInt("limit", 10)
+
+	books, err := s.labelService.GetBookByLabel(userId, labelName, page, limit)
 
 	if err != nil {
 		return utils.ErrorInternalServer(c, err.Error())

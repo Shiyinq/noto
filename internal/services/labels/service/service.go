@@ -13,7 +13,7 @@ type LabelService interface {
 	DeleteLabel(userId primitive.ObjectID, labelId primitive.ObjectID) error
 	AddBookLabel(book *model.BookLabel) (*model.AddBookLabelResponse, error)
 	DeleteBookLabel(book *model.BookLabel) error
-	GetBookByLabel(userId primitive.ObjectID, labelName string) ([]model.BookResponse, error)
+	GetBookByLabel(userId primitive.ObjectID, labelName string, page int, limit int) (*model.PaginatedBookResponse, error)
 }
 
 type LabelServiceImpl struct {
@@ -44,6 +44,6 @@ func (r *LabelServiceImpl) DeleteBookLabel(book *model.BookLabel) error {
 	return r.labelRepo.DeleteBookLabel(book)
 }
 
-func (r *LabelServiceImpl) GetBookByLabel(userId primitive.ObjectID, labelName string) ([]model.BookResponse, error) {
-	return r.labelRepo.GetBookByLabel(userId, labelName)
+func (r *LabelServiceImpl) GetBookByLabel(userId primitive.ObjectID, labelName string, page int, limit int) (*model.PaginatedBookResponse, error) {
+	return r.labelRepo.GetBookByLabel(userId, labelName, page, limit)
 }
