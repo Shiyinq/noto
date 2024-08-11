@@ -45,6 +45,8 @@ Noto ノート (nōto) is an app for storing your notes privately. You can host 
 
 ### Generate Swagger Documentation
 1. **Install Swagger for API Documentation**
+
+   If you don't have `swag` installed on your machine, install it first:
    ```sh
    go install github.com/swaggo/swag/cmd/swag@latest
    ```
