@@ -173,6 +173,28 @@ definitions:
       text:
         type: string
     type: object
+  noto_internal_services_notes_model.PaginatedNoteResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/noto_internal_services_notes_model.NoteResponse'
+        type: array
+      metadata:
+        $ref: '#/definitions/noto_internal_services_notes_model.PaginationMetadata'
+    type: object
+  noto_internal_services_notes_model.PaginationMetadata:
+    properties:
+      currentPage:
+        type: integer
+      nextPage:
+        type: integer
+      previousPage:
+        type: integer
+      totalData:
+        type: integer
+      totalPage:
+        type: integer
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -375,6 +397,11 @@ paths:
     get:
       description: Get notes by book id
       parameters:
+      - description: Book ID
+        in: path
+        name: bookId
+        required: true
+        type: string
       - description: Page number for pagination
         in: query
         minimum: 1
@@ -385,20 +412,13 @@ paths:
         minimum: 1
         name: limit
         type: integer
-      - description: Book ID
-        in: path
-        name: bookId
-        required: true
-        type: string
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/noto_internal_services_notes_model.NoteResponse'
-            type: array
+            $ref: '#/definitions/noto_internal_services_notes_model.PaginatedNoteResponse'
       security:
       - BearerAuth: []
       summary: Get notes by book id

@@ -328,6 +328,13 @@
                 "summary": "Get notes by book id",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Book ID",
+                        "name": "bookId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "minimum": 1,
                         "type": "integer",
                         "description": "Page number for pagination",
@@ -340,23 +347,13 @@
                         "description": "Number of items per page",
                         "name": "limit",
                         "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Book ID",
-                        "name": "bookId",
-                        "in": "path",
-                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/noto_internal_services_notes_model.NoteResponse"
-                            }
+                            "$ref": "#/definitions/noto_internal_services_notes_model.PaginatedNoteResponse"
                         }
                     }
                 }
@@ -962,6 +959,40 @@
             "properties": {
                 "text": {
                     "type": "string"
+                }
+            }
+        },
+        "noto_internal_services_notes_model.PaginatedNoteResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/noto_internal_services_notes_model.NoteResponse"
+                    }
+                },
+                "metadata": {
+                    "$ref": "#/definitions/noto_internal_services_notes_model.PaginationMetadata"
+                }
+            }
+        },
+        "noto_internal_services_notes_model.PaginationMetadata": {
+            "type": "object",
+            "properties": {
+                "currentPage": {
+                    "type": "integer"
+                },
+                "nextPage": {
+                    "type": "integer"
+                },
+                "previousPage": {
+                    "type": "integer"
+                },
+                "totalData": {
+                    "type": "integer"
+                },
+                "totalPage": {
+                    "type": "integer"
                 }
             }
         }
