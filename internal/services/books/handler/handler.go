@@ -61,7 +61,7 @@ func (s *BookHandlerImpl) CreateBook(c *fiber.Ctx) error {
 // @Tags		Books
 // @Security 	BearerAuth
 // @Produce		json
-// @Success		200		{object}	[]model.BookResponse
+// @Success		200		{object}	[]model.PaginatedBookResponse
 // @Router		/api/books [get]
 func (s *BookHandlerImpl) GetBooks(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
