@@ -23,21 +23,17 @@ func NewNoteService(noteRepo repository.NoteRepository) NoteService {
 }
 
 func (r *NoteServiceImpl) GetNotes(userId primitive.ObjectID, bookId primitive.ObjectID) ([]model.NoteResponse, error) {
-	var notes, err = r.noteRepo.GetNotes(userId, bookId)
-	return notes, err
+	return r.noteRepo.GetNotes(userId, bookId)
 }
 
 func (r *NoteServiceImpl) CreateNote(note *model.NoteCreate) (*model.NoteCreate, error) {
-	var newNote, err = r.noteRepo.CreateNote(note)
-	return newNote, err
+	return r.noteRepo.CreateNote(note)
 }
 
 func (r *NoteServiceImpl) UpdateNote(note *model.NoteUpdate) (*model.NoteResponse, error) {
-	var updated, err = r.noteRepo.UpdateNote(note)
-	return updated, err
+	return r.noteRepo.UpdateNote(note)
 }
 
 func (r *NoteServiceImpl) DeleteNote(userId primitive.ObjectID, bookId primitive.ObjectID, noteId primitive.ObjectID) error {
-	var err = r.noteRepo.DeleteNote(userId, bookId, noteId)
-	return err
+	return r.noteRepo.DeleteNote(userId, bookId, noteId)
 }
