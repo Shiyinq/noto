@@ -37,5 +37,5 @@ func main() {
 
 	app.Use(middleware.NotFoundHandler)
 
-	app.Listen(":8080")
+	app.Listen(config.PORT)
 }
