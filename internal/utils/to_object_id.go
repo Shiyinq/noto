@@ -9,7 +9,7 @@ import (
 func ToObjectID(id string) (primitive.ObjectID, error) {
 	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return primitive.NilObjectID, errors.New("invalid user id format")
+		return primitive.NilObjectID, errors.New("invalid id format")
 	}
 
 	return objectID, nil
