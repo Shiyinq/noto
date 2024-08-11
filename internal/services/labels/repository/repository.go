@@ -136,6 +136,10 @@ func (r *LabelRepositoryImpl) GetLabels(userId primitive.ObjectID) ([]model.Labe
 		return nil, err
 	}
 
+	if len(labels) == 0 {
+		return []model.LabelResponse{}, nil
+	}
+
 	return labels, nil
 }
 
@@ -182,7 +186,7 @@ func (r *LabelRepositoryImpl) GetBookByLabel(userId primitive.ObjectID, labelNam
 		}}},
 		{{Key: "$unwind", Value: bson.D{
 			{Key: "path", Value: "$books"},
-			{Key: "preserveNullAndEmptyArrays", Value: true},
+			{Key: "preserveNullAndEmptyArrays", Value: false},
 		}}},
 		{{Key: "$project", Value: bson.D{
 			{Key: "_id", Value: "$books._id"},
