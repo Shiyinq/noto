@@ -12,14 +12,22 @@ type NoteCreateSwagger struct {
 
 type NoteCreate struct {
 	ID        primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	UserId    primitive.ObjectID `json:"user_id" bson:"userId"`
 	BookId    primitive.ObjectID `json:"book_id" bson:"bookId"`
 	Text      string             `json:"text" bson:"text"`
 	CreatedAt time.Time          `json:"created_at" bson:"createdAt"`
 	UpdatedAt time.Time          `json:"updated_at" bson:"updatedAt"`
 }
 
-type NoteUpdate struct {
+type NoteUpdateSwagger struct {
 	Text string `json:"text" bson:"text"`
+}
+
+type NoteUpdate struct {
+	ID     primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	UserId primitive.ObjectID `json:"user_id" bson:"userId"`
+	BookId primitive.ObjectID `json:"book_id" bson:"bookId"`
+	Text   string             `json:"text" bson:"text"`
 }
 
 type NoteResponse struct {
