@@ -29,6 +29,8 @@ func NewNoteHandler(noteService service.NoteService) NoteHandler {
 // @Tags		Notes
 // @Security 	BearerAuth
 // @Produce		json
+// @Param		page		query		int		false	"Page number for pagination"	minimum(1)
+// @Param		limit		query		int		false	"Number of items per page"	minimum(1)
 // @Param		bookId path string true "Book ID"
 // @Success		200		{object}	[]model.NoteResponse
 // @Router		/api/books/{bookId}/notes [get]
@@ -43,7 +45,10 @@ func (s *NoteHandlerImpl) GetNotes(c *fiber.Ctx) error {
 		return utils.ErrorBadRequest(c, err.Error())
 	}
 
-	notes, err := s.noteService.GetNotes(userId, bookId)
+	page := c.QueryInt("page", 1)
+	limit := c.QueryInt("limit", 10)
+
+	notes, err := s.noteService.GetNotes(userId, bookId, page, limit)
 	if err != nil {
 		return utils.ErrorInternalServer(c, err.Error())
 	}
