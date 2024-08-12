@@ -32,6 +32,7 @@ func NewLabelHandler(labelService service.LabelService) LabelHandler {
 // @Security 	BearerAuth
 // @Accept		json
 // @Produce		json
+// @Param 		Authorization header string false "Bearer token"
 // @Param		book	body		model.LabelCreateSwagger	true	"Label to create"
 // @Success		201		{object}	model.LabelCreate
 // @Router		/api/labels [post]
@@ -61,6 +62,7 @@ func (s *LabelHandlerImpl) CreateLabel(c *fiber.Ctx) error {
 // @Tags		Labels
 // @Security 	BearerAuth
 // @Produce		json
+// @Param 		Authorization header string false "Bearer token"
 // @Success		200		{object}	[]model.LabelResponse
 // @Router		/api/labels [get]
 func (s *LabelHandlerImpl) GetLabels(c *fiber.Ctx) error {
@@ -82,8 +84,8 @@ func (s *LabelHandlerImpl) GetLabels(c *fiber.Ctx) error {
 // @Description	Delete label
 // @Tags		Labels
 // @Security 	BearerAuth
-// @Accept		json
 // @Produce		json
+// @Param 		Authorization header string false "Bearer token"
 // @Param		labelId path string true "Label ID"
 // @Success		200	{object} interface{}
 // @Router		/api/labels/{labelId} [delete]
@@ -114,6 +116,7 @@ func (s *LabelHandlerImpl) DeleteLabel(c *fiber.Ctx) error {
 // @Security 	BearerAuth
 // @Accept		json
 // @Produce		json
+// @Param 		Authorization header string false "Bearer token"
 // @Param		bookId path string true "Book ID"
 // @Param		book	body		model.BookLabelSwagger	true	"Label to add"
 // @Success		201	{object}	model.AddBookLabelResponse
@@ -151,6 +154,7 @@ func (s *LabelHandlerImpl) AddBookLabel(c *fiber.Ctx) error {
 // @Security 	BearerAuth
 // @Accept		json
 // @Produce		json
+// @Param 		Authorization header string false "Bearer token"
 // @Param		bookId path string true "Book ID"
 // @Param		book	body		model.BookLabelSwagger	true	"Label to delete"
 // @Success		200	{object} interface{}
@@ -189,6 +193,7 @@ func (s *LabelHandlerImpl) DeleteBookLabel(c *fiber.Ctx) error {
 // @Tags		Labels
 // @Security 	BearerAuth
 // @Produce		json
+// @Param 		Authorization header string false "Bearer token"
 // @Param		labelName path string true "Label Name"
 // @Param		page		query		int		false	"Page number for pagination"	minimum(1)
 // @Param		limit		query		int		false	"Number of items per page"	minimum(1)
