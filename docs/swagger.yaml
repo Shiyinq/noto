@@ -3,6 +3,12 @@ definitions:
   fiber.Map:
     additionalProperties: true
     type: object
+  noto_internal_common.ErrorResponse:
+    properties:
+      error:
+        example: error message
+        type: string
+    type: object
   noto_internal_services_books_model.ArchiveBookSwagger:
     properties:
       is_archived:
@@ -264,6 +270,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/noto_internal_services_books_model.PaginatedBookResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get all book
@@ -291,6 +305,18 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/noto_internal_services_books_model.BookCreate'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Create a new book
@@ -316,10 +342,18 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/noto_internal_services_books_model.BookResponse'
-        "404":
-          description: Not Found
+        "400":
+          description: Bad Request
           schema:
-            $ref: '#/definitions/fiber.Map'
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get book by id
@@ -352,6 +386,18 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/noto_internal_services_books_model.BookResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Archive book by id
@@ -384,6 +430,18 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/noto_internal_services_books_model.BookResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Update book by id
@@ -417,6 +475,18 @@ paths:
           description: OK
           schema:
             type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Delete label from book
@@ -449,6 +519,18 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/noto_internal_services_labels_model.AddBookLabelResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Add label to book
@@ -484,6 +566,18 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/noto_internal_services_notes_model.PaginatedNoteResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get notes by book id
@@ -516,6 +610,18 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/noto_internal_services_notes_model.NoteCreate'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Create a new note
@@ -542,10 +648,22 @@ paths:
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
+        "200":
+          description: OK
           schema:
             type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Delete note
@@ -579,10 +697,22 @@ paths:
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
+        "200":
+          description: OK
           schema:
             $ref: '#/definitions/noto_internal_services_notes_model.NoteResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Update note
@@ -605,6 +735,14 @@ paths:
             items:
               $ref: '#/definitions/noto_internal_services_labels_model.LabelResponse'
             type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get all labels
@@ -632,6 +770,18 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/noto_internal_services_labels_model.LabelCreate'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Create a new label
@@ -657,6 +807,18 @@ paths:
           description: OK
           schema:
             type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Delete label
@@ -692,6 +854,18 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/noto_internal_services_labels_model.PaginatedBookResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get book by label name
