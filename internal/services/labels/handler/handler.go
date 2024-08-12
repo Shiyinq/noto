@@ -1,6 +1,7 @@
 package handler
 
 import (
+	_ "noto/internal/common"
 	"noto/internal/services/labels/model"
 	"noto/internal/services/labels/service"
 	"noto/internal/utils"
@@ -35,6 +36,9 @@ func NewLabelHandler(labelService service.LabelService) LabelHandler {
 // @Param 		Authorization header string false "Bearer token"
 // @Param		book	body		model.LabelCreateSwagger	true	"Label to create"
 // @Success		201		{object}	model.LabelCreate
+// @Failure     400    	{object}   	common.ErrorResponse
+// @Failure     401     {object}    common.ErrorResponse
+// @Failure     500     {object}    common.ErrorResponse
 // @Router		/api/labels [post]
 func (s *LabelHandlerImpl) CreateLabel(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
@@ -64,6 +68,8 @@ func (s *LabelHandlerImpl) CreateLabel(c *fiber.Ctx) error {
 // @Produce		json
 // @Param 		Authorization header string false "Bearer token"
 // @Success		200		{object}	[]model.LabelResponse
+// @Failure     401     {object}    common.ErrorResponse
+// @Failure     500     {object}    common.ErrorResponse
 // @Router		/api/labels [get]
 func (s *LabelHandlerImpl) GetLabels(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
@@ -87,7 +93,10 @@ func (s *LabelHandlerImpl) GetLabels(c *fiber.Ctx) error {
 // @Produce		json
 // @Param 		Authorization header string false "Bearer token"
 // @Param		labelId path string true "Label ID"
-// @Success		200	{object} interface{}
+// @Success		200		{object} 	interface{}
+// @Failure     400    	{object}   	common.ErrorResponse
+// @Failure     401     {object}    common.ErrorResponse
+// @Failure     500     {object}    common.ErrorResponse
 // @Router		/api/labels/{labelId} [delete]
 func (s *LabelHandlerImpl) DeleteLabel(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
@@ -119,7 +128,10 @@ func (s *LabelHandlerImpl) DeleteLabel(c *fiber.Ctx) error {
 // @Param 		Authorization header string false "Bearer token"
 // @Param		bookId path string true "Book ID"
 // @Param		book	body		model.BookLabelSwagger	true	"Label to add"
-// @Success		201	{object}	model.AddBookLabelResponse
+// @Success		201		{object}	model.AddBookLabelResponse
+// @Failure     400    	{object}   	common.ErrorResponse
+// @Failure     401     {object}    common.ErrorResponse
+// @Failure     500     {object}    common.ErrorResponse
 // @Router		/api/books/{bookId}/labels [post]
 func (s *LabelHandlerImpl) AddBookLabel(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
@@ -157,7 +169,10 @@ func (s *LabelHandlerImpl) AddBookLabel(c *fiber.Ctx) error {
 // @Param 		Authorization header string false "Bearer token"
 // @Param		bookId path string true "Book ID"
 // @Param		book	body		model.BookLabelSwagger	true	"Label to delete"
-// @Success		200	{object} interface{}
+// @Success		200		{object} 	interface{}
+// @Failure     400    	{object}   	common.ErrorResponse
+// @Failure     401     {object}    common.ErrorResponse
+// @Failure     500     {object}    common.ErrorResponse
 // @Router		/api/books/{bookId}/labels [delete]
 func (s *LabelHandlerImpl) DeleteBookLabel(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
@@ -197,7 +212,10 @@ func (s *LabelHandlerImpl) DeleteBookLabel(c *fiber.Ctx) error {
 // @Param		labelName path string true "Label Name"
 // @Param		page		query		int		false	"Page number for pagination"	minimum(1)
 // @Param		limit		query		int		false	"Number of items per page"	minimum(1)
-// @Success		200	{object} model.PaginatedBookResponse
+// @Success		200		{object} 	model.PaginatedBookResponse
+// @Failure     400    	{object}   	common.ErrorResponse
+// @Failure     401     {object}    common.ErrorResponse
+// @Failure     500     {object}    common.ErrorResponse
 // @Router		/api/labels/{labelName}/books [get]
 func (s *LabelHandlerImpl) GetBookByLabel(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
