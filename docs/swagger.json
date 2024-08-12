@@ -26,6 +26,12 @@
                 "summary": "Get all book",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
                         "type": "boolean",
                         "description": "Filter by archive status",
                         "name": "is_archived",
@@ -74,6 +80,12 @@
                 "summary": "Create a new book",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
                         "description": "Book to create",
                         "name": "book",
                         "in": "body",
@@ -109,6 +121,12 @@
                 ],
                 "summary": "Get book by id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "Book ID",
@@ -150,6 +168,12 @@
                 ],
                 "summary": "Update book by id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "Book ID",
@@ -194,6 +218,12 @@
                 ],
                 "summary": "Archive book by id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "Book ID",
@@ -242,6 +272,12 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
                         "description": "Book ID",
                         "name": "bookId",
                         "in": "path",
@@ -286,6 +322,12 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
                         "description": "Book ID",
                         "name": "bookId",
                         "in": "path",
@@ -327,6 +369,12 @@
                 ],
                 "summary": "Get notes by book id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "Book ID",
@@ -378,6 +426,12 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
                         "description": "Book ID",
                         "name": "bookId",
                         "in": "path",
@@ -411,9 +465,6 @@
                     }
                 ],
                 "description": "Deelete note",
-                "consumes": [
-                    "application/json"
-                ],
                 "produces": [
                     "application/json"
                 ],
@@ -422,6 +473,12 @@
                 ],
                 "summary": "Delete note",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "Book ID",
@@ -464,6 +521,12 @@
                 ],
                 "summary": "Update note",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "Book ID",
@@ -513,6 +576,14 @@
                     "Labels"
                 ],
                 "summary": "Get all labels",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -544,6 +615,12 @@
                 "summary": "Create a new label",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
                         "description": "Label to create",
                         "name": "book",
                         "in": "body",
@@ -571,9 +648,6 @@
                     }
                 ],
                 "description": "Delete label",
-                "consumes": [
-                    "application/json"
-                ],
                 "produces": [
                     "application/json"
                 ],
@@ -582,6 +656,12 @@
                 ],
                 "summary": "Delete label",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "Label ID",
@@ -616,6 +696,12 @@
                 ],
                 "summary": "Get book by label name",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "Label Name",

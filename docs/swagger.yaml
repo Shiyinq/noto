@@ -239,6 +239,10 @@ paths:
     get:
       description: Get all book
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        type: string
       - description: Filter by archive status
         in: query
         name: is_archived
@@ -270,6 +274,10 @@ paths:
       - application/json
       description: Create a new book
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        type: string
       - description: Book to create
         in: body
         name: book
@@ -292,6 +300,10 @@ paths:
     get:
       description: Get book by id
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        type: string
       - description: Book ID
         in: path
         name: bookId
@@ -318,6 +330,10 @@ paths:
       - application/json
       description: Archive book by id
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        type: string
       - description: Book ID
         in: path
         name: bookId
@@ -346,6 +362,10 @@ paths:
       - application/json
       description: Update book by id
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        type: string
       - description: Book ID
         in: path
         name: bookId
@@ -375,6 +395,10 @@ paths:
       - application/json
       description: Delete label from book
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        type: string
       - description: Book ID
         in: path
         name: bookId
@@ -403,6 +427,10 @@ paths:
       - application/json
       description: Add label to book
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        type: string
       - description: Book ID
         in: path
         name: bookId
@@ -430,6 +458,10 @@ paths:
     get:
       description: Get notes by book id
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        type: string
       - description: Book ID
         in: path
         name: bookId
@@ -462,6 +494,10 @@ paths:
       - application/json
       description: Create a new note
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        type: string
       - description: Book ID
         in: path
         name: bookId
@@ -487,10 +523,12 @@ paths:
       - Notes
   /api/books/{bookId}/notes/{noteId}:
     delete:
-      consumes:
-      - application/json
       description: Deelete note
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        type: string
       - description: Book ID
         in: path
         name: bookId
@@ -518,6 +556,10 @@ paths:
       - application/json
       description: Update note
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        type: string
       - description: Book ID
         in: path
         name: bookId
@@ -549,6 +591,11 @@ paths:
   /api/labels:
     get:
       description: Get all labels
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        type: string
       produces:
       - application/json
       responses:
@@ -568,6 +615,10 @@ paths:
       - application/json
       description: Create a new label
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        type: string
       - description: Label to create
         in: body
         name: book
@@ -588,10 +639,12 @@ paths:
       - Labels
   /api/labels/{labelId}:
     delete:
-      consumes:
-      - application/json
       description: Delete label
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        type: string
       - description: Label ID
         in: path
         name: labelId
@@ -613,6 +666,10 @@ paths:
     get:
       description: Get book by label name
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        type: string
       - description: Label Name
         in: path
         name: labelName
