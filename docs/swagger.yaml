@@ -1,12 +1,14 @@
 basePath: /
 definitions:
-  fiber.Map:
-    additionalProperties: true
-    type: object
   noto_internal_common.ErrorResponse:
     properties:
       error:
         example: error message
+        type: string
+    type: object
+  noto_internal_services_auth_model.AuthToken:
+    properties:
+      token:
         type: string
     type: object
   noto_internal_services_books_model.ArchiveBookSwagger:
@@ -901,11 +903,11 @@ paths:
         "200":
           description: OK
           schema:
-            type: object
+            $ref: '#/definitions/noto_internal_services_auth_model.AuthToken'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/fiber.Map'
+            $ref: '#/definitions/noto_internal_common.ErrorResponse'
       summary: Handle Google OAuth callback
       tags:
       - Auth

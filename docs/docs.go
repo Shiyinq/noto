@@ -1038,13 +1038,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/noto_internal_services_auth_model.AuthToken"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/fiber.Map"
+                            "$ref": "#/definitions/noto_internal_common.ErrorResponse"
                         }
                     }
                 }
@@ -1052,16 +1052,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "fiber.Map": {
-            "type": "object",
-            "additionalProperties": true
-        },
         "noto_internal_common.ErrorResponse": {
             "type": "object",
             "properties": {
                 "error": {
                     "type": "string",
                     "example": "error message"
+                }
+            }
+        },
+        "noto_internal_services_auth_model.AuthToken": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
                 }
             }
         },
