@@ -31,6 +31,7 @@ func NewBookHandler(bookService service.BookService) BookHandler {
 // @Security 	BearerAuth
 // @Accept		json
 // @Produce		json
+// @Param 		Authorization header string false "Bearer token"
 // @Param		book	body		model.BookCreateSwagger	true	"Book to create"
 // @Success		201		{object}	model.BookCreate
 // @Router		/api/books [post]
@@ -60,6 +61,7 @@ func (s *BookHandlerImpl) CreateBook(c *fiber.Ctx) error {
 // @Tags		Books
 // @Security 	BearerAuth
 // @Produce		json
+// @Param 		Authorization header string false "Bearer token"
 // @Param		is_archived	query		bool	false	"Filter by archive status"
 // @Param		page		query		int		false	"Page number for pagination"	minimum(1)
 // @Param		limit		query		int		false	"Number of items per page"	minimum(1)
@@ -89,6 +91,7 @@ func (s *BookHandlerImpl) GetBooks(c *fiber.Ctx) error {
 // @Tags		Books
 // @Security 	BearerAuth
 // @Produce		json
+// @Param 		Authorization header string false "Bearer token"
 // @Param 		bookId path string true "Book ID"
 // @Success		200		{object}	model.BookResponse
 // @Failure 	404 {object} fiber.Map
@@ -121,6 +124,7 @@ func (s *BookHandlerImpl) GetBook(c *fiber.Ctx) error {
 // @Security 	BearerAuth
 // @Produce		json
 // @Accept		json
+// @Param 		Authorization header string false "Bearer token"
 // @Param 		bookId path string true "Book ID"
 // @Param		book	body		model.BookUpdateSwagger	true	"Book to update"
 // @Success		200		{object}	model.BookResponse
@@ -163,6 +167,7 @@ func (s *BookHandlerImpl) UpdateBook(c *fiber.Ctx) error {
 // @Security 	BearerAuth
 // @Produce		json
 // @Accept		json
+// @Param 		Authorization header string false "Bearer token"
 // @Param 		bookId path string true "Book ID"
 // @Param		book	body		model.ArchiveBookSwagger true	"Book to archive"
 // @Success		200		{object}	model.BookResponse

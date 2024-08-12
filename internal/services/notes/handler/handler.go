@@ -29,6 +29,7 @@ func NewNoteHandler(noteService service.NoteService) NoteHandler {
 // @Tags		Notes
 // @Security 	BearerAuth
 // @Produce		json
+// @Param 		Authorization header string false "Bearer token"
 // @Param		bookId path string true "Book ID"
 // @Param		page		query		int		false	"Page number for pagination"	minimum(1)
 // @Param		limit		query		int		false	"Number of items per page"	minimum(1)
@@ -63,6 +64,7 @@ func (s *NoteHandlerImpl) GetNotes(c *fiber.Ctx) error {
 // @Security 	BearerAuth
 // @Accept		json
 // @Produce		json
+// @Param 		Authorization header string false "Bearer token"
 // @Param		bookId path string true "Book ID"
 // @Param		book	body		model.NoteCreateSwagger	true	"Note to create"
 // @Success		201		{object}	model.NoteCreate
@@ -100,6 +102,7 @@ func (s *NoteHandlerImpl) CreateNote(c *fiber.Ctx) error {
 // @Security 	BearerAuth
 // @Accept		json
 // @Produce		json
+// @Param 		Authorization header string false "Bearer token"
 // @Param		bookId path string true "Book ID"
 // @Param		noteId path string true "Note ID"
 // @Param		book	body		model.NoteUpdateSwagger	true	"Note to update"
@@ -142,8 +145,8 @@ func (s *NoteHandlerImpl) UpdateNote(c *fiber.Ctx) error {
 // @Description	Deelete note
 // @Tags		Notes
 // @Security 	BearerAuth
-// @Accept		json
 // @Produce		json
+// @Param 		Authorization header string false "Bearer token"
 // @Param		bookId path string true "Book ID"
 // @Param		noteId path string true "Note ID"
 // @Success		201		{object} interface{}
