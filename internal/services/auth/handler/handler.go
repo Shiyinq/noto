@@ -4,6 +4,7 @@ import (
 	_ "noto/internal/common"
 	_ "noto/internal/services/auth/model"
 	"noto/internal/services/auth/service"
+	"noto/internal/utils"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -42,7 +43,8 @@ func (h *AuthHandler) HandleGoogleCallback(c *fiber.Ctx) error {
 	code := c.Query("code")
 	token, err := h.authService.HandleGoogleCallback(code)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+		return utils.ErrorInternalServer(c, err.Error())
 	}
+
 	return c.JSON(token)
 }
