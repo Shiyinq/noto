@@ -32,6 +32,12 @@ const docTemplate = `{
                 "summary": "Get all book",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
                         "type": "boolean",
                         "description": "Filter by archive status",
                         "name": "is_archived",
@@ -80,6 +86,12 @@ const docTemplate = `{
                 "summary": "Create a new book",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
                         "description": "Book to create",
                         "name": "book",
                         "in": "body",
@@ -115,6 +127,12 @@ const docTemplate = `{
                 ],
                 "summary": "Get book by id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "Book ID",
@@ -156,6 +174,12 @@ const docTemplate = `{
                 ],
                 "summary": "Update book by id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "Book ID",
@@ -200,6 +224,12 @@ const docTemplate = `{
                 ],
                 "summary": "Archive book by id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "Book ID",
@@ -248,6 +278,12 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
                         "description": "Book ID",
                         "name": "bookId",
                         "in": "path",
@@ -292,6 +328,12 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
                         "description": "Book ID",
                         "name": "bookId",
                         "in": "path",
@@ -333,6 +375,12 @@ const docTemplate = `{
                 ],
                 "summary": "Get notes by book id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "Book ID",
@@ -384,6 +432,12 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
                         "description": "Book ID",
                         "name": "bookId",
                         "in": "path",
@@ -417,9 +471,6 @@ const docTemplate = `{
                     }
                 ],
                 "description": "Deelete note",
-                "consumes": [
-                    "application/json"
-                ],
                 "produces": [
                     "application/json"
                 ],
@@ -428,6 +479,12 @@ const docTemplate = `{
                 ],
                 "summary": "Delete note",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "Book ID",
@@ -470,6 +527,12 @@ const docTemplate = `{
                 ],
                 "summary": "Update note",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "Book ID",
@@ -519,6 +582,14 @@ const docTemplate = `{
                     "Labels"
                 ],
                 "summary": "Get all labels",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -550,6 +621,12 @@ const docTemplate = `{
                 "summary": "Create a new label",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
                         "description": "Label to create",
                         "name": "book",
                         "in": "body",
@@ -577,9 +654,6 @@ const docTemplate = `{
                     }
                 ],
                 "description": "Delete label",
-                "consumes": [
-                    "application/json"
-                ],
                 "produces": [
                     "application/json"
                 ],
@@ -588,6 +662,12 @@ const docTemplate = `{
                 ],
                 "summary": "Delete label",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "Label ID",
@@ -622,6 +702,12 @@ const docTemplate = `{
                 ],
                 "summary": "Get book by label name",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
                     {
                         "type": "string",
                         "description": "Label Name",
