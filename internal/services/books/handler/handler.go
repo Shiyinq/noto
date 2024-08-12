@@ -1,6 +1,7 @@
 package handler
 
 import (
+	_ "noto/internal/common"
 	"noto/internal/services/books/model"
 	"noto/internal/services/books/service"
 	"noto/internal/utils"
@@ -34,6 +35,9 @@ func NewBookHandler(bookService service.BookService) BookHandler {
 // @Param 		Authorization header string false "Bearer token"
 // @Param		book	body		model.BookCreateSwagger	true	"Book to create"
 // @Success		201		{object}	model.BookCreate
+// @Failure     400    	{object}   	common.ErrorResponse
+// @Failure     401     {object}    common.ErrorResponse
+// @Failure     500     {object}    common.ErrorResponse
 // @Router		/api/books [post]
 func (s *BookHandlerImpl) CreateBook(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
@@ -66,6 +70,8 @@ func (s *BookHandlerImpl) CreateBook(c *fiber.Ctx) error {
 // @Param		page		query		int		false	"Page number for pagination"	minimum(1)
 // @Param		limit		query		int		false	"Number of items per page"	minimum(1)
 // @Success		200		{object}	model.PaginatedBookResponse
+// @Failure     401     {object}    common.ErrorResponse
+// @Failure     500     {object}    common.ErrorResponse
 // @Router		/api/books [get]
 func (s *BookHandlerImpl) GetBooks(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
@@ -94,7 +100,9 @@ func (s *BookHandlerImpl) GetBooks(c *fiber.Ctx) error {
 // @Param 		Authorization header string false "Bearer token"
 // @Param 		bookId path string true "Book ID"
 // @Success		200		{object}	model.BookResponse
-// @Failure 	404 {object} fiber.Map
+// @Failure     400    	{object}   	common.ErrorResponse
+// @Failure     401     {object}    common.ErrorResponse
+// @Failure     500     {object}    common.ErrorResponse
 // @Router		/api/books/{bookId} [get]
 func (s *BookHandlerImpl) GetBook(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
@@ -128,6 +136,9 @@ func (s *BookHandlerImpl) GetBook(c *fiber.Ctx) error {
 // @Param 		bookId path string true "Book ID"
 // @Param		book	body		model.BookUpdateSwagger	true	"Book to update"
 // @Success		200		{object}	model.BookResponse
+// @Failure     400    	{object}   	common.ErrorResponse
+// @Failure     401     {object}    common.ErrorResponse
+// @Failure     500     {object}    common.ErrorResponse
 // @Router		/api/books/{bookId} [put]
 func (s *BookHandlerImpl) UpdateBook(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
@@ -171,6 +182,9 @@ func (s *BookHandlerImpl) UpdateBook(c *fiber.Ctx) error {
 // @Param 		bookId path string true "Book ID"
 // @Param		book	body		model.ArchiveBookSwagger true	"Book to archive"
 // @Success		200		{object}	model.BookResponse
+// @Failure     400    	{object}   	common.ErrorResponse
+// @Failure     401     {object}    common.ErrorResponse
+// @Failure     500     {object}    common.ErrorResponse
 // @Router		/api/books/{bookId} [patch]
 func (s *BookHandlerImpl) ArchiveBook(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)

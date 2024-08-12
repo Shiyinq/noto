@@ -1,6 +1,7 @@
 package handler
 
 import (
+	_ "noto/internal/common"
 	"noto/internal/services/notes/model"
 	service "noto/internal/services/notes/service"
 	"noto/internal/utils"
@@ -34,6 +35,9 @@ func NewNoteHandler(noteService service.NoteService) NoteHandler {
 // @Param		page		query		int		false	"Page number for pagination"	minimum(1)
 // @Param		limit		query		int		false	"Number of items per page"	minimum(1)
 // @Success		200		{object}	model.PaginatedNoteResponse
+// @Failure     400    	{object}   	common.ErrorResponse
+// @Failure     401     {object}    common.ErrorResponse
+// @Failure     500     {object}    common.ErrorResponse
 // @Router		/api/books/{bookId}/notes [get]
 func (s *NoteHandlerImpl) GetNotes(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
@@ -68,6 +72,9 @@ func (s *NoteHandlerImpl) GetNotes(c *fiber.Ctx) error {
 // @Param		bookId path string true "Book ID"
 // @Param		book	body		model.NoteCreateSwagger	true	"Note to create"
 // @Success		201		{object}	model.NoteCreate
+// @Failure     400    	{object}   	common.ErrorResponse
+// @Failure     401     {object}    common.ErrorResponse
+// @Failure     500     {object}    common.ErrorResponse
 // @Router		/api/books/{bookId}/notes [post]
 func (s *NoteHandlerImpl) CreateNote(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
@@ -106,7 +113,10 @@ func (s *NoteHandlerImpl) CreateNote(c *fiber.Ctx) error {
 // @Param		bookId path string true "Book ID"
 // @Param		noteId path string true "Note ID"
 // @Param		book	body		model.NoteUpdateSwagger	true	"Note to update"
-// @Success		201		{object}	model.NoteResponse
+// @Success		200		{object}	model.NoteResponse
+// @Failure     400    	{object}   	common.ErrorResponse
+// @Failure     401     {object}    common.ErrorResponse
+// @Failure     500     {object}    common.ErrorResponse
 // @Router		/api/books/{bookId}/notes/{noteId} [patch]
 func (s *NoteHandlerImpl) UpdateNote(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
@@ -149,7 +159,10 @@ func (s *NoteHandlerImpl) UpdateNote(c *fiber.Ctx) error {
 // @Param 		Authorization header string false "Bearer token"
 // @Param		bookId path string true "Book ID"
 // @Param		noteId path string true "Note ID"
-// @Success		201		{object} interface{}
+// @Success		200		{object} 	interface{}
+// @Failure     400    	{object}   	common.ErrorResponse
+// @Failure     401     {object}    common.ErrorResponse
+// @Failure     500     {object}    common.ErrorResponse
 // @Router		/api/books/{bookId}/notes/{noteId} [delete]
 func (s *NoteHandlerImpl) DeleteNote(c *fiber.Ctx) error {
 	userId, err := utils.GetUserID(c)
