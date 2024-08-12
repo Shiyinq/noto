@@ -1,6 +1,8 @@
 package handler
 
 import (
+	_ "noto/internal/common"
+	_ "noto/internal/services/auth/model"
 	"noto/internal/services/auth/service"
 
 	"github.com/gofiber/fiber/v2"
@@ -19,7 +21,7 @@ func NewAuthHandler(authService service.AuthService) *AuthHandler {
 // @Description Redirects the user to Google's OAuth consent screen
 // @Tags Auth
 // @Produce json
-// @Success 302 {string} string "Redirect to Google's OAuth consent screen"
+// @Success 	302 	{string} string "Redirect to Google's OAuth consent screen"
 // @Router /auth/google [get]
 func (h *AuthHandler) HandleGoogleLogin(c *fiber.Ctx) error {
 	url := h.authService.HandleGoogleLogin()
@@ -33,8 +35,8 @@ func (h *AuthHandler) HandleGoogleLogin(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param code query string true "The authorization code returned by Google"
-// @Success 200 {object} interface{}
-// @Failure 500 {object} fiber.Map
+// @Success 	200 	{object} 	model.AuthToken
+// @Failure     500     {object}    common.ErrorResponse
 // @Router /auth/google/callback [get]
 func (h *AuthHandler) HandleGoogleCallback(c *fiber.Ctx) error {
 	code := c.Query("code")
