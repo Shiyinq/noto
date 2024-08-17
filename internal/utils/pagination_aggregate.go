@@ -2,7 +2,7 @@ package utils
 
 import "go.mongodb.org/mongo-driver/bson"
 
-func PaginationAggregate(page, limit int) bson.M {
+func PaginationAggregate(page int, limit int) bson.M {
 	skip := limit * (page - 1)
 
 	return bson.M{
