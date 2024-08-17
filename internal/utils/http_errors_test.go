@@ -10,7 +10,7 @@ import (
 )
 
 func TestSendErrorResponse(t *testing.T) {
-	tests := []struct {
+	testCases := []struct {
 		name           string
 		status         int
 		message        interface{}
@@ -52,24 +52,24 @@ func TestSendErrorResponse(t *testing.T) {
 		},
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
 			app := fiber.New()
 
 			ctx := app.AcquireCtx(&fasthttp.RequestCtx{})
 			defer app.ReleaseCtx(ctx)
 
 			var err error
-			if tt.typeError == "error" {
-				err = sendErrorResponse(ctx, tt.status, tt.message.(string))
-			} else if tt.typeError == "customError" {
-				err = CustomErrorJSON(ctx, tt.status, tt.message)
+			if testCase.typeError == "error" {
+				err = sendErrorResponse(ctx, testCase.status, testCase.message.(string))
+			} else if testCase.typeError == "customError" {
+				err = CustomErrorJSON(ctx, testCase.status, testCase.message)
 			}
 
 			require.NoError(t, err)
 
-			assert.Equal(t, tt.expectedStatus, ctx.Response().StatusCode())
-			assert.JSONEq(t, tt.expectedBody, string(ctx.Response().Body()))
+			assert.Equal(t, testCase.expectedStatus, ctx.Response().StatusCode())
+			assert.JSONEq(t, testCase.expectedBody, string(ctx.Response().Body()))
 		})
 	}
 }
