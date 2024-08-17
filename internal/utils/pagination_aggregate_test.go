@@ -8,7 +8,7 @@ import (
 )
 
 func TestPaginationAggregate(t *testing.T) {
-	tests := []struct {
+	testCases := []struct {
 		name     string
 		page     int
 		limit    int
@@ -68,10 +68,10 @@ func TestPaginationAggregate(t *testing.T) {
 		},
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := PaginationAggregate(tt.page, tt.limit)
-			assert.Equal(t, tt.expected, result)
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			result := PaginationAggregate(testCase.page, testCase.limit)
+			assert.Equal(t, testCase.expected, result)
 		})
 	}
 }

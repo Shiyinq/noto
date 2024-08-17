@@ -8,7 +8,7 @@ import (
 )
 
 func TestToObjectID(t *testing.T) {
-	test := []struct {
+	testCases := []struct {
 		name           string
 		request        string
 		expectedResult primitive.ObjectID
@@ -31,15 +31,15 @@ func TestToObjectID(t *testing.T) {
 		},
 	}
 
-	for _, tt := range test {
-		t.Run(tt.name, func(t *testing.T) {
-			objectID, err := ToObjectID(tt.request)
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			objectID, err := ToObjectID(testCase.request)
 
-			if tt.expectedError != "" {
-				assert.EqualError(t, err, tt.expectedError)
+			if testCase.expectedError != "" {
+				assert.EqualError(t, err, testCase.expectedError)
 			}
 
-			assert.Equal(t, objectID, tt.expectedResult)
+			assert.Equal(t, objectID, testCase.expectedResult)
 		})
 	}
 }
