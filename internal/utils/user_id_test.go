@@ -10,7 +10,7 @@ import (
 )
 
 func TestGetUserID(t *testing.T) {
-	tests := []struct {
+	testCases := []struct {
 		name           string
 		setupContext   func(*fiber.Ctx)
 		expectedResult primitive.ObjectID
@@ -44,23 +44,23 @@ func TestGetUserID(t *testing.T) {
 		},
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
 			app := fiber.New()
 			ctx := app.AcquireCtx(&fasthttp.RequestCtx{})
 			defer app.ReleaseCtx(ctx)
 
-			tt.setupContext(ctx)
+			testCase.setupContext(ctx)
 
 			userID, err := GetUserID(ctx)
 
-			if tt.expectedError != "" {
-				assert.EqualError(t, err, tt.expectedError)
+			if testCase.expectedError != "" {
+				assert.EqualError(t, err, testCase.expectedError)
 			} else {
 				assert.NoError(t, err)
 			}
 
-			assert.Equal(t, tt.expectedResult, userID)
+			assert.Equal(t, testCase.expectedResult, userID)
 		})
 	}
 }
