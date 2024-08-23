@@ -6,7 +6,7 @@ import (
 	"noto/internal/config"
 	"noto/internal/middleware"
 
-	_ "noto/docs"
+	_ "noto/docs/swagger"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
