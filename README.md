@@ -66,9 +66,9 @@ Noto ノート (nōto) is an app for storing your notes privately. You can host 
     ./swag.sh
     ```
 
-3. **Swagger**
+3. **Swagger Documentation**
 
-    http://localhost:8080/swagger/index.html
+    http://localhost:8080/docs/index.html
 
 ## Deployment
 
