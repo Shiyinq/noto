@@ -55,6 +55,16 @@ Noto ノート (nōto) is an app for storing your notes privately. You can host 
     ```sh
     swag init -g ./cmd/server/main.go --parseDependency --parseInternal --output docs/swagger
     ```
+    Or you can use the `swag.sh` script:
+
+    For the first time, before running the script, execute:
+    ```
+    chmod +x docs.sh
+    ```
+    Then, run:
+    ```
+    ./swag.sh
+    ```
 
 3. **Swagger**
 
