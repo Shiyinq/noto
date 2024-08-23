@@ -53,7 +53,7 @@ Noto ノート (nōto) is an app for storing your notes privately. You can host 
 
 2. **Generate or Update Documentation**
     ```sh
-    swag init -g ./cmd/server/main.go --parseDependency --parseInternal
+    swag init -g ./cmd/server/main.go --parseDependency --parseInternal --output docs/swagger
     ```
 
 3. **Swagger**
