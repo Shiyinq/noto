@@ -32,7 +32,7 @@ func main() {
 
 	app.Use(middleware.NewLogger())
 
-	app.Get("/swagger/*", swagger.HandlerDefault)
+	app.Get("/docs/*", swagger.HandlerDefault)
 	routes.SetupRoutes(app)
 
 	app.Use(middleware.NotFoundHandler)
