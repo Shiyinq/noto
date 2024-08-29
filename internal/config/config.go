@@ -12,6 +12,7 @@ import (
 )
 
 var PORT string
+var AllowedOrigins string
 var DB *mongo.Database
 var GoogleClientID string
 var GoogleClientSecret string
@@ -24,11 +25,16 @@ func LoadConfig() {
 	}
 
 	PORT = ":" + os.Getenv("PORT")
+	AllowedOrigins = os.Getenv("ALLOWED_ORIGINS")
 	mongoURI := os.Getenv("MONGODB_URI")
 	dbName := os.Getenv("DB_NAME")
 	GoogleClientID = os.Getenv("GOOGLE_CLIENT_ID")
 	GoogleClientSecret = os.Getenv("GOOGLE_CLIENT_SECRET")
 	JWTSecret = []byte(os.Getenv("JWT_SECRET"))
+
+	if AllowedOrigins == "" {
+		AllowedOrigins = "*"
+	}
 
 	ConnectMongoDB(mongoURI, dbName)
 }

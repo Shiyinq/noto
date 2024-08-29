@@ -30,6 +30,8 @@ func main() {
 		EnablePrintRoutes: false,
 	})
 
+	app.Use(middleware.SetupCORS())
+
 	app.Use(middleware.NewLogger())
 
 	app.Get("/docs/*", swagger.HandlerDefault)
