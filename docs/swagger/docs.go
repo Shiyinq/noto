@@ -1436,7 +1436,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "NOTO API",
-	Description:      "Noto API",
+	Description:      "Noto API: To get started, you need a token. Use http://localhost:8080/auth/google to obtain the token.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

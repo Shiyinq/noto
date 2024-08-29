@@ -14,7 +14,7 @@ import (
 
 // @title		NOTO API
 // @version		1.0
-// @description	Noto API
+// @description Noto API: To get started, you need a token. Use http://localhost:8080/auth/google to obtain the token.
 
 // @securityDefinitions.apikey BearerAuth
 // @in header
