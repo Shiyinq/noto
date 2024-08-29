@@ -59,7 +59,7 @@ Noto ノート (nōto) is an app for storing your notes privately. You can host 
 
     For the first time, before running the script, execute:
     ```
-    chmod +x docs.sh
+    chmod +x swag.sh
     ```
     Then, run:
     ```
