@@ -1,6 +1,7 @@
 package books_router
 
 import (
+	"noto/internal/config"
 	"noto/internal/services/books/handler"
 	"noto/internal/services/books/repository"
 	"noto/internal/services/books/service"
@@ -10,7 +11,7 @@ import (
 
 func BooksRouter(router fiber.Router) {
 
-	repo := repository.NewBookRepository()
+	repo := repository.NewBookRepository(config.DB)
 	serv := service.NewBookService(repo)
 	hand := handler.NewBookHandler(serv)
 

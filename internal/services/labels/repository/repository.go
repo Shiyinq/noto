@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"errors"
-	"noto/internal/config"
 	"noto/internal/services/labels/model"
 	"noto/internal/utils"
 	"time"
@@ -28,8 +27,8 @@ type LabelRepositoryImpl struct {
 	book_labels *mongo.Collection
 }
 
-func NewLabelRepository() LabelRepository {
-	return &LabelRepositoryImpl{labels: config.DB.Collection("labels"), book_labels: config.DB.Collection("book_labels")}
+func NewLabelRepository(db *mongo.Database) LabelRepository {
+	return &LabelRepositoryImpl{labels: db.Collection("labels"), book_labels: db.Collection("book_labels")}
 }
 
 func (r *LabelRepositoryImpl) CheckAndInsertLabel(label *model.LabelCreate) (*model.LabelCreate, error) {

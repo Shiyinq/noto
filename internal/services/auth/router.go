@@ -21,7 +21,7 @@ func AuthRouter(router fiber.Router) {
 		Endpoint: google.Endpoint,
 	}
 
-	authRepo := repository.NewAuthRepository()
+	authRepo := repository.NewAuthRepository(config.DB)
 	authService := service.NewAuthService(authRepo, googleOauthConfig, config.JWTSecret)
 	authHandler := handler.NewAuthHandler(authService)
 

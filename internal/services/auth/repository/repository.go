@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"noto/internal/config"
 	"noto/internal/services/auth/model"
 	"time"
 
@@ -19,8 +18,8 @@ type AuthRepositoryImpl struct {
 	users *mongo.Collection
 }
 
-func NewAuthRepository() AuthRepository {
-	return &AuthRepositoryImpl{users: config.DB.Collection("users")}
+func NewAuthRepository(db *mongo.Database) AuthRepository {
+	return &AuthRepositoryImpl{users: db.Collection("users")}
 }
 
 func (r *AuthRepositoryImpl) FindOrCreateUser(ctx context.Context, user *model.User) (*model.User, error) {
