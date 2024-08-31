@@ -1,6 +1,7 @@
 package labels_router
 
 import (
+	"noto/internal/config"
 	"noto/internal/services/labels/handler"
 	"noto/internal/services/labels/repository"
 	"noto/internal/services/labels/service"
@@ -9,7 +10,7 @@ import (
 )
 
 func LabelsRouter(router fiber.Router) {
-	var repo = repository.NewLabelRepository()
+	var repo = repository.NewLabelRepository(config.DB)
 	var serv = service.NewLabelService(repo)
 	var hand = handler.NewLabelHandler(serv)
 

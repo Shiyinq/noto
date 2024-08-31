@@ -1,6 +1,7 @@
 package notes_router
 
 import (
+	"noto/internal/config"
 	"noto/internal/services/notes/handler"
 	"noto/internal/services/notes/repository"
 	"noto/internal/services/notes/service"
@@ -9,7 +10,7 @@ import (
 )
 
 func NotesRouter(router fiber.Router) {
-	var repo = repository.NewNoteRepository()
+	var repo = repository.NewNoteRepository(config.DB)
 	var serv = service.NewNoteService(repo)
 	var hand = handler.NewNoteHandler(serv)
 

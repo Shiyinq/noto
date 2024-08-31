@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"errors"
-	"noto/internal/config"
 	model "noto/internal/services/notes/model"
 	"noto/internal/utils"
 	"time"
@@ -25,8 +24,8 @@ type NoteRepositoryImpl struct {
 	notes *mongo.Collection
 }
 
-func NewNoteRepository() NoteRepository {
-	return &NoteRepositoryImpl{notes: config.DB.Collection("notes")}
+func NewNoteRepository(db *mongo.Database) NoteRepository {
+	return &NoteRepositoryImpl{notes: db.Collection("notes")}
 }
 
 func (r *NoteRepositoryImpl) GetNotes(userId primitive.ObjectID, bookId primitive.ObjectID, page int, limit int) (*model.PaginatedNoteResponse, error) {

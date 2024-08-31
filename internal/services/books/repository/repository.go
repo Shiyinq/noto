@@ -5,7 +5,6 @@ import (
 	"errors"
 	"time"
 
-	"noto/internal/config"
 	"noto/internal/services/books/model"
 	"noto/internal/utils"
 
@@ -27,8 +26,8 @@ type BookRepositoryImpl struct {
 	books *mongo.Collection
 }
 
-func NewBookRepository() BookRepository {
-	return &BookRepositoryImpl{books: config.DB.Collection("books")}
+func NewBookRepository(db *mongo.Database) BookRepository {
+	return &BookRepositoryImpl{books: db.Collection("books")}
 }
 
 func bookAgregate(matchCondition bson.D, page int, limit int, usePagination bool) mongo.Pipeline {
