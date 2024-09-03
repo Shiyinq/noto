@@ -4,6 +4,8 @@ import (
 	"context"
 	"log"
 	"os"
+	"path/filepath"
+	"runtime"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -18,8 +20,17 @@ var GoogleClientID string
 var GoogleClientSecret string
 var JWTSecret []byte
 
+func envPath() string {
+	_, b, _, _ := runtime.Caller(0)
+	basePath := filepath.Join(filepath.Dir(b), "../..")
+	envPath := filepath.Join(basePath, ".env")
+	return envPath
+}
+
 func LoadConfig() {
-	err := godotenv.Load()
+	path := envPath()
+	err := godotenv.Load(path)
+	log.Println("Load .env file", path)
 	if err != nil {
 		log.Println("Error loading .env file, using environment variables")
 	}
